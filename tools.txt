@@ -1,0 +1,14 @@
+Datenbanken:
+- Django ORM
+- PJ Admin
+- sqlachemy 
+
+Website:
+- Django 
+
+Backend:
+- Python to Django 
+
+Graphen:
+- Graphene 
+- Graphql
