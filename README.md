@@ -8,12 +8,12 @@ Pflichtenheft
 ----
 1. Systemmodell und Umgebung
 
-
+```python
  *---*----------------|Server|-*-|DB|
  |   |                         |
  |   Web Interface             Simulation Interface
  Admin Panel
-
+```
 2. Zielbestimmungen
 
 Web Interface 
