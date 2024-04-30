@@ -19,29 +19,32 @@ Pflichtenheft
 Web Interface 
 - Auswahl der Simulationsprogramme
 - Welche Daten plotten ?
-- Herunterladen von graphen (SVG etc.)
-- Persistente links
+- Herunterladen von graphen (SVG etc.) (Wunsch) 
+- Persistente links (Wunsch)
 - Login 
 
 Admin Panel
 - Logging
 - Authentifizierung / Authorization
 - Benutzerverwaltung
+- SCC Integration ? Shibboleth (Wunsch)
 
 Graphen
 - Interaktiv
 - FrameWorks
+- Import & Export von Daten (Wunsch)
 
-API-Server Clien
+API Server-Client
 - Sicherheit (HTTPS) / REST API ? 
 - Websocket for live reload
 
 Server Datenbank 
 - Simulation
 - User
-- Configuration
+- Configuration (Wunsch)
 
 Server Simulation 
-- Schnittstelle (CSV ?)
+- Schnittstelle CSV
+- Schnittstellenerweiterung (Wunsch)
 - Echtzeitüberwachung ?
 - Welche Daten haben wir 
