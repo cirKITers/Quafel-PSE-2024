@@ -42,9 +42,12 @@ Server Datenbank
 - Simulation
 - User
 - Configuration (Wunsch)
+- Configuration per Environment
 
 Server Simulation 
 - Schnittstelle CSV
 - Schnittstellenerweiterung (Wunsch)
 - Echtzeitüberwachung ?
-- Welche Daten haben wir 
+- Welche Daten haben wir
+- Hardware Serialisation (Wunsch)
+- Caching von Simulations Durchgängen (Wunsch)
