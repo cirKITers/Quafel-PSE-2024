@@ -3,15 +3,11 @@ package controller/simulation
 - Unterteilung des Controllers.
 - Hier können neue Simulationsdaten erstellt werden.
 
+Offene Fragen:
+- Wie sollen mehrere Anfragen zur gleichen Zeit abgearbeitet werden? Sequentiell oder Parallel?
+
 Methoden:
-- Convert QUAFEL results and put into model(csv)
 - submit auftrag(seed: int, min_qubits: int, max_qubits: int, qubits_increment: int, qubits_type: str, 
                  min_depth: int, max_depth: int, depth_increment: int, depth_type: str, 
                  min_shots: int, max_shots: int, shots_increment: int, shots_type: str,
-                 quantum_framework: QFR)
-
-private methoden:
-- check what data is already available(min_qubits: int, max_qubits: int, qubits_increment: int, qubits_type: str, 
-                 min_depth: int, max_depth: int, depth_increment: int, depth_type: str, 
-                 min_shots: int, max_shots: int, shots_increment: int, shots_type: str,
-                 quantum_framework: QFR)
+                 quantum_frameworks: QFR[], evaluations: int) -> success or not signal to view
