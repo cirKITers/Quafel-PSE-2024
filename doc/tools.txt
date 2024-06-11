@@ -1,6 +1,6 @@
 Datenbanken:
 - Django ORM
-- PJ Admin
+- PG Admin
 - sqlachemy 
 
 Website:
