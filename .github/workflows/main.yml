@@ -1,8 +1,15 @@
 name: GithubAction
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
-  CheckCodestyle:
+  check_code_style:
     runs-on: ubuntu-latest
+    name: Checking Code Style with the .editorconfig file
     steps:
-      - name: EditorConfig-Action
+      - name: running
         uses: zbeekman/EditorConfig-Action@v1.1.1
