@@ -1,4 +1,4 @@
-package controller/hardware-profile
+package controller/hardware_profile
 
 - Unterteilung des Controllers.
 - Hier sind die Controller für die Hardware-Profile.
