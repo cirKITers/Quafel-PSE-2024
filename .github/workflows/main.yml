@@ -1,0 +1,15 @@
+name: GithubAction
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  check_code_style:
+    runs-on: ubuntu-latest
+    name: Checking Code Style
+    steps:
+      - name: EditorConfigCheck
+        uses: editorconfig-checker/action-editorconfig-checker@v1.0.0
