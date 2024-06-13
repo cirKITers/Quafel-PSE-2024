@@ -2,11 +2,14 @@ package simulation
 
 - Dieses Package dient als Schnittstelle zwischen Quafel-Web und Quafel.
 - Hier kann via der Hardwareprofile auf einem Quafel-Programm eine Simulation gestartet werden.
-- Anschließend erhält man Daten, diese müssen dann in die Klassen-Strukturen des Modells umgewandelt werden und via dem Controller anschließend in die Datenbank geschrieben werden.
+- Anschließend erhält man Daten, diese müssen dann in die Klassen-Strukturen des Modells umgewandelt werden und via dem
+  Controller anschließend in die Datenbank geschrieben werden.
 
 Methoden:
 
-- Submit Simulationsauftrag (min_qubits: int, max_qubits: int, qubits_increment: int, qubits_type: str, min_depth: int, max_depth: int, depth_increment: int, depth_type: str, min_shots: int, max_shots: int, shots_increment: int, shots_type: str, quantum_framework: QFR) -> QUAFLE output als csv
+- Submit Simulationsauftrag (min_qubits: int, max_qubits: int, qubits_increment: int, qubits_type: str, min_depth: int,
+  max_depth: int, depth_increment: int, depth_type: str, min_shots: int, max_shots: int, shots_increment: int,
+  shots_type: str, quantum_framework: QFR) -> QUAFLE output als csv
 
 private methoden:
 
@@ -21,7 +24,8 @@ Wie kann man einem Job auf dem Cluster starten?
 - Hardwareprofil, Simulationsauftrag.
 - Wie erreicht man Quafel?
 - SSH Wie übergibt man die Parameter an Quafel?
-- conf\base\parameters\data_generation.yml & conf\base\parameters\data_science.yml anpassen und hochladen. Wie bekommt man die Rückgabe von Quafel?
+- conf\base\parameters\data_generation.yml & conf\base\parameters\data_science.yml anpassen und hochladen. Wie bekommt
+  man die Rückgabe von Quafel?
 - bwsyncshare
 
 Fragen an Melvin:
