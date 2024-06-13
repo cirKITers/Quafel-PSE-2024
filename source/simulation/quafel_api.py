@@ -12,7 +12,7 @@ class QUAFEL_API:
         self._password = _password
         # self.ssh = connect_ssh(host, port, username, password)
 
-    # Funktioniert noch nicht, muss noch irgendwie auf prompts antworten, aber grad zu faul. Lohnt wahrscheinlich eh erst wenn wir en richtigen server haben.
+    # Funktioniert noch nicht.
     def setup_quafel(self, ssh):
         # https://www.baeldung.com/linux/sudo-non-interactive-mode
         self._command(ssh, f'echo "{self._password}" | sudo -S apt-get update && sudo apt-get upgrade', True)
