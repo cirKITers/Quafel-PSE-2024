@@ -10,5 +10,4 @@ Backend:
 - Python to Django 
 
 Graphen:
-- Graphene 
-- Graphql
+- Matplotlib
