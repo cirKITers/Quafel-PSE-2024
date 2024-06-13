@@ -13,7 +13,3 @@ class HardwareProfileModel(models.Model):
     _port = models.IntegerField()
 
     # TODO: getter
-
-    # TODO: Additional information for the cluster:
-    # TODO: maybe add this information in another class
-    # TODO: how to start it on the other side (ssh, etc.)?
