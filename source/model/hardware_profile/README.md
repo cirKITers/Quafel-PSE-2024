@@ -1,4 +1,4 @@
-package model/hardware-profile
+### package model/hardware-profile
 
 - Hier werden alle Daten zu den Hardware-Profilen gespeichert und von der ORM verwaltet.
 
