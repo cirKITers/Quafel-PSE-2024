@@ -6,7 +6,6 @@ Quafel-PSE 2024
 
 ## Pflichtenheft
 
-
 1. Systemmodell und Umgebung
 
         *---*----------------|Server|-*-|DB|
@@ -21,31 +20,36 @@ Quafel-PSE 2024
     - Persistente links (Wunsch)
     - Login
 
-    Admin Panel
-    - Logging
-    - Authentifizierung / Authorization
-    - Benutzerverwaltung
-    - SCC Integration ? Shibboleth (Wunsch)
+Admin Panel
 
-    Graphen
-    - Interaktiv
-    - FrameWorks
-    - Import & Export von Daten (Wunsch)
+- Logging
+- Authentifizierung / Authorization
+- Benutzerverwaltung
+- SCC Integration ? Shibboleth (Wunsch)
 
-    API Server-Client
-    - Sicherheit (HTTPS) / REST API ?
-    - Websocket for live reload
+Graphen
 
-    Server Datenbank
-    - Simulation
-    - User
-    - Configuration (Wunsch)
-    - Configuration per Environment
+- Interaktiv
+- FrameWorks
+- Import & Export von Daten (Wunsch)
 
-    Server Simulation
-    - Schnittstelle CSV
-    - Schnittstellenerweiterung (Wunsch)
-    - Echtzeitüberwachung?
-    - Welche Daten haben wir
-    - Hardware Serialisation (Wunsch)
-    - Caching von Simulations-Durchgängen (Wunsch)
+API Server-Client
+
+- Sicherheit (HTTPS) / REST API ?
+- Websocket for live reload
+
+Server Datenbank
+
+- Simulation
+- User
+- Configuration (Wunsch)
+- Configuration per Environment
+
+Server Simulation
+
+- Schnittstelle CSV
+- Schnittstellenerweiterung (Wunsch)
+- Echtzeitüberwachung?
+- Welche Daten haben wir
+- Hardware Serialisation (Wunsch)
+- Caching von Simulations-Durchgängen (Wunsch)

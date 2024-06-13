@@ -41,7 +41,8 @@ class QUAFEL_API:
 
         list_frameworks: str = '["' + '","'.join(quantum_framework) + '"]'
 
-        output, error = self._command(ssh, "cd ~/git/Quafel/ && grep -n 'frameworks' conf/base/parameters/data_generation.yml | cut -d ':' -f1")
+        output, error = self._command(ssh,
+            "cd ~/git/Quafel/ && grep -n 'frameworks' conf/base/parameters/data_generation.yml | cut -d ':' -f1")
         line: int = output.split("\n")[0]
         self._command(ssh, f"cd ~/git/Quafel/ && sed -i '{line}s/.*/  frameworks: {list_frameworks}/' conf/base/parameters/data_generation.yml")
 

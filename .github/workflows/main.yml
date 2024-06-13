@@ -1,22 +1,22 @@
 name: Code Style Check
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
-  code-style-check:
-    runs-on: ubuntu-latest
+    code-style-check:
+        runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+            -   name: Set up Node.js
+                uses: actions/setup-node@v2
+                with:
+                    node-version: '14'
 
-    - name: Install EditorConfig Checker
-      run: npm install -g eclint
+            -   name: Install EditorConfig Checker
+                run: npm install -g eclint
 
-    - name: Run EditorConfig Checker
-      run: eclint check "*"
+            -   name: Run EditorConfig Checker
+                run: eclint check "*"
