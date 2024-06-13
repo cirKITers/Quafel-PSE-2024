@@ -1,15 +1,22 @@
-name: GithubAction
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+name: Code Style Check
+
+on: [push, pull_request]
+
 jobs:
-  check_code_style:
+  code-style-check:
     runs-on: ubuntu-latest
-    name: Checking Code Style
+
     steps:
-      - name: EditorConfigCheck
-        uses: editorconfig-checker/action-editorconfig-checker@v1.0.0
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install EditorConfig Checker
+      run: npm install -g eclint
+
+    - name: Run EditorConfig Checker
+      run: eclint check "*"
