@@ -32,18 +32,6 @@ Results von {config_id}:
 
 Abstrahierte Methoden:
 
-- Laden für Visualisierung(
-  min_qubits: int, max_qubits: int, qubits_increment: int, qubits_type: str,
-  min_depth: int, max_depth: int, depth_increment: int, depth_type: str,
-  min_shots: int, max_shots: int, shots_increment: int, shots_type: str,
-  quantum_frameworks: QFR[]) -> csv
-  oder
-  (qubits: int[][], depths: int[][], shots: int[][], quantum_frameworks: QFR[]) -> csv
-- Check welche daten schon vorhanden für datengenerierung(
-  min_qubits: int, max_qubits: int, qubits_increment: int, qubits_type: str,
-  min_depth: int, max_depth: int, depth_increment: int, depth_type: str,
-  min_shots: int, max_shots: int, shots_increment: int, shots_type: str,
-  quantum_frameworks: QFR[], evaluations: int)
-  ->
-  qubits: int[][], depths: int[][], shots: int[][], quantum_frameworks: QFR[]
+- Laden für Visualisierung(min_qubits: int, max_qubits: int, qubits_increment: int, qubits_type: str, min_depth: int, max_depth: int, depth_increment: int, depth_type: str, min_shots: int, max_shots: int, shots_increment: int, shots_type: str, quantum_frameworks: QFR[]) -> csv oder (qubits: int[][], depths: int[][], shots: int[][], quantum_frameworks: QFR[]) -> csv
+- Check welche daten schon vorhanden für datengenerierung(min_qubits: int, max_qubits: int, qubits_increment: int, qubits_type: str, min_depth: int, max_depth: int, depth_increment: int, depth_type: str, min_shots: int, max_shots: int, shots_increment: int, shots_type: str, quantum_frameworks: QFR[], evaluations: int) -> qubits: int[][], depths: int[][], shots: int[][], quantum_frameworks: QFR[]
 - Convert QUAFEL results and put into model(csv) -> None
