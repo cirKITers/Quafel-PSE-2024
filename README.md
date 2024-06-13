@@ -21,28 +21,28 @@ Quafel-PSE 2024
     - Persistente links (Wunsch)
     - Login
 
-   Admin Panel
+    Admin Panel
     - Logging
     - Authentifizierung / Authorization
     - Benutzerverwaltung
     - SCC Integration ? Shibboleth (Wunsch)
 
-   Graphen
+    Graphen
     - Interaktiv
     - FrameWorks
     - Import & Export von Daten (Wunsch)
 
-   API Server-Client
+    API Server-Client
     - Sicherheit (HTTPS) / REST API ?
     - Websocket for live reload
 
-   Server Datenbank
+    Server Datenbank
     - Simulation
     - User
     - Configuration (Wunsch)
     - Configuration per Environment
 
-   Server Simulation
+    Server Simulation
     - Schnittstelle CSV
     - Schnittstellenerweiterung (Wunsch)
     - Echtzeitüberwachung?
