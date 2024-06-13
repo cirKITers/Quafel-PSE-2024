@@ -18,24 +18,24 @@ class QUAFEL_API:
         self._command(ssh, f'echo "{self._password}" | sudo -S apt-get update && sudo apt-get upgrade', True)
         self._command(ssh, f'echo "{self._password}" | sudo -S apt install python3.10', True)
         self._command(ssh, f'echo "{self._password}" | sudo -S apt install pipx', True)
-        self._command(ssh,"pipx install poetry")
-        self._command(ssh,"pipx ensurepath")
-        self._command(ssh,"exec bash")
-        self._command(ssh,"cd ~")
-        self._command(ssh,"mkdir git")
-        self._command(ssh,"cd git/")
-        self._command(ssh,"git clone https://github.com/cirKITers/Quafel.git")
-        self._command(ssh,"cd Quafel/")
-        self._command(ssh,"poetry lock --no-update")
-        self._command(ssh,"poetry install --without dev")
+        self._command(ssh, "pipx install poetry")
+        self._command(ssh, "pipx ensurepath")
+        self._command(ssh, "exec bash")
+        self._command(ssh, "cd ~")
+        self._command(ssh, "mkdir git")
+        self._command(ssh, "cd git/")
+        self._command(ssh, "git clone https://github.com/cirKITers/Quafel.git")
+        self._command(ssh, "cd Quafel/")
+        self._command(ssh, "poetry lock --no-update")
+        self._command(ssh, "poetry install --without dev")
 
         self._close_ssh(ssh)
-        
-    def submit_simulation(self, 
-            min_qubits: int, max_qubits: int, qubits_increment: int, qubits_type: str, 
-            min_depth: int, max_depth: int, depth_increment: int, depth_type: str, 
-            min_shots: int, max_shots: int, shots_increment: int, shots_type: str,
-            quantum_framework: list[str], evaluations: int):
+
+    def submit_simulation(self,
+                          min_qubits: int, max_qubits: int, qubits_increment: int, qubits_type: str,
+                          min_depth: int, max_depth: int, depth_increment: int, depth_type: str,
+                          min_shots: int, max_shots: int, shots_increment: int, shots_type: str,
+                          quantum_framework: list[str], evaluations: int):
         ssh = self._connect_ssh()
         # self.command(ssh,"cd ~/git/Quafel/")
 
@@ -59,8 +59,9 @@ class QUAFEL_API:
 
         self._close_ssh(ssh)
 
-    def submit_simulation_point(self, qubits: int, depth: int, shots: int, quantum_framework: list[str], evaluations: int):
-        self.submit_simulation(qubits, qubits, 1, "linear", depth, depth, 1, "exp2", shots, shots+1, 1, "exp2", quantum_framework, evaluations)
+    def submit_simulation_point(self, qubits: int, depth: int, shots: int, quantum_framework: list[
+        str], evaluations: int):
+        self.submit_simulation(qubits, qubits, 1, "linear", depth, depth, 1, "exp2", shots, shots + 1, 1, "exp2", quantum_framework, evaluations)
 
     def download_results(self):
         ssh = self._connect_ssh()
@@ -85,7 +86,7 @@ class QUAFEL_API:
                 hostname=self._host,
                 port=self._port,
                 username=self._username,
-                #password=self._password,
+                # password=self._password,
                 key_filename="./myKey"
             )
             print(f"Connected to {self._host}")
@@ -101,7 +102,7 @@ class QUAFEL_API:
     def _close_ssh(self, ssh: paramiko.SSHClient):
         ssh.close()
 
-    def _command(self, ssh: paramiko.SSHClient, command:str, show_prompts:bool = False):
+    def _command(self, ssh: paramiko.SSHClient, command: str, show_prompts: bool = False):
         # Execute the command
         print(f">> {command}")
         stdin, stdout, stderr = ssh.exec_command(command)
