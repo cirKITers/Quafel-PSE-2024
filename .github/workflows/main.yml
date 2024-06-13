@@ -9,7 +9,7 @@ on:
 jobs:
   check_code_style:
     runs-on: ubuntu-latest
-    name: Checking Code Style with the .editorconfig file
+    name: Checking Code Style
     steps:
-      - name: running
-        uses: zbeekman/EditorConfig-Action@v1.1.1
+      - name: EditorConfigCheck
+        uses: wow-rp-addons/actions-editorconfig-check@v1.0.1
