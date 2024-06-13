@@ -1,0 +1,8 @@
+name: GithubAction
+on: [push]
+jobs:
+  CheckCodestyle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: EditorConfig-Action
+        uses: zbeekman/EditorConfig-Action@v1.1.1
