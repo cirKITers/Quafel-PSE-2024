@@ -17,7 +17,7 @@ private methoden:
 - connect per ssh to correct cluster
 - set up quafel
 - generate simulations configuration commands für file editing
-- downaload results from bwsyncshare
+- download results from bwsyncshare
 
 
 
@@ -26,8 +26,8 @@ private methoden:
 Wie kann man einem Job auf dem Cluster starten?
 - mit ssh verbinden. quafel ansprechen.
 Welche Daten sind nötig um einen Job auf dem KIT-Cluster zu starten?
-- Hardwareprofil, Simulationsauftrag
-Wie erreicht man Quafel?
+- Hardwareprofil, Simulationsauftrag.
+- Wie erreicht man Quafel?
 - SSH
 Wie übergibt man die Parameter an Quafel?
 - conf\base\parameters\data_generation.yml & conf\base\parameters\data_science.yml anpassen und hochladen.

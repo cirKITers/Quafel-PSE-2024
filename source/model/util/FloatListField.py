@@ -12,7 +12,7 @@ class FloatListField(models.Field):  # Maybe it needs something else than models
 
     # Get the float at the given index
     def get(self, index: int) -> float:
-        return None  # TODO: implement this function
+        return 0  # TODO: implement this function
 
     # Set the float at the given index
     def set(self, index: int, value: float):
@@ -24,4 +24,4 @@ class FloatListField(models.Field):  # Maybe it needs something else than models
 
     # Get the average of all floats in the list
     def get_average(self) -> float:
-        return None  # TODO: implement this function
+        return 0.0  # TODO: implement this function
