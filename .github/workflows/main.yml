@@ -18,5 +18,8 @@ jobs:
             -   name: Install EditorConfig Checker
                 run: npm install -g eclint
 
+            -   name: Configure EditorConfig Checker
+                run: eclint infer "./.editorconfig"
+
             -   name: Run EditorConfig Checker
-                run: eclint check "*"
+                run: eclint check **/*
