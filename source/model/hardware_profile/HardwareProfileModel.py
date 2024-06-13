@@ -12,4 +12,4 @@ class HardwareProfileModel(models.Model):
     # The port of the hardware_profile to access it
     _port = models.IntegerField()
 
-    # TODO: getter
+    # TODO: getter and setter
