@@ -12,4 +12,4 @@ jobs:
     name: Checking Code Style
     steps:
       - name: EditorConfigCheck
-        uses: wow-rp-addons/actions-editorconfig-check@v1.0.1
+        uses: editorconfig-checker/action-editorconfig-checker@v1.0.0
