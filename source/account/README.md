@@ -1,4 +1,4 @@
-Package account:
+### Package account:
 
 - Schnittstelle zwischen QuafelWeb und der Chibboleth-API
 - Stellt Funktionen zur Verfügung, um die Chibboleth-API zu nutzen
