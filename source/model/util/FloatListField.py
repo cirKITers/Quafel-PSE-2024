@@ -1,7 +1,7 @@
 from django.db import models
 
 
-# List of floats to store the results of the simulation in the database
+# List of floats to store the results of the api_simulation in the database
 class FloatListField(models.Field):  # Maybe it needs something else than models.Field
     # The maximum length of the list
     _max_length: int
