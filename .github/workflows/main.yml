@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  formatting:
+  code-style-check:
     runs-on: ubuntu-latest
     steps:
       - if: github.event_name != 'pull_request'
@@ -16,6 +16,9 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
-          style-settings-file: .codestyle.xml
       - uses: actions/checkout@v3
-      - uses: notdevcody/intellij-format-action@v1
+      - uses: notdevcody/intellij-format-action@v1.1
+        with:
+          style-settings-file: .codestyle.xml
+          commit-on-changes: false
+          fail-on-changes: true
