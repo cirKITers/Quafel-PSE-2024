@@ -1,2 +1,10 @@
 on:
-  []
+  pull_request:
+    branches:
+      - main
+jobs:
+  nothing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do nothing
+        run: echo "Doing nothing"
