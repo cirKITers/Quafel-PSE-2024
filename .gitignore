@@ -1,6 +1,6 @@
 #Simulation results
-source/simulation/results/
-source/simulation/myKey
+source/api_simulation/results/
+source/api_simulation/myKey
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

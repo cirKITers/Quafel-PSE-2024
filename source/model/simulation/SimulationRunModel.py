@@ -1,8 +1,9 @@
 from django.db import models
 
 
-# This class represents a simulation run containing multiple or one point(s)
+# This class represents an api_simulation run containing multiple or one point(s)
 # The id of this class is used to determine the position where the results are stored
+# noinspection PyUnresolvedReferences
 class SimulationRunModel(models.Model):
     # Get the points of this run (related_name='points' is used in SimulationPointModel) # TODO: check
     def get_points(self):
@@ -21,6 +22,7 @@ class SimulationRunModel(models.Model):
         return self.get_unfinished_points().count() == 0
 
     # Get the path this run is stored in... # TODO: check is this should be here
+    # noinspection PyMethodMayBeStatic
     def get_path(self):
         return None  # TODO: implement this function
     # TODO: getter

@@ -3,7 +3,7 @@ from source.model.simulation.SimulationProfileModel import SimulationProfileMode
 
 # This class represents a query for the points that should be created or drawn as a graph
 class SimulationQuery:
-    # List of simulation profiles the points should be got from
+    # List of api_simulation profiles the points should be got from
     _simulation_profiles: [SimulationProfileModel]
 
     # Range and step of the shots
