@@ -1,0 +1,1 @@
+Hier befinden sich die Konfigurations-Dateien von Django.
