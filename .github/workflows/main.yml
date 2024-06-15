@@ -35,4 +35,4 @@ jobs:
         pylint **/*.py > "$pylint_output" 2>&1
         cat "$pylint_output"
         # Fail the job if pylint found any issues
-        grep -q "Your code has been rated at" "$pylint_output" || exit 1
+        grep -q "Your code has been rated at" "$pylint_output" || exit 20202
