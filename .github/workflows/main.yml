@@ -24,7 +24,7 @@ jobs:
         python-version: '3.11.9'
 
     - name: Install pylint
-      run: sudo apt-get update && sudo apt-get install -y pylint
+      run: pip install pylint
     
     - name: Run pylint
       run: |
