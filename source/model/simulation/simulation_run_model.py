@@ -1,5 +1,5 @@
 """
-This file contains the SimulationRunModel class, 
+This file contains the SimulationRunModel class,
 which represents an api_simulation run containing multiple or one point(s).
 """
 
