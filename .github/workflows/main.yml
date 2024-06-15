@@ -25,9 +25,8 @@ jobs:
 
     - name: Install pylint
       run: sudo apt-get update && sudo apt-get install -y pylint
-
-    - name: Verify .pylintrc presence
-      run: ls -la
     
     - name: Run pylint
-      run: pylint --rcfile=.pylintrc **/*.py
+      run: |
+          PYTHON_FILES=$(find . -name "*.py")
+          pylint --rcfile=.pylintrc $PYTHON_FILES
