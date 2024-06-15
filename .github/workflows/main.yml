@@ -30,8 +30,4 @@ jobs:
       run: ls -la
     
     - name: Run pylint
-      run: |
-        pylint_output=$(mktemp)
-        pylint **/*.py | tee "$pylint_output"
-        cat "$pylint_output"
-        grep -q "Your code has been rated at" "$pylint_output" || exit 101
+      run: pylint --rcfile=.pylintrc **/*.py
