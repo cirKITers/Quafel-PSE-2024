@@ -28,5 +28,8 @@ jobs:
     - name: Install pylint
       run: pip install pylint
 
+    - name: test
+      run: echo ls
+
     - name: Run pylint
       run: pylint **/*.py
