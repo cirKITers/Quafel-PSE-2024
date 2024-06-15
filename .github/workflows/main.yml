@@ -11,6 +11,7 @@ on:
 
 jobs:
   pylint:
+    name: Check CodeStyle with pylint
     runs-on: ubuntu-latest
 
     steps:
@@ -22,14 +23,11 @@ jobs:
       with:
         python-version: '3.11.9'
 
-    - name: Install pip
+    - name: Ensure pip
       run: python -m ensurepip --upgrade
 
     - name: Install pylint
       run: pip install pylint
 
-    - name: test
-      run: ls
-
     - name: Run pylint
-      run: pylint **/*.py
+      run: pylint --rcfile=$GITHUB_WORKSPACE/.pylintrc **/*.py
