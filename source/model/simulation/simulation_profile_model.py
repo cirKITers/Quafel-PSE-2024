@@ -1,5 +1,5 @@
 """
-This file contains the SimulationProfileModel class, 
+This file contains the SimulationProfileModel class,
 which represents an api_simulation program and version on a hardware_profile.
 """
 
