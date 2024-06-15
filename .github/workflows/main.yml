@@ -3,8 +3,17 @@ on:
     branches:
       - main
 jobs:
-  nothing:
+  code-style-check:
     runs-on: ubuntu-latest
+    name: Pylint Code Style Check
     steps:
-      - name: Do nothing
-        run: echo "Doing nothing"
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: PyLint
+        uses: gabriel-milan/action-pylint@v1
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} # GitHub token
+          path: "**/*.py" # Glob pattern for files to lint
+          fail: true # Fail the action if pylint errors are found
+          pr-message: false # Send a PR message if pylint errors are found
