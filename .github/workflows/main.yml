@@ -32,7 +32,6 @@ jobs:
     - name: Run pylint
       run: |
         pylint_output=$(mktemp)
-        pylint **/*.py > "$pylint_output" 2>&1
+        pylint **/*.py | tee "$pylint_output"
         cat "$pylint_output"
-        # Fail the job if pylint found any issues
         grep -q "Your code has been rated at" "$pylint_output" || exit 101
