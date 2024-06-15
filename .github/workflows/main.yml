@@ -22,9 +22,8 @@ jobs:
       with:
         python-version: '3.11.9'
 
-    - name: Install python
-      run: python3 -m pip install --upgrade pip
-        python3 -m pip install --upgrade pip
+    - name: Install pip
+      run: python -m ensurepip --upgrade
 
     - name: Install pylint
       run: pip install pylint
