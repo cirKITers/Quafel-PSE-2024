@@ -6,7 +6,7 @@ from django.db import models
 
 
 # This class represents an admin.
-class AdminModel(models.Model):
+class mmAdminModel(models.Model):
     """" This class represents an admin. """
     # The first name of the admin
     _first_name = models.CharField(max_length=30)
