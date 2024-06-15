@@ -28,6 +28,11 @@ jobs:
 
     - name: Verify .pylintrc presence
       run: ls -la
-
+    
     - name: Run pylint
-      run: pylint **/*.py
+      run: |
+        if [ -f .pylintrc ]; then
+          pylint --rcfile=.pylintrc **/*.py
+        else
+          pylint **/*.py
+        fi
