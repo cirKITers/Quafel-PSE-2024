@@ -1,4 +1,4 @@
-name: PyLint Code Style Check
+name: Check CodeStyle
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  lint:
+  pylint:
     runs-on: ubuntu-latest
 
     steps:
