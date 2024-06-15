@@ -1,9 +1,9 @@
 from django.db import models
 
-from source.model.simulation import SimulationProfileModel
-from source.model.simulation.SimulationQuery import SimulationQuery
-from source.model.simulation.SimulationRunModel import SimulationRunModel
-from source.model.util.FloatListField import FloatListField
+from source.model.simulation import simulation_profile_model
+from source.model.simulation.simulation_query_model import SimulationQuery
+from source.model.simulation.simulation_run_model import SimulationRunModel
+from source.model.util.float_list_field import FloatListField
 
 
 # This class represents a point of an api_simulation (a points has multiple results for different shots)
