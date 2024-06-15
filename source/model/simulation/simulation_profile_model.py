@@ -1,6 +1,6 @@
 from django.db import models
 
-from source.model.hardware_profile.HardwareProfileModel import HardwareProfileModel
+from source.model.hardware_profile.hardware_profile_model import HardwareProfileModel
 
 
 # This class represents an api_simulation program and version on a hardware_profile

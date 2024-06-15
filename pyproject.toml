@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "quafel-pse-2024"
+version = "0.1.0"
+description = ""
+authors = ["Nils Prommersberger <nils.prommersberger@icloud.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11.9"
+django = "^5.0.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,3 +1,6 @@
+"""
+This file contains the class AdminModel, which represents an admin.
+"""
 from django.db import models
 
 

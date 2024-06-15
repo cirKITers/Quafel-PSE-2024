@@ -1,4 +1,4 @@
-from source.model.simulation.SimulationProfileModel import SimulationProfileModel
+from source.model.simulation.simulation_profile_model import SimulationProfileModel
 
 
 # This class represents a query for the points that should be created or drawn as a graph
