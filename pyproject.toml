@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.11.9"
 django = "^5.0.6"
 django-db = "^0.0.7"
+pylint = "^3.2.3"
 
 
 [build-system]
