@@ -4,6 +4,10 @@ package simulation
 - Hier kann via der Hardwareprofile auf einem Quafel-Programm eine Simulation gestartet werden.
 - Anschließend erhält man Daten, diese müssen dann in die Klassen-Strukturen des Modells umgewandelt werden und via dem
   Controller anschließend in die Datenbank geschrieben werden.
+- Die Daten werden immer auf die gleiche Art und Weise zurückgegeben,
+sie werden auf dem DatenServer von QuafelWeb abgelegt und können von dort aus heruntergeladen werden.
+- Die Daten werden als CSV-Datei zurückgegeben.
+- Der Pfad zu den Daten ist der simulation_run klasse zu entnehmen.
 
 Methoden:
 

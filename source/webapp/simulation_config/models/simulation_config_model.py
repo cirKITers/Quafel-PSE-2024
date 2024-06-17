@@ -2,7 +2,7 @@
 This class represents a query for the points that should be created or drawn as a graph.
 """
 
-from source.model.simulation.simulation_profile_model import SimulationProfileModel
+from source.webapp.simulation_config.models.simulation_profile_model import SimulationProfileModel
 
 
 class SimulationQuery:

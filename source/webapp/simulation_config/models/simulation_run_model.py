@@ -5,7 +5,7 @@ which represents an api_hardware run containing multiple or one point(s).
 
 
 from django.db import models
-from source.model.simulation.simulation_point_model import SimulationPointModel
+from source.webapp.simulation_config.models.simulation_point_model import SimulationPointModel
 
 
 class SimulationRunModel(models.Model):

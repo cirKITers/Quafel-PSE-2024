@@ -4,7 +4,7 @@ which represents an api_hardware program and version on a hardware_profile.
 """
 
 from django.db import models
-from source.model.hardware_profile.hardware_profile_model import HardwareProfileModel
+from source.webapp.simulation_config.hardware_profile_model import HardwareProfileModel
 
 
 class SimulationProfileModel(models.Model):

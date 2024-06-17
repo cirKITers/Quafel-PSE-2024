@@ -4,9 +4,9 @@ This file contains the model for the simulation_point.
 
 from django.db import models
 
-from source.model.simulation.simulation_profile_model import SimulationProfileModel
-from source.model.simulation.simulation_query_model import SimulationQuery
-from source.model.util.float_list_field import FloatListField
+from source.webapp.simulation_config.models.simulation_profile_model import SimulationProfileModel
+from source.webapp.simulation_config.models.simulation_config_model import SimulationQuery
+from source.webapp.simulation_config.util.float_list_field import FloatListField
 
 
 class SimulationPointModel(models.Model):
