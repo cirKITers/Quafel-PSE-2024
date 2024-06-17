@@ -1,5 +1,5 @@
 """
-This modules purpose is to define the interface for a hardware-node outside the hardware-node-app of django.
+This modules purpose is to define the interface for a node profile outside the hardware-node-app of django.
 This prevents that the simulation_config app is dependent on the hardware-node app.
 
 This module contains the interface for a hardware-node.
@@ -9,10 +9,16 @@ A hardware-node has a description to describe the hardware-node and some informa
 from abc import abstractmethod, ABC
 
 
-class IHardwareNode(ABC):
+class INodeProfile(ABC):
     """
     Interface for the hardware-node model.
     """
+
+    @abstractmethod
+    def get_name(self) -> str:
+        """
+        Returns the name of the hardware-node.
+        """
 
     @abstractmethod
     def get_description(self) -> str:
