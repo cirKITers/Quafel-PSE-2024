@@ -53,15 +53,15 @@
 <!-- Menu bar -->
 <div class="menu-bar">
     <div class="logo">
-        <!-- TODO: Register index, make beauty, make button -->
-        QuafelWeb
+        <!-- Get the name of the main site from the registry -->
+        {{ main_site_name }}
     </div>
     <div class="tabs">
         <!-- Example tabs, replace with your actual tabs -->
         <!-- TODO: Create register function and do here a for loop to display the content -->
-        <div class="tab">Tab 1</div>
-        <div class="tab">Tab 2</div>
-        <div class="tab">Tab 3</div>
+        {% for tab in tabs %}
+            <a href="{{ tab.url }}" class="tab">{{ tab.name }}</a>
+        {% endfor %}
     </div>
     <button class="login-button">
     <!-- TODO: Add login/logout functionality -->
