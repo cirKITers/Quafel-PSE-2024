@@ -11,16 +11,16 @@ from source.model.util.float_list_field import FloatListField
 
 class SimulationPointModel(models.Model):
     """
-    This class represents a point of an api_simulation (a points has multiple results for different shots)
+    This class represents a point of an api_hardware (a points has multiple results for different shots)
     """
 
-    # The api_simulation-program and version this point was made for
+    # The api_hardware-program and version this point was made for
     _simulation_profile = models.ForeignKey(SimulationProfileModel, on_delete=models.CASCADE)
 
     # The state of the point if it is finished or not
     _finished = models.BooleanField(default=False)
 
-    # The api_simulation run this point belongs to
+    # The api_hardware run this point belongs to
     _simulation_run = models.ForeignKey("SimulationRunModel", on_delete=models.CASCADE, related_name='points')
 
     # Amount of shots

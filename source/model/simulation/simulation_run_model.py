@@ -1,6 +1,6 @@
 """
 This file contains the SimulationRunModel class,
-which represents an api_simulation run containing multiple or one point(s).
+which represents an api_hardware run containing multiple or one point(s).
 """
 
 
@@ -10,8 +10,8 @@ from source.model.simulation.simulation_point_model import SimulationPointModel
 
 class SimulationRunModel(models.Model):
     """
-    This class represents an api_simulation run containing multiple or one point(s).
-    This class is used to identify the location, where the result of run is stored to complete the api_simulation.
+    This class represents an api_hardware run containing multiple or one point(s).
+    This class is used to identify the location, where the result of run is stored to complete the api_hardware.
     """
 
     def get_points(self) -> [SimulationPointModel]:
@@ -45,7 +45,7 @@ class SimulationRunModel(models.Model):
     def get_path(self) -> str:
         """
         Get the path of the run
-        The path is the location where the result of the run is stored to complete the api_simulation.
+        The path is the location where the result of the run is stored to complete the api_hardware.
         :return: The path of the run
         """
         # TODO: implement this function
