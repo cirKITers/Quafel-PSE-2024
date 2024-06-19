@@ -1,1 +1,0 @@
-Her befindet sich alles, das Django braucht, um zu funktionieren. 
