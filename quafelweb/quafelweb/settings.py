@@ -61,7 +61,7 @@ ROOT_URLCONF = 'quafelweb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['quafelweb/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,14 +82,21 @@ WSGI_APPLICATION = 'quafelweb.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "database",
-        "USER": "postgres",
-        "PASSWORD": "postgresql",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "mydatabase",
     }
 }
+# TODO this should work 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "database",
+#         "USER": "postgres",
+#         "PASSWORD": "postgresql",
+#         "HOST": "127.0.0.1",
+#         "PORT": "5432",
+#     }
+# }
 
 
 # Password validation
@@ -132,3 +139,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+OID_CONF_URL = "https://oidc.scc.kit.edu/auth/realms/kit/.well-known/openid-configuration"
+
+AUTHLIB_OAUTH_CLIENTS = {
+    'kitopenid': {
+        'client_id': "quafelweb-pse2024-scc-kit-edu",
+        'client_secret': "gsIpGaFHNPK6e4cfqDLVkLbSjuzGBi8n"
+    }
+}
