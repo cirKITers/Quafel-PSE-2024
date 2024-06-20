@@ -8,7 +8,7 @@ class BaseAuthenticator(ABC):
   _AUTHENTICATORS : dict[str, "BaseAuthenticator"] = dict() 
 
   @abstractmethod
-  def authenticate(self, request):
+  def authenticate(self, request, callback_path):
     raise NotImplementedError()
   
   @abstractmethod

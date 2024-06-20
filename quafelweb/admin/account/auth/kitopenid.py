@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from authlib.integrations.django_client import OAuth
 from authlib.integrations.django_client import token_update
 from django.shortcuts import redirect
-from admin.account import authenticate
+from quafelweb.admin.account.auth import authenticate
 
 class KITOpenIDAuth(authenticate.BaseAuthenticator):
 
