@@ -10,4 +10,4 @@ class HardwareConfig(AppConfig):
     Configuration for the hardware node app.
     """
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'admin.hardware'
+    name = 'hardware_controller'

@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from authlib.integrations.django_client import OAuth
 from authlib.integrations.django_client import token_update
 from django.shortcuts import redirect
-from quafelweb.admin.account.auth import authenticate
+from account_controller import authenticate
 
 class KITOpenIDAuth(authenticate.BaseAuthenticator):
 
@@ -30,7 +30,6 @@ class KITOpenIDAuth(authenticate.BaseAuthenticator):
 
   def get_identifier(self, request):
     if not self.is_logged_in(request): return None
-
     return request.session.get('user_info')['email']
   
   def is_logged_in(self, request):

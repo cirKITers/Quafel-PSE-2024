@@ -16,7 +16,7 @@ def index(request):
         "Qbits": list(range(16)),
         "Duration": list(1000 * (i ** 2) for i in range(16))
     })
-    fig = px.density_contour(df, x="Qbits", y="Duration")
+    fig = px.line(df)
     graph_div = fig.to_html(full_html=False)
 
     # Pass the plot to the HTML template

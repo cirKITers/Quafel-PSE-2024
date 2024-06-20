@@ -1,13 +1,13 @@
 """
-Apps configuration for simulation visual app.
+Apps configuration for simulation config app.
 """
 
 from django.apps import AppConfig
 
 
-class SimulationVisualConfig(AppConfig):
+class SimulationConfigConfig(AppConfig):
     """
     Configuration for the simulation submit app.
     """
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'public.simulation_visualization'
+    name = 'simulation_data'

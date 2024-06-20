@@ -1,6 +1,6 @@
 
 from django.urls import path
-from admin.account import manager
+from account_controller import manager
 
 urlpatterns = [
     path('', manager.AccountManager.index),
