@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}QuafelWeb{% endblock %}</title>
+    <!-- TODO: Use KIT style -->
+</head>
+<body>
+<!-- Menu bar -->
+<div class="menu-bar">
+    <div class="logo">
+        <!-- Get the name of the main site from the registry -->
+        {{ main_site_name }}
+    </div>
+    <div class="tabs">
+        <!-- Example tabs, replace with your actual tabs -->
+        <!-- TODO: Create register function and do here a for loop to display the content -->
+        {% for tab in tabs %}
+            <a href="{{ tab.url }}" class="tab">{{ tab.name }}</a>
+        {% endfor %}
+    </div>
+    <button class="login-button">
+    <!-- TODO: Add login/logout functionality -->
+        Login 
+    </button>
+</div>
+
+<!-- Content area -->
+<div class="content">
+    {% block content %}
+    <!-- Child templates will override this block with their content -->
+    <h2>Welcome to QuafelWeb!</h2>
+    <p>This is the default content area.</p>
+    {% endblock %}
+</div>
+</body>
+</html>
