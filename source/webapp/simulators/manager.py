@@ -12,14 +12,11 @@ def run(username:str, host:str, port:str, password:str, totp: str,
         min_depth: int, max_depth: int, depth_increment: int, depth_type: str, 
         min_shots: int, max_shots: int, shots_increment: int, shots_type: str,
         quantum_framework: list[str], evaluations: int):
-    # was ist i node?
     """
-    try to run the i_node
+    Connect to node through ssh with username, host, port, password
+    if QUAFEL is not set up, set it up
+    Run QUAFEL with given parameters
     """
-    # Connect to the node with ip, port and totp
-    # Check if the node is set up
-    # Setup if not set up
-    # Run the node with the config ???
 
 
 def get_output(username:str, host:str, port:str, password:str, totp: str):
