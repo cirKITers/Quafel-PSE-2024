@@ -11,6 +11,8 @@ django = "^5.0.6"
 django-db = "^0.0.7"
 pylint = "^3.2.3"
 postgres = "^4.0"
+plotly = "^5.22.0"
+pandas = "^2.2.2"
 
 
 [build-system]
