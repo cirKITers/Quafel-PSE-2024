@@ -1,10 +1,11 @@
 from typing import Self
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
 import admin.account.auth.kitopenid # This needs to be here
-from admin.account import authenticate
+from quafelweb.admin.account.auth import authenticate
+from admin.account.models import QuafelAdmin
 # Create your views here.
 
 class AccountManager():
@@ -18,16 +19,22 @@ class AccountManager():
     def _deco(req):
       if not AccountManager._AUTH.is_logged_in(req):
         return AccountManager._AUTH.authenticate(req, req.build_absolute_uri(reverse('auth')))
-      # TODO: verify user is in the admin group
+      ident = AccountManager._AUTH.get_identifier(req)
+      if QuafelAdmin.objects.contains(QuafelAdmin(ident)):
+        return redirect('denied')
       return fn(req)
     
     return _deco
+  
+  def access_denied(req):
+    return HttpResponse("Access denied")
 
   @require_login
   def index(req):
+    # if openid causes any problems use localhost instead of 127.0.0.1 // localhost is allowed as an return path
 
     ident = AccountManager._AUTH.get_identifier(req)
-    return HttpResponse("Your email is " + req.session['user_ident'])
+    return HttpResponse("Your email is " + ident)
     
 
   

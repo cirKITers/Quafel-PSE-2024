@@ -43,13 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # lib
+    # libs
     'authlib',
 
-    # app
+    # apps
     'public.simulation_visualization',
+    'admin.account',
     'admin.hardware',
-    'admin.account'
 
 ]
 
