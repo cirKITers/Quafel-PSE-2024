@@ -7,18 +7,19 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 import plotly.express as px
-import pandas as pd
+from random import randint
 
-@login_required
-def index(request):
-    # Generate the plot
-    df = pd.DataFrame({
-        "Qbits": list(range(16)),
-        "Duration": list(1000 * (i ** 2) for i in range(16))
-    })
-    fig = px.line(df)
-    graph_div = fig.to_html(full_html=False)
+class SimulationView:
 
-    # Pass the plot to the HTML template
-    context = {'graph_div': graph_div}
-    return render(request, 'index.html', context)
+    @staticmethod
+    def graph(x_label : str, y_label : str, x_data : list, y_data : list) -> str:
+      return px.line(x=x_data, y=y_data, labels=[x_label, y_label]).to_html(full_html=False)
+
+    def index(request):
+        # Generate the plot
+        # Pass the plot to the HTML template
+        context = { 'graph_div' : SimulationView.graph("Y", "X", list(range(16)), [randint(0, 100) for _ in range(16)])}
+        return render(request, 'index.html', context)
+    
+    def specific(request, qbit_start, qbit_end, depth_start, depth_end, evals_start, evals_end):
+        ...
