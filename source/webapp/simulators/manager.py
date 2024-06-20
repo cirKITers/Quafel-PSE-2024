@@ -14,7 +14,7 @@ def run(username:str, host:str, port:str, password:str, totp: str,
         quantum_framework: list[str], evaluations: int):
     """
     Connect to node through ssh with username, host, port, password
-    if QUAFEL is not set up, set it up
+    if correct QUAFEL version is not set up, set it up
     Run QUAFEL with given parameters
     """
 
