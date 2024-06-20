@@ -3,9 +3,9 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-import admin.account.auth.kitopenid # This needs to be here
-from quafelweb.admin.account.auth import authenticate
-from admin.account.models import QuafelAdmin
+import account_controller.kitopenid # This needs to be here
+from account_controller import authenticate
+from account_controller.models import QuafelAdmin
 # Create your views here.
 
 class AccountManager():
@@ -36,7 +36,6 @@ class AccountManager():
     ident = AccountManager._AUTH.get_identifier(req)
     return HttpResponse("Your email is " + ident)
     
-
-  
+    
   def auth_view(req):
     return AccountManager._AUTH.authenticate_callback(req)

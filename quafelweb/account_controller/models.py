@@ -4,7 +4,7 @@ from django.db import models
 
 class QuafelAdmin(models.Model):
     
-  identifier = models.CharField(max_length=200, primary_key=True)
+  identifier = models.CharField(max_length=50, primary_key=True)
 
   def __str__(self):
     return self.identifier

@@ -47,10 +47,11 @@ INSTALLED_APPS = [
     'authlib',
 
     # apps
-    'public.simulation_visualization',
-    'admin.account',
-    'admin.hardware',
-
+    'account_controller',
+    'hardware_controller',
+    'simulation_controller',
+    'simulation_data',
+    'simulation_view',
 ]
 
 MIDDLEWARE = [
@@ -68,7 +69,7 @@ ROOT_URLCONF = 'quafelweb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['quafelweb/templates'],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

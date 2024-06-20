@@ -18,6 +18,6 @@ from django.urls import path, include
 from django.contrib import admin
 
 urlpatterns = [
-    path('', include('public.simulation_visualization.urls')),
-    path('admin/', include('admin.urls'))
+    path('', include('simulation_view.urls')),
+    path('account/', include('account_controller.urls'))
 ]
