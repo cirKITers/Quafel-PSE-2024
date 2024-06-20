@@ -43,7 +43,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'public.simulation_visualization'
+    # lib
+    'authlib',
+
+    # app
+    'public.simulation_visualization',
+    'admin.hardware',
+    'admin.account'
+
 ]
 
 MIDDLEWARE = [
@@ -139,12 +146,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-OID_CONF_URL = "https://oidc.scc.kit.edu/auth/realms/kit/.well-known/openid-configuration"
-
-AUTHLIB_OAUTH_CLIENTS = {
-    'kitopenid': {
-        'client_id': "quafelweb-pse2024-scc-kit-edu",
-        'client_secret': "gsIpGaFHNPK6e4cfqDLVkLbSjuzGBi8n"
-    }
-}
