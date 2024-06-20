@@ -12,10 +12,15 @@ def run(username:str, host:str, port:str, password:str, totp: str, slurm: str,
         min_depth: int, max_depth: int, depth_increment: int, depth_type: str, 
         min_shots: int, max_shots: int, shots_increment: int, shots_type: str,
         quantum_framework: list[str], evaluations: int):
-    """
-    Connect to node through ssh with username, host, port, password, 
+    connection = connect(username, host, port, password, totp, slurm)
+    """ 
     if correct QUAFEL version is not set up, set it up
     Run QUAFEL with given parameters through SLURM
+    """
+
+def connect(username:str, host:str, port:str, password:str, totp: str, slurm: str):
+    """
+    Connect to the node through ssh with username, host, port, password, totp and slurm.
     """
 
 
