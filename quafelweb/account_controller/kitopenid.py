@@ -39,7 +39,7 @@ class KITOpenIDAuth(authenticate.BaseAuthenticator):
   @receiver(token_update)
   def on_token_update(self, sender, name, token, refresh_token=None, access_token=None, **kwargs):
       if refresh_token:
-          item = self.oauth.find(name=name, refresh_token=refresh_token)
+        item = self.oauth.find(name=name, refresh_token=refresh_token)
       elif access_token:
           item = self.oauth.find(name=name, access_token=access_token)
       else:
