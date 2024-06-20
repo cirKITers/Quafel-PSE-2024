@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from django.dispatch import receiver
 from authlib.integrations.django_client import OAuth
 from authlib.integrations.django_client import token_update
+from django.shortcuts import redirect
 from admin.account import authenticate
 
 class KITOpenIDAuth(authenticate.BaseAuthenticator):
@@ -18,20 +19,22 @@ class KITOpenIDAuth(authenticate.BaseAuthenticator):
         client_kwargs={'scope': 'openid email'}
     )
 
-  def authenticate(self, request):
-    request.session["last_request"] = request.get_
-    return self.oauth.kitopenid.authorize_redirect(request, request.get_raw_uri())
+  def authenticate(self, request, auth_callback):
+    request.session["last_request"] = request.build_absolute_uri()
+    return self.oauth.kitopenid.authorize_redirect(request, auth_callback)
 
-  def authenticate_callback_view(self, request):
+  def authenticate_callback(self, request):
     token = self.oauth.kitopenid.authorize_access_token(request)
-    request.session['user'] = token['userinfo']['email']
-    return request.session["last_request"]
+    request.session['user_info'] = token['userinfo']
+    return redirect(request.session.get("last_request", '/'))
 
   def get_identifier(self, request):
-    return request.session.get('user')
+    if not self.is_logged_in(request): return None
+
+    return request.session.get('user_ident')
   
-  def get_identifier(self, request):
-    return request.session.get('user') is not None
+  def is_logged_in(self, request):
+    return 'user_ident' in request.session
   
     
   @receiver(token_update)

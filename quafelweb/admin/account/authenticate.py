@@ -5,14 +5,14 @@ from django.shortcuts import redirect
 
 class BaseAuthenticator(ABC):
 
-  _AUTHENTICATORS : dict[str, "BaseAuthenticator"]= dict() 
+  _AUTHENTICATORS : dict[str, "BaseAuthenticator"] = dict() 
 
   @abstractmethod
   def authenticate(self, request):
     raise NotImplementedError()
   
   @abstractmethod
-  def authenticate_callback_view(self, request):
+  def authenticate_callback(self, request):
     raise NotImplementedError()
   
   @abstractmethod

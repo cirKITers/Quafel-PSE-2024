@@ -1,7 +1,7 @@
 
-from django.urls import path
-from admin.account import views
+from django.urls import path, include
+from admin.account import manager
 
 urlpatterns = [
-    path('account/', views.AccountManager.index),
+    path('account/', include("admin.account.urls")),
 ]
