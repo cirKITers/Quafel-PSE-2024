@@ -31,10 +31,10 @@ class KITOpenIDAuth(authenticate.BaseAuthenticator):
   def get_identifier(self, request):
     if not self.is_logged_in(request): return None
 
-    return request.session.get('user_ident')
+    return request.session.get('user_info')['email']
   
   def is_logged_in(self, request):
-    return 'user_ident' in request.session
+    return 'user_info' in request.session
   
     
   @receiver(token_update)
