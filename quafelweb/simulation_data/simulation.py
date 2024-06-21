@@ -3,7 +3,7 @@ from models import HardwareProfile, SimulatorProfile
 
 @dataclass
 class SimulationEnv:
-  
+
   # this does not need to be stored, can this be a normal class
   hardware : HardwareProfile
   
@@ -21,3 +21,5 @@ class SimulationGroup:
   depths : set[int]
 
   evals : set[int]
+
+  shots : set[int]

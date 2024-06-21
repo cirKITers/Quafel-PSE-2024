@@ -18,13 +18,17 @@ class SimulationRun(models.Model):
 
   simulator_name = models.ForeignKey(SimulatorProfile, on_delete=models.CASCADE)
 
+  user = models.CharField(max_length=100)
+
   # CONF
 
   shots = models.IntegerField()
 
-  qubits = models.IntegerField()
-
+  qbits = models.IntegerField()
+  
   depth = models.IntegerField()
+
+  evals = models.IntegerField()
 
 
   # STATUS
