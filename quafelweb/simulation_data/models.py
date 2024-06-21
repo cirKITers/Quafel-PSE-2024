@@ -41,3 +41,9 @@ class SimulationRun(models.Model):
 
   durations = models.FloatField(max_length=100)
 
+  # variables check on model level, raise Exception if domain criteria not met
+  def clean(self):
+    ...
+
+
+
