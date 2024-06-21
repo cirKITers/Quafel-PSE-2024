@@ -16,7 +16,7 @@ class SimulationView:
     context = { 'graph_div' : SimulationView.graph("Y", "X", list(range(16)), [randint(0, 100) for _ in range(16)])}
     sim_evs = [ SimulationEnv(HardwareProfile())]
 
-    SimulationView.render_view(request, sim_evs, sim_confs)
+    return SimulationView.render_view(request, sim_evs)
   
   def specific(request, qbit_start, qbit_end, depth_start, depth_end, evals_start, evals_end):
       ...
