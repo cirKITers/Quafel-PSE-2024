@@ -45,5 +45,10 @@ class SimulationRun(models.Model):
   def clean(self):
     ...
 
+  # calculate and return max runs and also return already simulated runs
+  def calculateRunnedData(self):
+    ...
+
+
 
 
