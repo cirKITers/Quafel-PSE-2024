@@ -20,8 +20,4 @@ class HardwareView:
   def archive_profile(request):
     ...
 
-  # return List of HardwareProfile Ids connected with the request
-  def getConst(request):
-    ...
-
   
