@@ -1,55 +1,43 @@
-# Quafel-PSE-2024
+# QuafelWeb
 
-Quafel-PSE 2024
+QuafelWeb is a web application to visualize and manage data from various
+quantum computing simulators with the help of [Quafel](https://github.com/cirKITers/Quafel).
 
-[Link DOC session 23.04.2024](https://1drv.ms/o/s!Ag_4xbQUhPOygusGDPI2pwFZw97NMg?e=WyGdqK)
+## Set up and run the project
 
-## Pflichtenheft
+### Project Dependencies
+- [Python 3.11.9](https://www.python.org/downloads/)
+- [Poetry](https://python-poetry.org/docs/)
+- [Docker](https://docs.docker.com/get-docker/)
 
-1. Systemmodell und Umgebung
+### Finish Setting Up
+After installing the dependencies and cloning the repository, 
+run the following command in the root of the project to install the 
+python dependencies and finish setting up:
 
-        *---*----------------|Server|-*-|DB|
-        |   |                         |
-        |   Web Interface             Simulation Interface
-        Admin Panel
+```bash
+poetry install
+```
 
-2. Zielbestimmungen
-    - Web Interface Auswahl der Simulationsprogramme
-    - Welche Daten plotten?
-    - Herunterladen von graphen (SVG etc.) (Wunsch)
-    - Persistente links (Wunsch)
-    - Login
+### Run the project
+To run the project, the following commands must be executed:
 
-Admin Panel
+- This will start the database and the simulated hardware profile:
+```bash
+docker-compose up -d
+```
 
-- Logging
-- Authentifizierung / Authorization
-- Benutzerverwaltung
-- SCC Integration ? Shibboleth (Wunsch)
+- this will update the database schema:
+```bash
+poetry run python quafelweb/manage.py migrate
+```
 
-Graphen
+- This will start the web application:
+```bash
+poetry run python quafelweb/manage.py runserver
+```
 
-- Interaktiv
-- FrameWorks
-- Import & Export von Daten (Wunsch)
-
-API Server-Client
-
-- Sicherheit (HTTPS) / REST API ?
-- Websocket for live reload
-
-Server Datenbank
-
-- Simulation
-- User
-- Configuration (Wunsch)
-- Configuration per Environment
-
-Server Simulation
-
-- Schnittstelle CSV
-- Schnittstellenerweiterung (Wunsch)
-- Echtzeitüberwachung?
-- Welche Daten haben wir
-- Hardware Serialisation (Wunsch)
-- Caching von Simulations-Durchgängen (Wunsch)
+### Additional information
+- The web application can be accessed at `http://localhost:8000/`
+- The simulated hardware-profile is available via ssh at `localhost:2222` 
+with the credentials `user:password`
