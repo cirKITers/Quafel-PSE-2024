@@ -1,6 +1,12 @@
 version: '3.8'
 
 services:
+  hardware_profile_1:
+    build:
+      dockerfile: HardwareProfile.Dockerfile
+    ports:
+      - "2222:22"
+  
   postgres:
     image: postgres:latest
     container_name: postgres_quafel_web
