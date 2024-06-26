@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 
 import plotly.express as px
@@ -14,9 +15,8 @@ class SimulationView:
     # Generate the plot
     # Pass the plot to the HTML template
     context = { 'graph_div' : SimulationView.graph("Y", "X", list(range(16)), [randint(0, 100) for _ in range(16)])}
-    sim_evs = [ SimulationEnv(HardwareProfile())]
 
-    return SimulationView.render_view(request, sim_evs)
+    return HttpResponse(request, "Working Index page")
   
   def specific(request, qbit_start, qbit_end, depth_start, depth_end, evals_start, evals_end):
       ...
