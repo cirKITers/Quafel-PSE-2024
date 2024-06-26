@@ -6,7 +6,7 @@ authors = ["Nils Prommersberger <nils.prommersberger@icloud.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11.9"
+python = "^3.12"
 django = "^5.0.6"
 django-db = "^0.0.7"
 pylint = "^3.2.3"
