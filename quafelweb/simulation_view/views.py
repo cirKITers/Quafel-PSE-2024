@@ -27,9 +27,3 @@ class SimulationView:
     context = { 'environments' : sim_envs }
 
     return render(request, 'index.html', context)
-
-    
-  # return Integers of Simulation Data already in database
-  def getRunnedData(request):
-    ...
-  
