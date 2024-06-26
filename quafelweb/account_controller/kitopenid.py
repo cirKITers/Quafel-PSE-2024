@@ -34,22 +34,5 @@ class KITOpenIDAuth(authenticate.BaseAuthenticator):
   
   def is_logged_in(self, request):
     return 'user_info' in request.session
-  
-    
-  @receiver(token_update)
-  def on_token_update(self, sender, name, token, refresh_token=None, access_token=None, **kwargs):
-      if refresh_token:
-        item = self.oauth.find(name=name, refresh_token=refresh_token)
-      elif access_token:
-          item = self.oauth.find(name=name, access_token=access_token)
-      else:
-          return
-
-      # update old token
-      item.access_token = token['access_token']
-      item.refresh_token = token.get('refresh_token')
-      item.expires_at = token['expires_at']
-      item.save()
-
 
 authenticate.BaseAuthenticator.RegisterInstance("kitopenid", KITOpenIDAuth())

@@ -5,7 +5,7 @@ from django.urls import reverse
 
 import account_controller.kitopenid # This needs to be here
 from account_controller import authenticate
-from account_controller.models import QuafelAdmin
+from account_controller.models import AdminAccount
 # Create your views here.
 
 class AccountManager():
@@ -20,7 +20,7 @@ class AccountManager():
       if not AccountManager._AUTH.is_logged_in(req):
         return AccountManager._AUTH.authenticate(req, req.build_absolute_uri(reverse('auth')))
       ident = AccountManager._AUTH.get_identifier(req)
-      if QuafelAdmin.objects.contains(QuafelAdmin(ident)):
+      if AdminAccount.objects.contains(AdminAccount(ident)):
         return redirect('denied')
       return fn(req)
     

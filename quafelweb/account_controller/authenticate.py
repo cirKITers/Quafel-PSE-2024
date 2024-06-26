@@ -23,6 +23,7 @@ class BaseAuthenticator(ABC):
   def is_logged_in(self, request):
     raise NotImplementedError()
   
+
   def RegisterInstance(name : str, auth : "BaseAuthenticator"):
     BaseAuthenticator._AUTHENTICATORS[name] = auth
 
