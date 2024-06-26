@@ -1,6 +1,6 @@
-poetry.lock
-
+*.lock
 *.pyc
+mydatabase
 #Simulation results
 source/api_out_input/results/
 source/api_out_input/myKey
@@ -170,3 +170,6 @@ cython_debug/
 /poetry.lock
 
 **/mydatabase
+*.pyc
+*.lock
+quafelweb/mydatabase
