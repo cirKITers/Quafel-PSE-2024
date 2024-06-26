@@ -36,7 +36,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -49,6 +48,7 @@ INSTALLED_APPS = [
     # apps
     'account_controller',
     'hardware_controller',
+    'quafel_simulators',
     'simulation_controller',
     'simulation_data',
     'simulation_view',
@@ -84,27 +84,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'quafelweb.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "mydatabase",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "database",
+        "USER": "postgres",
+        "PASSWORD": "postgresql",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
-# TODO this should work 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "database",
-#         "USER": "postgres",
-#         "PASSWORD": "postgresql",
-#         "HOST": "127.0.0.1",
-#         "PORT": "5432",
-#     }
-# }
 
 
 # Password validation
