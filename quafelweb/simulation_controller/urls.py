@@ -1,3 +1,5 @@
-urlpatterns = [
-  
-]
+'''
+Defines the url routing 
+'''
+
+urlpatterns = []

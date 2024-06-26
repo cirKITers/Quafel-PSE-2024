@@ -1,5 +1,8 @@
+'''
+Defines the models used to store SimulationRuns in an database
+'''
 from django.db import models
-from hardware_controller.models import HardwareProfile
+from quafelweb.hardware_controller.models import HardwareProfile
 
 
 #TODO do this from a conf file maybe even in the settings
