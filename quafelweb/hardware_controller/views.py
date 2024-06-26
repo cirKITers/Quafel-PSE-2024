@@ -5,7 +5,7 @@ from account_controller.manager import AccountManager
 class HardwareView:
 
   # /hardware
-  def index(request):
+  def manage_controllers(request):
     ...
 
   # /hardware/add with post
@@ -20,8 +20,5 @@ class HardwareView:
   def archive_profile(request):
     ...
 
-  # return List of HardwareProfile Ids connected with the request (persistent Links)
-  def getConst(request):
-    ...
 
   
