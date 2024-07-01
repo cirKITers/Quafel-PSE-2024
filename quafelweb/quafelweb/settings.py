@@ -16,6 +16,18 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# Add .env variables anywhere before SECRET_KEY
+dotenv_file = (BASE_DIR.parent / ".env_secret").resolve()
+if dotenv_file.is_file():
+    for line in dotenv_file.read_text().splitlines():
+        if line.startswith("#"): continue
+        line = line.strip().replace(' ', '')
+        key, value = line.split("=", 2)
+        os.environ[key] = value
+else:
+    raise RuntimeError("The .env_secret file is not present, get the .env_secret file from an admin")
+
 # Build path for the source outside the django-project
 EXTERNAL_DIR = os.path.join(BASE_DIR, '..', '..')
 if EXTERNAL_DIR not in sys.path:
@@ -109,3 +121,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+OPENID_SECRET = os.environ["OPENID_KIT_SECRET_KEY"]
+OPENID_CLIENT_ID = os.environ["OPENID_KIT_CLIENT_ID"]
+
+OPENID_CONF_URL = "https://oidc.scc.kit.edu/auth/realms/kit/.well-known/openid-configuration"
+OPENID_CLIENT_IDENT = 'email'
