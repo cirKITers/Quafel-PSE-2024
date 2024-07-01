@@ -3,7 +3,21 @@
     <script src="https://cdn.plotly.com/plotly-2.10.1.min.js"></script>
   </head>
   <body>
+    <div id='site_navbar'>
+      <a id='site_navbar_logo' class='site_navbar_link' href='/'>QuafelWeb<a>
+      <div id='site_navbar_links'>
+        <a class='site_navbar_link' href="/account/login">Login</a>
+        {% if session.logged_in %}
+        <a class='site_navbar_link' href="/simulation">Simulation</a>
+        <a class='site_navbar_link' href="/hardware">Hardware</a>
+        <a class='site_navbar_link' href="/account">Accounts</a>
+        <a class='site_navbar_link' href="/account/logout">Logout</a>
+        {% endif %}  
+      </div>
+    </div>
+    <div id='site_content'>
     {% block content %}
     {% endblock %}
+    </div>
   </body>
 </html>
