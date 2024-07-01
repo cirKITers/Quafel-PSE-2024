@@ -16,7 +16,7 @@ class SimulationView:
     # Pass the plot to the HTML template
     context = { 'graph_div' : SimulationView.graph("Y", "X", list(range(16)), [randint(0, 100) for _ in range(16)])}
 
-    return HttpResponse(request, "Working Index page")
+    return render(request, "simulation.html")
   
   def specific(request, qbit_start, qbit_end, depth_start, depth_end, evals_start, evals_end):
       ...
@@ -26,4 +26,4 @@ class SimulationView:
   
     context = { 'environments' : sim_envs }
 
-    return render(request, 'index.html', context)
+    return render(request, 'simulation.html', context)

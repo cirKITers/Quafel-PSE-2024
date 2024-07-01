@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
+  
     path('', RedirectView.as_view(url='view', permanent=False), name='index'),
     path('view/', include('simulation_view.urls')),
     path('account/', include('account_controller.urls')),
