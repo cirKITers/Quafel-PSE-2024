@@ -1,9 +1,9 @@
 
 from django.urls import path
-from account_controller import manager
+from account_controller import views
 
 urlpatterns = [
-    path('', manager.AccountManager.index),
-    path('auth/', manager.AccountManager.auth_view, name='auth'),
-    path('denied/', manager.AccountManager.access_denied, name='denied')
+    path('', views.AccountView.manage_accounts),
+    path('auth/', views.AccountView.authenticate_callback, name='auth_callback'),
+    path('denied/', views.AccountView.denied, name='denied')
 ]
