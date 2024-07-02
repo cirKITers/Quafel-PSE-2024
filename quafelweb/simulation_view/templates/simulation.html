@@ -1,19 +1,49 @@
-{% extends "default_template.html" %}
+{% extends "core.html" %}
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'simulation.css' %}">
+{%endblock%}
 
 {% block content %}
 
-<div id="environments">
-{% comment %} {% for env in environments %}
-  <div class='environment'>
-    <p>{% env.name %}</p>
+<div id="sim_envs">
+  {% for env in environments %}
+  <div class='env_container'>
+    <button class='env_visibility_toggle'></button>
+    <div>
+      <p>{{ env.simulator.name }}</p>
+      <p>{{ env.hardware.name }}</p>
+    </div>
+    <p>{{ env.simulator.version }}</p>
+    {% labeled_button 'delete' %}
   </div>
-{% endfor %} {% endcomment %}
+  {% endfor %}
+  <button id='add_env_button'>Add Environment</button>
 </div>
-</div>
-<div>
+<div id="graph_container">
   {{ graph_div|safe }}
 </div>
-<div id="sim_conf_selectors">
+<div id="sim_confs">
+<div class = 'sim_conf'>
+  <p>Qubits</p>
+  
+  <div>
+    <input></input>
+    <input></input>
+  </div>
 </div>
-
+<div class = 'sim_conf'>
+  <p>Depth</p>
+  <div>
+    <input></input>
+  </div>
+</div>
+<div class = 'sim_conf'>
+  <p>Evaluations</p>
+  <div>
+    <input></input>
+  </div>
+</div>
+</div>
 {% endblock %}

@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.plotly.com/plotly-2.10.1.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'default.css' %}">
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body>
+    <div id='site_navbar'>
+      <a id='site_navbar_logo' class='site_navbar_link' href='/'>QuafelWeb<a>
+      <div id='site_navbar_links'>
+        {% if request.session.logged_in %}
+        <a class='site_navbar_link' href="{% url 'simulation' %}">Simulation</a>
+        <a class='site_navbar_link' href="{% url 'hardware' %}">Hardware</a>
+        <a class='site_navbar_link' href="{% url 'account' %}">Accounts</a>
+        <a class='site_navbar_link' href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <a class='site_navbar_link' href="{% url 'login' %}">Login</a>
+        {% endif %}  
+      </div>
+    </div>
+    <div id='site_content'>
+    {% block content %}
+    {% endblock %}
+    </div>
+  </body>
+</html>

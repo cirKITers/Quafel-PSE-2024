@@ -1,11 +1,10 @@
-from account_controller.manager import AccountManager
 
 # Create your views here.
 
 class HardwareView:
 
   # /hardware
-  def manage_controllers(request):
+  def manage_profiles(request):
     ...
 
   # /hardware/add with post

@@ -76,15 +76,22 @@ ROOT_URLCONF = 'quafelweb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': ['templates', 'templatetags'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
             ],
+            'builtins': [
+                'templatetags.register',
+            ],
         },
     },
+]
+
+STATICFILES_DIRS = [
+    "static",
 ]
 
 WSGI_APPLICATION = 'quafelweb.wsgi.application'
