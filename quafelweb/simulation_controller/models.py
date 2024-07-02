@@ -3,7 +3,7 @@ Defines the models used for creating new simulations runs
 '''
 
 from django.db import models
-from quafelweb.simulation_data.models import SimulationRun
+from simulation_data.models import SimulationRun
 
 class SimulationRequest(models.Model):
     '''  

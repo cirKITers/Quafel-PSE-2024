@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Callable, Optional
 from django.http import HttpRequest, HttpResponse
 from authlib.integrations.django_client import OAuth
 from django.shortcuts import redirect, render
@@ -17,14 +17,25 @@ OAUTH.register(
 
 class AccountView:
 
-  ACCOUNTS = []
+  ACCOUNTS = [ 'ulqho@student.kit.edu' ]
+  
+  @staticmethod
+  def require_login(view : Callable) -> HttpResponse:
+
+    def _decorator(request : HttpResponse):
+      if AccountView.is_logged_in(request):
+        return view(request)
+      return AccountView.authenticate(request) 
+
+    return _decorator
+  
 
   @staticmethod
-  def manage_accounts(request) -> HttpResponse:
-    if AccountView.is_logged_in(request):
-      return HttpResponse(AccountView.get_identifier(request))
-    return AccountView.authenticate(request) 
-  
+  @require_login
+  def manage_accounts(request : HttpRequest) -> HttpResponse:
+    return HttpResponse(AccountView.get_identifier(request))
+
+
   @staticmethod
   def add_admin(request) -> HttpResponse:
     ...
@@ -35,6 +46,10 @@ class AccountView:
 
   @staticmethod
   def authenticate(request : HttpRequest) -> HttpResponse:
+    if AccountView.is_logged_in(request):
+      redirect_url =  request.build_absolute_uri() 
+      if redirect_url == request.build_absolute_uri(reverse('login')):
+        return redirect('/')
     request.session["last_request"] = request.build_absolute_uri()
     return OAUTH.openid.authorize_redirect(request, request.build_absolute_uri(reverse('auth_callback')))
 
@@ -54,7 +69,7 @@ class AccountView:
   @staticmethod
   def get_identifier(request : HttpRequest) -> Optional[str]:
     if not AccountView.is_logged_in(request): return None
-    return request.session.get('admin_ident')[OPENID_CLIENT_IDENT]
+    return request.session.get('admin_ident')
 
   @staticmethod
   def is_logged_in(request : HttpRequest) -> bool:
