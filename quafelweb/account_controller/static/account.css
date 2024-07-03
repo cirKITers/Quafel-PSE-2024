@@ -1,0 +1,39 @@
+#site_content {
+  flex-direction: column;
+  width: 40em;
+  height: auto;
+}
+
+#account_search {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+#account_search input {
+  width: 90%;
+  height: 3em;
+}
+
+#account_container {
+  height: auto;
+  background-color: gray;
+}
+
+.account_entry {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#new_account_div{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+#account_search input {
+  width: 90%;
+  height: 3em;
+}

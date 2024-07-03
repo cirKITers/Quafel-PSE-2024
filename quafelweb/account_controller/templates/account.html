@@ -1,0 +1,25 @@
+{% extends "core.html" %}
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'account.css' %}">
+{%endblock%}
+
+{% block content %}
+<div id='account_search'>
+  <input></input>
+  {% labeled_button 'search' id='account_search_button'%}
+</div>
+<div id='account_container'>
+  {%for name in accounts %}
+  <div class='account_entry'>
+    <p>{{ name }}</p>
+    {% labeled_button delete %}
+  </div>  
+  {% endfor %}
+</div>
+<div id='new_account_div'>
+  <input></input>
+  {% labeled_button '+' %}
+</div>
+{% endblock %}
