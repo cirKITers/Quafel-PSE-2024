@@ -17,7 +17,7 @@ OAUTH.register(
 
 class AccountView:
 
-  ACCOUNTS = [ 'ulqho@student.kit.edu' ]
+  ACCOUNTS = [ 'ulqho@student.kit.edu' ] * 3
   
   @staticmethod
   def require_login(view : Callable) -> HttpResponse:
@@ -33,7 +33,7 @@ class AccountView:
   @staticmethod
   @require_login
   def manage_accounts(request : HttpRequest) -> HttpResponse:
-    return HttpResponse(AccountView.get_identifier(request))
+    return render(request, "account.html", context={"accounts" : AccountView.ACCOUNTS})
 
 
   @staticmethod
@@ -42,6 +42,10 @@ class AccountView:
 
   @staticmethod
   def remove_admin(request) -> HttpResponse:
+    ...
+  
+  @staticmethod
+  def search(request) -> HttpResponse:
     ...
 
   @staticmethod
