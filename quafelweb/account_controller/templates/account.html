@@ -8,18 +8,18 @@
 {% block content %}
 <div id='account_search'>
   <input></input>
-  {% labeled_button 'search' id='account_search_button'%}
+  <button><span class="material-symbols-outlined">search</span></button>
 </div>
 <div id='account_container'>
   {%for name in accounts %}
   <div class='account_entry'>
     <p>{{ name }}</p>
-    {% labeled_button delete %}
+    <button class='icon_button'><span class="material-symbols-outlined">delete</span></button>
   </div>  
   {% endfor %}
 </div>
 <div id='new_account_div'>
   <input></input>
-  {% labeled_button '+' %}
+  <button><span class="material-symbols-outlined">add</span></button>
 </div>
 {% endblock %}

@@ -1,7 +1,6 @@
 #site_content {
   flex-direction: column;
   width: 40em;
-  height: auto;
 }
 
 #account_search {
@@ -10,18 +9,15 @@
   flex-direction: row;
 }
 
-#account_search input {
-  width: 90%;
-  height: 3em;
-}
 
 #account_container {
-  height: auto;
-  background-color: gray;
+  overflow: auto;
+  height: calc(100%  - 8em);
 }
 
 .account_entry {
-  width: 100%;
+  padding: 10px;
+  width: calc(100% - 20px);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -31,9 +27,17 @@
   width: 100%;
   display: flex;
   flex-direction: row;
+  align-self: flex-end;
 }
 
-#account_search input {
-  width: 90%;
-  height: 3em;
+#account_search input,
+#new_account_div input {
+  width: 100%;
+  height: 4em;
+}
+
+
+.account_entry .icon_button:hover {
+  transition-duration: 0.2s;
+  color: red;
 }

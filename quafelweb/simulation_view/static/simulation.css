@@ -1,14 +1,14 @@
 
 #graph_container {
-  width: 70%;
-  height: 50em;
+  width: 60%;
+  height: 50em;   
 }
 
 /* Simulation configuration selector*/
 
 #sim_confs {
   margin-top: 5em;
-  width: 15%;
+  flex: 0 1 20%
 }
 
 .sim_conf {
@@ -29,8 +29,8 @@
 
 #sim_envs {
   margin-top: 5em;
-  width: 15%;
   overflow: auto;
+  flex: 0 1 20%
 }
 
 
@@ -43,10 +43,10 @@
   padding: 0 10px;
 }
 
-.env_container button {
-  width: 30px;
-  height: 30px;
-  position: relative;
+
+.env_container .icon_button:hover {
+  transition-duration: 0.2s;
+  color: red;
 }
 
 .env_container p {

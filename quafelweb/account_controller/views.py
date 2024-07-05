@@ -17,7 +17,7 @@ OAUTH.register(
 
 class AccountView:
 
-  ACCOUNTS = [ 'ulqho@student.kit.edu' ] * 3
+  ACCOUNTS = ['ulqho@student.kit.edu' ] * 300
   
   @staticmethod
   def require_login(view : Callable) -> HttpResponse:
@@ -61,7 +61,6 @@ class AccountView:
   @staticmethod
   def authenticate_callback(request : HttpRequest) -> HttpResponse:
     token = OAUTH.openid.authorize_access_token(request)
-    
 
     if not token["userinfo"][OPENID_CLIENT_IDENT] in AccountView.ACCOUNTS: # TODO replace this with an data base access
       return redirect(reverse('denied'))
@@ -77,11 +76,16 @@ class AccountView:
 
   @staticmethod
   def is_logged_in(request : HttpRequest) -> bool:
-    return request.session.get('logged_in', False)
+    return 'admin_ident' in request.session
   
   @staticmethod
   def denied(request : HttpRequest):
-    return render(request, 'denied.html')
+    context = {
+      'info_type' : 'error',
+      'header' : 'No Access',
+      'message' : 'You dont have access to this resource'
+    }
+    return render(request, 'info.html', context=context)
   
   @staticmethod
   def logout(request : HttpRequest):
