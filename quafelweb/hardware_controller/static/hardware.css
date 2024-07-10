@@ -53,7 +53,7 @@
 
 
 #add_hardware_container div textarea{
-  height: 30em;
+  height: 20em;
   resize: none;
   overflow: auto;
 }

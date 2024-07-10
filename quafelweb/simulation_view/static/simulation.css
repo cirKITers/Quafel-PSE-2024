@@ -1,7 +1,11 @@
 
 #graph_container {
-  width: 60%;
-  height: 50em;   
+  width: 60vw;
+  height: 100%;   
+  position: relative;
+  padding: 2em;
+  box-sizing: border-box;
+
 }
 
 /* Simulation configuration selector*/

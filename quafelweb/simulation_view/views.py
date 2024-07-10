@@ -25,7 +25,6 @@ class SimulationView:
     graph = SimulationView.graph(df)
 
     context = { 
-      'graph_div' : graph,
       'environments' : envs
     }
 

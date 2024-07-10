@@ -83,9 +83,6 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
             ],
-            'builtins': [
-                'templatetags.register',
-            ],
         },
     },
 ]

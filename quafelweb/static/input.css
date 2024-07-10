@@ -2,6 +2,15 @@
 input {
   width: 100%;
   font-size: 1.1em;
+  padding: 0 1em;
+  box-sizing: border-box;
+}
+
+textarea {
+  width: 100%;
+  font-size: 1.1em;
+  padding: 1em;
+  box-sizing: border-box;
 }
 
 button {
@@ -27,6 +36,7 @@ button {
 }
 
 button:hover{
+  transition-duration: 0.1s;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -34,5 +44,5 @@ button:hover{
 button:active {
   transition-duration: 0.1s;
   top: 1px;
-  color: rgb(189, 189, 189);
+  background-color: rgb(189, 189, 189);
 }

@@ -3,6 +3,7 @@
 {% block head %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'simulation.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {%endblock%}
 
 {% block content %}
@@ -22,7 +23,7 @@
   <button id='add_env_button'>Add Environment</button>
 </div>
 <div id="graph_container">
-  {{ graph_div|safe }}
+  <canvas id='graph'></canvas>
 </div>
 <div id="sim_confs">
 <div class = 'sim_conf'>
@@ -46,4 +47,36 @@
   </div>
 </div>
 </div>
+
+<script>
+  const ctx = document.getElementById('graph');
+  (async function() {
+    const data = [
+      { year: 2010, count: 10 },
+      { year: 2011, count: 20 },
+      { year: 2012, count: 15 },
+      { year: 2013, count: 25 },
+      { year: 2014, count: 22 },
+      { year: 2015, count: 30 },
+      { year: 2016, count: 28 },
+    ];
+  
+    new Chart(
+      ctx,
+      {
+        type: 'line',
+        data: {
+          labels: data.map(row => row.year),
+          datasets: [
+            {
+              label: 'Acquisitions by year',
+              data: data.map(row => row.count)
+            }
+          ]
+        } 
+      }
+    );
+  })();
+   
+</script>
 {% endblock %}

@@ -17,7 +17,9 @@ class HardwareView:
   
   @AccountView.require_login
   def add_profile(request):
+    
     ...
+    
 
   # /hardware/remove with post
   
