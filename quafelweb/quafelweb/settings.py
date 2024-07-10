@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     # apps
     'account_controller',
     'hardware_controller',
-    'quafel_simulators',
     'simulation_controller',
     'simulation_data',
     'simulation_view',
