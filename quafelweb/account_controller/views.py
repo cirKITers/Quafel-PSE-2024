@@ -72,7 +72,7 @@ class AccountView:
     token = OAUTH.openid.authorize_access_token(request)
 
     ident = token["userinfo"][OPENID_CLIENT_IDENT]
-    if not AdminAccount.objects.filter(identifier=ident).first(): # TODO replace this with an data base access
+    if not AdminAccount.objects.filter(identifier=ident).first(): 
       return redirect(reverse('denied'))
 
     request.session['admin_ident'] = token['userinfo'][OPENID_CLIENT_IDENT]

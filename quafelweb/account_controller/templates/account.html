@@ -9,6 +9,7 @@
 <form action="/account" method="get" id='account_search'>
   {% csrf_token %}
   <input type="text" name='search' value={{request.GET.search}}>
+  <span>Search</span>
   <button type="submit"><span class="material-symbols-outlined">search</span></button>
 </form>
 <div id='account_container'>
@@ -23,6 +24,7 @@
 <form action="add/" method="post" id='new_account_div'>
   {% csrf_token %}
   <input name="admin_ident"></input>
+  <span>Add admin</span>
   <button type="submit"><span class="material-symbols-outlined">add</span></button>
 </form>
 {% endblock %}

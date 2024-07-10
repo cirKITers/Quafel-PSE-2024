@@ -1,12 +1,13 @@
+#site_content {
+  justify-content: space-between;
+}
+
 
 #conf_selection_container {
   height: calc(100%  - 8em);
   display: flex;
   flex-direction: column;
 }
-
-
-
 
 .conf_selection {
   display: flex;
@@ -16,7 +17,6 @@
   padding: 1em;
   margin-bottom: 1.5em;
   border: 1px black solid;
-
 }
 
 .conf_selection div {
@@ -35,4 +35,40 @@
 
 #env_selector {
   background-color: blanchedalmond;
+}
+
+#environment_panel {
+  height: 100%;
+  width: 70em;
+}
+
+#selection_panel input {
+  height: 2em;
+}
+
+
+#selection_panel {
+  display:  flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: center;
+  padding: 1em;
+  border: 2px black solid;
+  align-items: center;
+}
+
+
+#environment_panel div * {
+  width: 10em;
+}
+
+#no_profiles {
+  text-align: center;
+  font-size: 1.6em;
+  font-weight: 2em;
+}
+
+#add_simulation_panel {
+  display: flex;
+  flex-direction: row;
 }

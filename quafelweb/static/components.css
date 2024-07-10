@@ -108,3 +108,47 @@ input[type='number'] {
   height: 80%;
   padding: 0.3em;
 }
+
+/* Dropdown */
+
+.dropbtn {
+  text-align: center;
+  text-decoration: none;
+  padding: .7em 2em;
+  background-color: white;
+  border: 2px black solid;
+  color: black;
+  margin: 0;
+  
+  font-size: 1.2em;
+  font-weight: bold;
+  position: relative;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  width: 100%;
+  z-index: 100;
+  padding: 0;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 1em;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {display: block;}
