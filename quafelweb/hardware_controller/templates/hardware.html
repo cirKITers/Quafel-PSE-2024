@@ -7,7 +7,6 @@
 
 {% block content %}
 <div id="hardware_list">
-  <h2 style='color: white;'>.</h2>
   <div id='hardware_search'>
     <input></input>
     <button><span class="material-symbols-outlined">search</span></button>
@@ -26,16 +25,16 @@
 <form action='add' id='add_hardware_container'>
   {% csrf_token %}
   <div id="add_hardware_name">
-    <h2>Name</h2>
-    <input required></input>
+    <input required placeholder=" "></input>
+    <span>Name</span>
   </div>
   <div id="add_hardware_description">
-    <h2>Description</h2>
-    <textarea fixed=True required></textarea>
+    <textarea fixed=True required placeholder=" "></textarea>
+    <span>Description</span>
   </div>
   <div id="add_hardware_connection">
-    <h2>Connection</h2>
-    <input required></input>
+    <input required placeholder=" "></input>
+    <span>Connection</span>
   </div>
   
   <button type='submit'>Submit</button>

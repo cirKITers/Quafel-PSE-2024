@@ -1,0 +1,38 @@
+
+#conf_selection_container {
+  height: calc(100%  - 8em);
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
+.conf_selection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 25em;
+  padding: 1em;
+  margin-bottom: 1.5em;
+  border: 1px black solid;
+
+}
+
+.conf_selection div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.conf_selection div div {
+  height: 2px;
+  width: 20px;
+  background-color: black;
+  margin: 1em;
+}
+
+#env_selector {
+  background-color: blanchedalmond;
+}

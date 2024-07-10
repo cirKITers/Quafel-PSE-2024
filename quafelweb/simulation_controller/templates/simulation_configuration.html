@@ -1,5 +1,43 @@
 {% extends "core.html" %}
 
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'simulation_configuration.css' %}">
+{% endblock%}
+
 {% block content %}
-<h1>TODO Implement this page</h1>
+<form action="" method="post" id='new_account_div'>
+  {% csrf_token %}
+  <div id="conf_selection_container">
+    <div class='conf_selection'>
+      <h3>Qubits</h3>
+      <div>
+        <input name="qubits_range_min" type='number' value={{request.POST.qubits_range_min}}></input>
+        <div></div>
+        <input name="qubits_range_max" type='number' value={{request.POST.qubits_range_max}}></input>    
+      </div>
+    </div>
+    <div class='conf_selection'>
+      <h3>Depth</h3>
+      <div>
+        <input name="depth_range_max" type='number' value={{request.POST.depth_range_max}}></input>
+        <div></div>
+        <input name="depth_range_min" type='number' value={{request.POST.depth_range_min}}></input>
+      </div>
+    </div>
+    <div class='conf_selection'>
+      <h3>Evals</h3>
+      <div>
+        <input name="eval_range_min" type='number' value={{request.POST.eval_range_min}}></input>
+        <div></div>
+        <input name="eval_range_min" type='number' value={{request.POST.eval_range_min}}></input>
+      </div>
+    </div>
+    <button id="simulation_conf_submit" type="submit">Search</button>
+  </div>  
+</form>
+<form>
+</form>
+  
 {% endblock %}

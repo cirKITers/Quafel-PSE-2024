@@ -18,7 +18,7 @@
       </div>
       <div id='site_navbar_links'>
         {% if request.session.logged_in %}
-        <a class='site_navbar_link' href="{% url 'simulation' %}">Simulation</a>
+        <a class='site_navbar_link' href="{% url 'simulation_configuration' %}">Simulation</a>
         <a class='site_navbar_link' href="{% url 'hardware' %}">Hardware</a>
         <a class='site_navbar_link' href="{% url 'account' %}">Accounts</a>
         <a class='site_navbar_link' href="{% url 'logout' %}">Logout</a>
