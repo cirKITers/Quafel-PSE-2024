@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from django.shortcuts import render
 from account_controller.views import AccountView
 from hardware_controller.models import HardwareProfile
@@ -16,9 +18,8 @@ class SimulationRequestView:
     
     # Pass the queryset to the template
     context = {'hardware_profiles': hardware_profiles ,
-               'simulator_profiles': simulator_profiles,
-               'simulation_runs': SimulationRun.objects.all()[:10]}
-    print("PENIS")
+               'simulator_profiles': simulator_profiles,}
+              #  'simulation_runs': SimulationRun.objects.all()[:10]}
     return render(request, 'simulation_configuration.html', context)
 
 
@@ -50,11 +51,10 @@ class SimulationRequestView:
                                               depth__range=(depth_min, depth_max),
                                               shots__range=(shots_min, shots_max), 
                                               evals__range=(eval_min, eval_max)).values('hardware_profile', 'simulator_name').distinct()
-    print("HIER" + str(hwp_sim_combinations.count()))
-    for obj in hwp_sim_combinations:
-      print(obj)
+    # print("HIER" + str(hwp_sim_combinations.count()))
+    # for obj in hwp_sim_combinations:
+    #   print(obj)
     finished_array = [[[[[False for _ in range(n_evals)] for _ in range(n_shots)] for _ in range(n_depth)] for _ in range(n_qubits)] for _ in range(hwp_sim_combinations.count())]
-    
     n_finished = 0
     sim_and_finished = []
 
@@ -70,8 +70,13 @@ class SimulationRequestView:
           print("q", run.qbits, "d", run.depth, "s", run.shots, "e", run.evals)
           finished_array[comb][run.qbits - qubits_min][run.depth - depth_min][run.shots - shots_min][run.evals - eval_min] = True
           n_finished += 1
-      sim_and_finished.append({'hardwareprofile': HardwareProfile.objects.get(name=hwp_sim_combinations[comb]['hardware_profile']),
-                               'simulatorprofile': SimulatorProfile.objects.get(id=hwp_sim_combinations[comb]['simulator_name']), 'finished': n_finished})
+      hardwareprofile = HardwareProfile.objects.get(name=hwp_sim_combinations[comb]['hardware_profile'])
+      simulatorprofile = SimulatorProfile.objects.get(id=hwp_sim_combinations[comb]['simulator_name'])
+      sim_and_finished.append({'hardwareprofile': hardwareprofile,
+                               'simulatorprofile': simulatorprofile,
+                               'finished': n_finished,
+                               'hardwareprofile_id': hardwareprofile.name,
+                               'simulatorprofile_id': simulatorprofile.id,})
 
       # Alternative approach
       # for q in range(qubits_min, qubits_max):
@@ -85,18 +90,18 @@ class SimulationRequestView:
     context = {'n_runs': n_runs,
                'sim_and_finished': sim_and_finished
     }
-    print(context)
-    print(sim_and_finished)
-    print("Muschi")
     return render(request, "simulation_configuration.html", context)
-
-
-
-
 
 
   @AccountView.require_login
   def select_environments(request):
+    data = json.loads(request.body)
+    checked_entries = data.get('checkedEntries')
+    print(checked_entries)
+    for entry in checked_entries:
+      hwp = HardwareProfile.objects.get(name=entry[0])
+      sim = SimulatorProfile.objects.get(id=entry[1])
+      print(hwp, sim)
 
     return render(request, 'simulation_configuration.html')
 
@@ -142,3 +147,8 @@ class SimulationRequestView:
   @AccountView.require_login
   def claim_results(request):
     ...
+
+  def get_hardwareprofiles_simulators(request):
+    hwps = list(HardwareProfile.objects.all().values('name', 'description'))
+    sims = list(SimulatorProfile.objects.all().values('name', 'version', 'id'))
+    return JsonResponse({'hwps': hwps, 'sims': sims})

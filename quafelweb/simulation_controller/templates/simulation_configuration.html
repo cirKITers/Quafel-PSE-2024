@@ -44,8 +44,9 @@
     </div>
     <button id="simulation_conf_submit" type="submit">Search Hardwareprofiles</button>
   </form>
+  <button id="btn_submit" onclick="sentCheckedEntries()">Submit Runs</button>
 
-  <form "{% url 'select_configuration' %}" method="post" id='table'>
+  <!-- <form action="{% url 'select_configuration' %}" method="post" id='table'>
     <div class='conf_selection'>
       <h3>Hardwareprofile</h3>
       <div>
@@ -66,7 +67,7 @@
         </select>
       </div>
     </div>
-  </form>
+  </form> -->
 </div>
 
 <div id="computed_overview">
@@ -74,7 +75,7 @@
     <tr id="table_header">
       <th><input type="checkbox"></th>
       <th><div>Hardware</div></th>
-      <th><div>Simulation</div></th>
+      <th><div>Simulator</div></th>
       <th><div>Version</div></th>
       <th><div class="no_border">Finished</div></th>
     </tr>
@@ -89,13 +90,16 @@
     {% endfor %} -->
     {% for run in sim_and_finished %}
     <tr>
-      <td><input type="checkbox"></td>
-      <td>{{ run.hardwareprofile.name }}</td>
-      <td>{{ run.simulatorprofile.name }}</td>
-      <td>{{ run.simulatorprofile.version}}</td>
+      <td><input type="checkbox" class="run-checkbox" data-hwp-id="{{ run.hardwareprofile_id }}" data-simulator-id="{{ run.simulatorprofile_id }}"></td>
+      <td class="hardware_profile_name">{{ run.hardwareprofile.name }}</td>
+      <td class="simulator_name">{{ run.simulatorprofile.name }}</td>
+      <td class="simulator_version">{{ run.simulatorprofile.version}}</td>
       <td>{{ run.finished }}/{{n_runs}}</td>
     </tr>
     {% endfor %}
   </table>
+  <button id="add-hardwareprofile">+</button>
 </div>
+
+<script src="{% static 'simulation_scripts.js' %}"></script>
 {% endblock %}
