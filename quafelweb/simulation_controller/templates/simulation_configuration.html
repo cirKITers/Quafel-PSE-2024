@@ -7,23 +7,31 @@
 {% endblock%}
 
 {% block content %}
-<form action="" method="post" id='new_account_div'>
-  {% csrf_token %}
-  <div id="conf_selection_container">
+<div id="conf_selection_container">
+  <form action="{% url 'select_configuration' %}" method="post" id='configuration'>
+    {% csrf_token %}
     <div class='conf_selection'>
       <h3>Qubits</h3>
       <div>
         <input name="qubits_range_min" type='number' value={{request.POST.qubits_range_min}}></input>
         <div></div>
-        <input name="qubits_range_max" type='number' value={{request.POST.qubits_range_max}}></input>    
+        <input name="qubits_range_max" type='number' value={{request.POST.qubits_range_max}}></input>
       </div>
     </div>
     <div class='conf_selection'>
       <h3>Depth</h3>
       <div>
-        <input name="depth_range_max" type='number' value={{request.POST.depth_range_max}}></input>
-        <div></div>
         <input name="depth_range_min" type='number' value={{request.POST.depth_range_min}}></input>
+        <div></div>
+        <input name="depth_range_max" type='number' value={{request.POST.depth_range_max}}></input>
+      </div>
+    </div>
+    <div class='conf_selection'>
+      <h3>Shots</h3>
+      <div>
+        <input name="shots_range_min" type='number' value={{request.POST.shots_range_min}}></input>
+        <div></div>
+        <input name="shots_range_max" type='number' value={{request.POST.shots_range_max}}></input>
       </div>
     </div>
     <div class='conf_selection'>
@@ -31,13 +39,63 @@
       <div>
         <input name="eval_range_min" type='number' value={{request.POST.eval_range_min}}></input>
         <div></div>
-        <input name="eval_range_min" type='number' value={{request.POST.eval_range_min}}></input>
+        <input name="eval_range_max" type='number' value={{request.POST.eval_range_max}}></input>
       </div>
     </div>
-    <button id="simulation_conf_submit" type="submit">Search</button>
-  </div>  
-</form>
-<form>
-</form>
-  
+    <button id="simulation_conf_submit" type="submit">Search Hardwareprofiles</button>
+  </form>
+
+  <form "{% url 'select_configuration' %}" method="post" id='table'>
+    <div class='conf_selection'>
+      <h3>Hardwareprofile</h3>
+      <div>
+        <select name="hardwareprofile">
+          {% for profile in hardware_profiles %}
+          <option value="{{ profile.name }}">{{ profile.name }} - {{profile.protocol}}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class='conf_selection'>
+      <h3>Simulatorprofile</h3>
+      <div>
+        <select name="simulatorprofile">
+          {% for profile in simulator_profiles %}
+          <option value="{{ profile.name }}">{{ profile.name }} - {{profile.version}}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="computed_overview">
+  <table style="width:100%">
+    <tr id="table_header">
+      <th><input type="checkbox"></th>
+      <th><div>Hardware</div></th>
+      <th><div>Simulation</div></th>
+      <th><div>Version</div></th>
+      <th><div class="no_border">Finished</div></th>
+    </tr>
+    <!-- {% for run in simulation_runs %}
+    <tr>
+      <td><input type="checkbox"></td>
+      <td>{{ run.simulator_name.name }}</td>
+      <td>{{ run.hardware_profile.name }}</td>
+      <td>{{ run.simulator_name.version}}</td>
+      <td>Schwanz</td>
+    </tr>
+    {% endfor %} -->
+    {% for run in sim_and_finished %}
+    <tr>
+      <td><input type="checkbox"></td>
+      <td>{{ run.hardwareprofile.name }}</td>
+      <td>{{ run.simulatorprofile.name }}</td>
+      <td>{{ run.simulatorprofile.version}}</td>
+      <td>{{ run.finished }}/{{n_runs}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
 {% endblock %}

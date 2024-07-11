@@ -12,6 +12,9 @@ class SimulatorProfile(models.Model):
 
   version = models.CharField(max_length=50)
 
+  def __str__(self):
+    return self.name + " " + self.version
+
 
 class SimulationRun(models.Model):
   
@@ -43,6 +46,9 @@ class SimulationRun(models.Model):
   entangelment_cap = models.FloatField()
 
   durations = models.FloatField(max_length=100)
+
+  def __str__(self):
+    return self.hardware_profile.name + " " + self.simulator_name.name + " " + self.user + " " + str(self.shots) + " " + str(self.qbits) + " " + str(self.depth) + " " + str(self.evals) + " " + str(self.finished) + " " + str(self.expressability) + " " + str(self.entangelment_cap) + " " + str(self.durations)
 
 
 

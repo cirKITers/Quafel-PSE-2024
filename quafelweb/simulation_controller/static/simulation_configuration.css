@@ -1,8 +1,12 @@
-
 #conf_selection_container {
   height: calc(100%  - 8em);
   display: flex;
   flex-direction: column;
+}
+
+#computed_overview {
+  width: 100%;
+  margin-left: 5em;
 }
 
 
@@ -35,4 +39,44 @@
 
 #env_selector {
   background-color: blanchedalmond;
+}
+
+#simulation_conf_submit {
+  width: 100%;
+  border: 1px black solid;
+  cursor: pointer;
+  margin-bottom: 2em;
+}
+
+#computed_overview table{
+  border-collapse: collapse;
+  border: 1px gray solid;
+}
+
+#computed_overview #table_header th{
+  border-bottom: 2px black solid;
+}
+
+
+#computed_overview th div{
+  border: 1px black solid;
+  padding: 6px 15px; /* Adjust padding as needed */
+  margin: 7px;
+  display: inline-block;
+  background-color: white; /* Optional: sets the background of the content area */
+}
+
+
+#computed_overview th .no_border {
+  border: none; /* Increased specificity and optional use of !important */
+}
+
+#computed_overview td {
+  padding: 6px 15px; /* Adjust padding as needed */
+  margin: 7px;
+  text-align: center;
+}
+
+#computed_overview tr:nth-child(2n) {
+  background-color: rgb(240, 240, 240); /* Example background color */
 }
