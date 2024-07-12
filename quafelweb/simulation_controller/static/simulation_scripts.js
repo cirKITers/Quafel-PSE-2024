@@ -97,10 +97,10 @@ document.addEventListener("DOMContentLoaded", function () {
 						)
 						.join("");
 
-					var table = document.querySelector(
-						"#computed_overview table"
+					var tbody = document.querySelector(
+						"#computed_overview tbody"
 					);
-                    var newRow = table.rows[table.rows.length - 1].cloneNode(true);
+                    var newRow = tbody.rows[tbody.rows.length - 1].cloneNode(true);
 					// newRow.cells[0].querySelector("input").checked = true;
 					newRow.cells[0].innerHTML = `<button class="apply" onclick="insertNewCombi(this)">Apply</button>`;
 
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                                 </select>`;
 					newRow.cells[3].innerHTML = "";
                     newRow.cells[4].innerText = newRow.cells[4].innerText.replace(/\d+/, "0");
-					table.appendChild(newRow);
+					tbody.appendChild(newRow);
                     stripeTable()
 				})
 				.catch((error) => console.error("Error:", error));

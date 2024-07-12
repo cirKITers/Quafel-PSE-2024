@@ -1,67 +1,65 @@
 #conf_selection_container {
-  /* height: calc(100%  - 8em); */
-  display: flex;
-  flex-direction: column;
+	/* height: calc(100%  - 8em); */
+	display: flex;
+	flex-direction: column;
 }
 
 #computed_overview {
-  width: 100%;
-  margin-left: 5em;
+	width: 100%;
+	margin-left: 5em;
+  /* max-height: 100%;
+  overflow-y: auto; */
 }
 
-
-
-
 .conf_selection {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 25em;
-  padding: 1em;
-  margin-bottom: 1.5em;
-  border: 1px black solid;
-
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 25em;
+	padding: 1em;
+	margin-bottom: 1.5em;
+	border: 1px black solid;
 }
 
 .conf_selection div {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
 }
 
 .conf_selection div div {
-  height: 2px;
-  width: 20px;
-  background-color: black;
-  margin: 1em;
+	height: 2px;
+	width: 20px;
+	background-color: black;
+	margin: 1em;
 }
 
 #env_selector {
-  background-color: blanchedalmond;
+	background-color: blanchedalmond;
 }
 
 #simulation_conf_submit {
-  width: 100%;
-  border: 1px black solid;
-  cursor: pointer;
-  margin-bottom: 2em;
+	width: 100%;
+	border: 1px black solid;
+	cursor: pointer;
+	margin-bottom: 2em;
 }
 
 #add-hardwareprofile {
-  border: 1px black solid;
-  cursor: pointer;
-  padding: 0.5em 4em;
-  margin-top: 1em;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  margin-bottom: 3em;
+	border: 1px black solid;
+	cursor: pointer;
+	padding: 0.5em 4em;
+	margin-top: 1em;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	margin-bottom: 3em;
 }
 
-#computed_overview table{
-  border-collapse: collapse;
-  border: 1px gray solid;
+#computed_overview table {
+	border-collapse: collapse;
+	border: 1px gray solid;
 }
 
 #computed_overview #table_header th{
@@ -70,39 +68,48 @@
 
 
 #computed_overview th div{
-  border: 1px black solid;
-  padding: 6px 15px; /* Adjust padding as needed */
-  margin: 7px;
-  display: inline-block;
-  background-color: white; /* Optional: sets the background of the content area */
+	border: 1px black solid;
+	padding: 6px 15px; /* Adjust padding as needed */
+	margin: 7px;
+	display: inline-block;
+	background-color: white; /* Optional: sets the background of the content area */
 }
 
-
 #computed_overview th .no_border {
-  border: none; /* Increased specificity and optional use of !important */
+	border: none; /* Increased specificity and optional use of !important */
 }
 
 #computed_overview td {
-  padding: 6px 15px; /* Adjust padding as needed */
-  margin: 7px;
-  text-align: center;
+	padding: 6px 15px; /* Adjust padding as needed */
+	margin: 7px;
+	text-align: center;
+}
+/* TODO: have to make all fixed width that it wont move when new rows inserted */
+#computed_overview td:first-child {
+	width: 50px;
 }
 
 tr.even {
-  background-color: rgb(240, 240, 240);
+	background-color: rgb(240, 240, 240);
 }
 
 #btn_submit {
-  margin-top: auto;
+	margin-top: auto;
 }
 
 .apply {
-  margin: 0px;
-  padding: 0px;
-  cursor: pointer;
-  width: 100%;
-  border: 0.5px black solid;
-  cursor: pointer;
-  font-size: unset;
-  
+	margin: 0px;
+	padding: 1px;
+	cursor: pointer;
+	/* width: 100%; */
+	border: 0.5px black solid;
+  border-radius: 2px;
+	cursor: pointer;
+	font-size: small;
 }
+
+input[type="checkbox" i] {
+	width: unset;
+}
+
+/* TODO: If rows exceed page make table scrollable */
