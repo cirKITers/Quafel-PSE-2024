@@ -2,6 +2,7 @@
 Defines the models used to store SimulationRuns in an database
 '''
 from django.db import models
+from django.db.models.signals import post_init
 from hardware_controller.models import HardwareProfile
 
 
@@ -9,8 +10,6 @@ from hardware_controller.models import HardwareProfile
 class SimulatorProfile(models.Model):
 
   name = models.CharField(max_length=50)
-
-  version = models.CharField(max_length=50)
 
 
 class SimulationRun(models.Model):
@@ -46,3 +45,10 @@ class SimulationRun(models.Model):
 
 
 
+
+
+def my_handler(**kwargs):
+    print("Run Handler")
+
+
+post_init.connect(my_handler, sender=SimulatorProfile)

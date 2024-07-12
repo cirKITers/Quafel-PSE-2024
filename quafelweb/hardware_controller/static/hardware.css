@@ -71,3 +71,7 @@
   width: 100%;
 }
 
+.hardware_entry .icon_button:hover {
+  transition-duration: 0.2s;
+  color: red;
+}

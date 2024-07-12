@@ -7,76 +7,70 @@
 {%endblock%}
 
 {% block content %}
-
-<div id="sim_envs">
-  {% for env in environments %}
-  <div class='env_container'>
-    <button class='env_visibility_toggle' type='checkbox'></button>
+<div>
+  <h2>Configurations</h2>
+  <div class = 'sim_conf'>
+    <p>Qubits</p>
     <div>
+      <input>
+      <input>
+    </div>
+  </div>
+  <div class = 'sim_conf'>
+    <p>Depth</p>
+    <div>
+      <input type='number'>
+    </div>
+  </div>
+  <div class = 'sim_conf'>
+    <p>Evaluations</p>
+    <div>
+      <input>
+    </div>
+  </div>
+  <h2>Environments</h2>
+  <form id="env_filter" method="get">
+    <button class='env_visibility_toggle' type='checkbox'>All</button>
+    <input type="hidden" name="simulator_filter" value="{{ request.GET.simulator_filter }}">
+    <input type="hidden" name="hardware_filter" value="{{ request.GET.hardware_filter }}">
+    <div class="dropdown">
+      <div class="dropbtn">{{ request.GET.hardware_filter|default:"Hardware"}}</div>
+      <div class="dropdown-content">
+        {% if request.GET.hardware_filter %}
+        <button name="hardware_filter" type="submit" value="">All</button>
+        {% endif %}
+        {% for hardware in hardware_profiles %}
+          {% if request.GET.hardware_filter != hardware.name%}
+          <button name="hardware_filter" type="submit" value="{{hardware.name}}">{{hardware.name}}</button>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="dropdown">
+      <div class="dropbtn">{{ request.GET.simulator_filter|default:"Simulator"}}</div>
+      <div class="dropdown-content">
+        {% if request.GET.simulator_filter %}
+        <button name="simulator_filter" type="submit" value="">All</button>
+        {% endif %}
+        {% for simulator in simulator_profiles %}
+        {% if request.GET.simulator_filter != simulator.name%}
+        <button name="simulator_filter" type="submit" value="{{simulator.name}}">{{simulator.name}}</button>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </form>
+  <div id="sim_envs">
+    {% for env in environments %}
+    <div class='env_container'>
+      <button class='env_visibility_toggle' type='checkbox'></button>
       <p>{{ env.simulator.name }}</p>
       <p>{{ env.hardware.name }}</p>
     </div>
-    <p>{{ env.simulator.version }}</p>
-    <button class='icon_button'><span class="material-symbols-outlined">delete</span></button>
+    {% endfor %}
   </div>
-  {% endfor %}
-  <button id='add_env_button'>Add Environment</button>
 </div>
 <div id="graph_container">
-  <canvas id='graph'></canvas>
+  {{graph|safe}}
 </div>
-<div id="sim_confs">
-<div class = 'sim_conf'>
-  <p>Qubits</p>
-  
-  <div>
-    <input></input>
-    <input></input>
-  </div>
-</div>
-<div class = 'sim_conf'>
-  <p>Depth</p>
-  <div>
-    <input type='number'></input>
-  </div>
-</div>
-<div class = 'sim_conf'>
-  <p>Evaluations</p>
-  <div>
-    <input></input>
-  </div>
-</div>
-</div>
-
-<script>
-  const ctx = document.getElementById('graph');
-  (async function() {
-    const data = [
-      { year: 2010, count: 10 },
-      { year: 2011, count: 20 },
-      { year: 2012, count: 15 },
-      { year: 2013, count: 25 },
-      { year: 2014, count: 22 },
-      { year: 2015, count: 30 },
-      { year: 2016, count: 28 },
-    ];
-  
-    new Chart(
-      ctx,
-      {
-        type: 'line',
-        data: {
-          labels: data.map(row => row.year),
-          datasets: [
-            {
-              label: 'Acquisitions by year',
-              data: data.map(row => row.count)
-            }
-          ]
-        } 
-      }
-    );
-  })();
-   
-</script>
 {% endblock %}

@@ -19,7 +19,7 @@ OAUTH.register(
 class AccountView:
   
   @staticmethod
-  def require_login(view : Callable) -> HttpResponse:
+  def require_login(view : Callable) -> Callable:
 
     def _decorator(request : HttpResponse):
       if AccountView.is_logged_in(request):
@@ -53,7 +53,7 @@ class AccountView:
   def remove_admin(request) -> HttpResponse:
 
     if ident := request.POST.get("admin_id"):
-      AdminAccount.objects.filter(uid=ident).delete()
+      AdminAccount.objects.get(uid=ident).delete()
 
     return redirect(reverse('account'))
   
