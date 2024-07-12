@@ -2,10 +2,10 @@
 The quafel hardware base is for the runner to get the hardware information to connect to
 """
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 
-class HardwareBase(ABC):
+class HardwareBase:
     """
     The base class for the hardware profile
     """
