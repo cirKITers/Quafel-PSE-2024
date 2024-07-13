@@ -4,7 +4,7 @@ mydatabase
 .env_secret
 quafelweb/data
 
-**/migrations/**.py
+migrations
 #Simulation results
 source/api_out_input/results/
 source/api_out_input/myKey

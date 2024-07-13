@@ -3,6 +3,7 @@ Defines the models used to store SimulationRuns in an database
 '''
 from django.db import models
 from django.db.models.signals import post_init
+from django.contrib.postgres.fields import ArrayField
 from hardware_controller.models import HardwareProfile
 
 
@@ -41,7 +42,7 @@ class SimulationRun(models.Model):
 
   entangelment_cap = models.FloatField()
 
-  durations = models.FloatField(max_length=100)
+  durations = models.FloatField(max_length=100) # ArrayField(models.FloatField())
 
 
 

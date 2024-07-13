@@ -43,27 +43,33 @@ class SimulationView:
       (env, SimulationRun.objects.filter(
         simulator_name=env.simulator.id, 
         hardware_profile=env.hardware.uuid,
-        qbits__in=set(range(1, max_qbits + 1))
+        qbits__in=set(range(1, max_qbits + 1)),
+        depth=32,
+        evals=256
       )) for env in envs
     ]
 
-    data = pd.DataFrame()
+
+
+    graph_data = {
+      "data" : [
+        {
+          "label" : env.hardware.name + " " + env.simulator.name,
+          "data" : [0] + [run.durations for run in runs]
+        }
+        for env, runs in env_to_run_map
+      ],
+      'labels' : list(range(0, max_qbits + 1))
+    }
+
+    graph_data["max"] = max(max(data["data"]) for data in graph_data["data"]) if len(env_to_run_map) > 0 else 1.0
     
-    for env, runs in env_to_run_map: 
-      results = [0] * max_qbits
-      for run in runs:
-        results[run.qbits - 1] = run.durations
 
-      data[env.hardware.name + " " + env.simulator.name] = results
-
-
-
-
-    context = { 
+    context = {
       'environments' : envs,
       'hardware_profiles' : HardwareProfile.objects.all(),
       'simulator_profiles' : SimulatorProfile.objects.all(),
-      'graph' : SimulationView.graph(data)
+      'graph_data' : graph_data
     }
 
     return render(request, "simulation.html", context=context)

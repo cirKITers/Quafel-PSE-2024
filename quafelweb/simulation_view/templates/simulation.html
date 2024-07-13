@@ -37,11 +37,11 @@
       <div class="dropbtn">{{ request.GET.hardware_filter|default:"Hardware"}}</div>
       <div class="dropdown-content">
         {% if request.GET.hardware_filter %}
-        <button name="hardware_filter" type="submit" value="">All</button>
+          <button name="hardware_filter" type="submit" value="">All</button>
         {% endif %}
         {% for hardware in hardware_profiles %}
           {% if request.GET.hardware_filter != hardware.name%}
-          <button name="hardware_filter" type="submit" value="{{hardware.name}}">{{hardware.name}}</button>
+            <button name="hardware_filter" type="submit" value="{{hardware.name}}">{{hardware.name}}</button>
           {% endif %}
         {% endfor %}
       </div>
@@ -50,12 +50,12 @@
       <div class="dropbtn">{{ request.GET.simulator_filter|default:"Simulator"}}</div>
       <div class="dropdown-content">
         {% if request.GET.simulator_filter %}
-        <button name="simulator_filter" type="submit" value="">All</button>
+          <button name="simulator_filter" type="submit" value="">All</button>
         {% endif %}
         {% for simulator in simulator_profiles %}
-        {% if request.GET.simulator_filter != simulator.name%}
-        <button name="simulator_filter" type="submit" value="{{simulator.name}}">{{simulator.name}}</button>
-        {% endif %}
+          {% if request.GET.simulator_filter != simulator.name%}
+            <button name="simulator_filter" type="submit" value="{{simulator.name}}">{{simulator.name}}</button>
+          {% endif %}
         {% endfor %}
       </div>
     </div>
@@ -71,6 +71,36 @@
   </div>
 </div>
 <div id="graph_container">
-  {{graph|safe}}
+  <canvas id="graph_canvast"></canvas>
 </div>
+{{ graph_data|json_script:"grap_data_container" }}
+<script>
+  const graph_data = JSON.parse(
+    document.getElementById('grap_data_container').textContent
+  );
+
+  console.log(graph_data.max)
+  const config = {
+    type: 'line',
+    data: {
+      labels: graph_data.labels,
+      datasets: graph_data.data
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          ticks: {
+            max: graph_data.max
+        }
+        }
+      }
+    },
+  };
+
+  new Chart(
+    document.getElementById("graph_canvast"),
+    config
+  )
+</script>
 {% endblock %}
