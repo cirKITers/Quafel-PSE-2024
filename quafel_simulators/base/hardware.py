@@ -23,6 +23,18 @@ class HardwareBase:
         """
 
     @abstractmethod
+    def get_username(self) -> str:
+        """
+        Get the username of the hardware
+        """
+
+    @abstractmethod
+    def get_password(self) -> str:
+        """
+        Get the password of the hardware
+        """
+
+    @abstractmethod
     def needs_totp(self) -> bool:
         """
         Whether the hardware needs a TOTP

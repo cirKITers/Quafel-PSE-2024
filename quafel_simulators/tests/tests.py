@@ -7,7 +7,7 @@ import unittest
 
 class TestSimulators(unittest.TestCase):
     """
-    Test the integer arithmetic operations
+    Test the simulators module
     """
 
     def test_create_configuration_file(self):
@@ -46,6 +46,19 @@ class TestSimulators(unittest.TestCase):
         assert simulators.get_simulators()[0].get_version() == "1.0"
         assert simulators.get_simulators()[1].get_name() == "sim2"
         assert simulators.get_simulators()[1].get_version() == "2.0"
+
+
+class TestSubmitter(unittest.TestCase):
+    """
+    Test the submitter module
+    """
+
+    def test_setup_hardware(self):
+        """
+        Test the setup of the hardware
+        """
+
+        # TODO
 
 
 if __name__ == '__main__':
