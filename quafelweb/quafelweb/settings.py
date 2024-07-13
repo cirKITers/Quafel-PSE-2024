@@ -42,7 +42,7 @@ SECRET_KEY = 'django-insecure-g715+$i5t@rzbi)-ktamejq27%@g*os=-i3s67c$5hofs6x-aj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ 'localhost' ]
 
 
 # Application definition
@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     # apps
     'account_controller',
     'hardware_controller',
-    'quafel_simulators',
     'simulation_controller',
     'simulation_data',
     'simulation_view',
@@ -83,9 +82,6 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
             ],
-            'builtins': [
-                'templatetags.register',
-            ],
         },
     },
 ]
@@ -96,14 +92,21 @@ STATICFILES_DIRS = [
 
 WSGI_APPLICATION = 'quafelweb.wsgi.application'
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "database",
+#         "USER": "postgres",
+#         "PASSWORD": "postgresql",
+#         "HOST": "127.0.0.1",
+#         "PORT": "5432",
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "database",
-        "USER": "postgres",
-        "PASSWORD": "postgresql",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

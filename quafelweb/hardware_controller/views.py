@@ -8,13 +8,18 @@ class HardwareView:
 
   @AccountView.require_login
   def manage_profiles(request):
-    return render(request, 'hardware.html')
+    context = {
+      'hardware_profiles' : []
+    }
+    return render(request, 'hardware.html', context=context)
 
   # /hardware/add with post
   
   @AccountView.require_login
   def add_profile(request):
+    
     ...
+    
 
   # /hardware/remove with post
   

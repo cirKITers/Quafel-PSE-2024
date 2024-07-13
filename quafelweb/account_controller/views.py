@@ -1,8 +1,11 @@
 from typing import Callable, Optional
-from django.http import HttpRequest, HttpResponse
+
 from authlib.integrations.django_client import OAuth
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+
+from account_controller.models import AdminAccount
 from quafelweb.settings import OPENID_CONF_URL, OPENID_SECRET, OPENID_CLIENT_ID, OPENID_CLIENT_IDENT
 
 OAUTH = OAuth()
@@ -14,10 +17,7 @@ OAUTH.register(
   client_kwargs={'scope': 'openid email'}
 )
 
-
 class AccountView:
-
-  ACCOUNTS = [ 'ulqho@student.kit.edu' ] * 3
   
   @staticmethod
   def require_login(view : Callable) -> HttpResponse:
@@ -26,28 +26,37 @@ class AccountView:
       if AccountView.is_logged_in(request):
         return view(request)
       return AccountView.authenticate(request) 
-
     return _decorator
-  
+
 
   @staticmethod
   @require_login
   def manage_accounts(request : HttpRequest) -> HttpResponse:
-    return render(request, "account.html", context={"accounts" : AccountView.ACCOUNTS})
+    accounts = AdminAccount.objects.all()
+    if search := request.GET.get("search"):
+      accounts = [acc for acc in accounts if search in acc.identifier]
+
+    return render(request, "account.html", context={ "accounts" : accounts })
 
 
   @staticmethod
+  @require_login
   def add_admin(request) -> HttpResponse:
-    ...
+    
+    if ident := request.POST.get("admin_ident"):
+      AdminAccount(identifier=ident).save()
+
+    return redirect(reverse('account'))
 
   @staticmethod
+  @require_login
   def remove_admin(request) -> HttpResponse:
-    ...
-  
-  @staticmethod
-  def search(request) -> HttpResponse:
-    ...
 
+    if ident := request.POST.get("admin_id"):
+      AdminAccount.objects.filter(uid=ident).delete()
+
+    return redirect(reverse('account'))
+  
   @staticmethod
   def authenticate(request : HttpRequest) -> HttpResponse:
     if AccountView.is_logged_in(request):
@@ -61,9 +70,9 @@ class AccountView:
   @staticmethod
   def authenticate_callback(request : HttpRequest) -> HttpResponse:
     token = OAUTH.openid.authorize_access_token(request)
-    
 
-    if not token["userinfo"][OPENID_CLIENT_IDENT] in AccountView.ACCOUNTS: # TODO replace this with an data base access
+    ident = token["userinfo"][OPENID_CLIENT_IDENT]
+    if not AdminAccount.objects.filter(identifier=ident).first(): # TODO replace this with an data base access
       return redirect(reverse('denied'))
 
     request.session['admin_ident'] = token['userinfo'][OPENID_CLIENT_IDENT]
@@ -77,11 +86,16 @@ class AccountView:
 
   @staticmethod
   def is_logged_in(request : HttpRequest) -> bool:
-    return request.session.get('logged_in', False)
+    return 'admin_ident' in request.session
   
   @staticmethod
   def denied(request : HttpRequest):
-    return render(request, 'denied.html')
+    context = {
+      'info_type' : 'error',
+      'header' : 'No Access',
+      'message' : 'You dont have access to this resource'
+    }
+    return render(request, 'info.html', context=context)
   
   @staticmethod
   def logout(request : HttpRequest):

@@ -1,15 +1,21 @@
+<!DOCType html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
 <html>
   <head>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <script src="https://cdn.plotly.com/plotly-2.10.1.min.js"></script>
     {% load static %}
     <link rel="stylesheet" href="{% static 'default.css' %}">
+    <link rel="stylesheet" href="{% static 'input.css' %}">
     {% block head %}
     {% endblock %}
   </head>
   <body>
     <div id='site_navbar'>
-      <a id='site_navbar_logo' class='site_navbar_link' href='/'>QuafelWeb<a>
+      <div id='site_logo_container'>
+        <a id='site_navbar_logo' class='site_navbar_link' href='/'>QuafelWeb</a>
+        {% if request.session.logged_in %}
+        <p>{{request.session.admin_ident}}</p>
+        {%endif%}
+      </div>
       <div id='site_navbar_links'>
         {% if request.session.logged_in %}
         <a class='site_navbar_link' href="{% url 'simulation' %}">Simulation</a>

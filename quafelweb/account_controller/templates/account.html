@@ -6,20 +6,23 @@
 {%endblock%}
 
 {% block content %}
-<div id='account_search'>
-  <input></input>
-  {% labeled_button 'search' id='account_search_button'%}
-</div>
+<form action="/account" method="get" id='account_search'>
+  {% csrf_token %}
+  <input type="text" name='search' value={{request.GET.search}}>
+  <button type="submit"><span class="material-symbols-outlined">search</span></button>
+</form>
 <div id='account_container'>
-  {%for name in accounts %}
-  <div class='account_entry'>
-    <p>{{ name }}</p>
-    {% labeled_button delete %}
-  </div>  
+  {%for account in accounts %}
+  <form action="delete/"  class='account_entry' method='post'>
+    {% csrf_token %}
+    <p>{{ account.identifier }}</p>
+    <button class='icon_button' name="admin_id" value={{account.uid}}><span class="material-symbols-outlined">delete</span></button>
+  </form>  
   {% endfor %}
 </div>
-<div id='new_account_div'>
-  <input></input>
-  {% labeled_button '+' %}
-</div>
+<form action="add/" method="post" id='new_account_div'>
+  {% csrf_token %}
+  <input name="admin_ident"></input>
+  <button type="submit"><span class="material-symbols-outlined">add</span></button>
+</form>
 {% endblock %}

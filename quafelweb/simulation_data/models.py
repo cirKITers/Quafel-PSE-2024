@@ -43,6 +43,3 @@ class SimulationRun(models.Model):
   entangelment_cap = models.FloatField()
 
   durations = models.FloatField(max_length=100)
-
-
-

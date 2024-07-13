@@ -1,5 +1,43 @@
 {% extends "core.html" %}
 
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'hardware.css' %}">
+{%endblock%}
+
 {% block content %}
-<h1>TODO Implement this page</h1>
+<div id="hardware_list">
+  <h2 style='color: white;'>.</h2>
+  <div id='hardware_search'>
+    <input></input>
+    <button><span class="material-symbols-outlined">search</span></button>
+  </div>
+  <div id='hardware_container'>
+    {%for name in hardware_profiles %}
+      <div class='hardware_entry'>
+        <p>{{ name }}</p>
+        <button><span class="material-symbols-outlined">delete</span></button>
+      </div>  
+    {% empty %}
+      <p id="no_profiles">No hardware profiles found</p>
+    {% endfor %}
+  </div>
+</div>
+<form action='add' id='add_hardware_container'>
+  {% csrf_token %}
+  <div id="add_hardware_name">
+    <h2>Name</h2>
+    <input required></input>
+  </div>
+  <div id="add_hardware_description">
+    <h2>Description</h2>
+    <textarea fixed=True required></textarea>
+  </div>
+  <div id="add_hardware_connection">
+    <h2>Connection</h2>
+    <input required></input>
+  </div>
+  
+  <button type='submit'>Submit</button>
+</form>
 {% endblock %}

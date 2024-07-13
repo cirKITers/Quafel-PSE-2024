@@ -3,6 +3,7 @@
 {% block head %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'simulation.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {%endblock%}
 
 {% block content %}
@@ -10,19 +11,19 @@
 <div id="sim_envs">
   {% for env in environments %}
   <div class='env_container'>
-    <button class='env_visibility_toggle'></button>
+    <button class='env_visibility_toggle' type='checkbox'></button>
     <div>
       <p>{{ env.simulator.name }}</p>
       <p>{{ env.hardware.name }}</p>
     </div>
     <p>{{ env.simulator.version }}</p>
-    {% labeled_button 'delete' %}
+    <button class='icon_button'><span class="material-symbols-outlined">delete</span></button>
   </div>
   {% endfor %}
   <button id='add_env_button'>Add Environment</button>
 </div>
 <div id="graph_container">
-  {{ graph_div|safe }}
+  <canvas id='graph'></canvas>
 </div>
 <div id="sim_confs">
 <div class = 'sim_conf'>
@@ -36,7 +37,7 @@
 <div class = 'sim_conf'>
   <p>Depth</p>
   <div>
-    <input></input>
+    <input type='number'></input>
   </div>
 </div>
 <div class = 'sim_conf'>
@@ -46,4 +47,36 @@
   </div>
 </div>
 </div>
+
+<script>
+  const ctx = document.getElementById('graph');
+  (async function() {
+    const data = [
+      { year: 2010, count: 10 },
+      { year: 2011, count: 20 },
+      { year: 2012, count: 15 },
+      { year: 2013, count: 25 },
+      { year: 2014, count: 22 },
+      { year: 2015, count: 30 },
+      { year: 2016, count: 28 },
+    ];
+  
+    new Chart(
+      ctx,
+      {
+        type: 'line',
+        data: {
+          labels: data.map(row => row.year),
+          datasets: [
+            {
+              label: 'Acquisitions by year',
+              data: data.map(row => row.count)
+            }
+          ]
+        } 
+      }
+    );
+  })();
+   
+</script>
 {% endblock %}

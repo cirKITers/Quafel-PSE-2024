@@ -1,0 +1,26 @@
+{% extends "core.html" %}
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'info.css' %}">
+{%endblock%}
+
+
+{% block content %}
+<div id='info_content'>
+  <div id='info_head'>
+    <span class="material-symbols-outlined">
+      {% if info_type == 'error' %}
+        error
+      {% elif info_type == 'success' %}
+        check_circle    
+      {% else  %}
+        info_i
+      {% endif %}
+    </span>
+    <h1>{{ header }}</h1>
+  </div>
+  <h3>{{ message }}</h3>
+  <a href="/" id='info_button'>Ok</a>
+<div>
+{% endblock %}
