@@ -75,7 +75,7 @@ class SimulationRequestView:
       sim_and_finished.append({'hardwareprofile': hardwareprofile,
                                'simulatorprofile': simulatorprofile,
                                'finished': n_finished,
-                               'hardwareprofile_id': hardwareprofile.name,
+                               'hardwareprofile_name': hardwareprofile.name,
                                'simulatorprofile_id': simulatorprofile.id,})
 
       # Alternative approach
@@ -86,9 +86,12 @@ class SimulationRequestView:
       #         if SimulationRun.objects.filter(HardwareProfile=hwp_sim_combinations[comb]['hardware_profile'], SimulatorProfile = hwp_sim_combinations[comb]['simulator_name'] , qbits=q, depth=d, shots=s, evals=e).exists():
       #           finished_array[q][d][s][e] = True
       #           n_finished += 1
-    
+    hwps = list(HardwareProfile.objects.all().values('name', 'description'))
+    sims = list(SimulatorProfile.objects.all().values('name', 'version', 'id'))
+
     context = {'n_runs': n_runs,
-               'sim_and_finished': sim_and_finished
+               'sim_and_finished': sim_and_finished,
+               'hwps_sims': json.dumps({'hwps': hwps, 'sims': sims}),
     }
     return render(request, "simulation_configuration.html", context)
 
@@ -147,8 +150,3 @@ class SimulationRequestView:
   @AccountView.require_login
   def claim_results(request):
     ...
-
-  def get_hardwareprofiles_simulators(request):
-    hwps = list(HardwareProfile.objects.all().values('name', 'description'))
-    sims = list(SimulatorProfile.objects.all().values('name', 'version', 'id'))
-    return JsonResponse({'hwps': hwps, 'sims': sims})

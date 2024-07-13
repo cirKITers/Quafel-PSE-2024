@@ -7,7 +7,7 @@
 #computed_overview {
 	width: 100%;
 	margin-left: 5em;
-  /* max-height: 100%;
+	/* max-height: 100%;
   overflow-y: auto; */
 }
 
@@ -62,12 +62,11 @@
 	border: 1px gray solid;
 }
 
-#computed_overview #table_header th{
-  border-bottom: 2px black solid;
+#computed_overview #table_header th {
+	border-bottom: 2px black solid;
 }
 
-
-#computed_overview th div{
+#computed_overview th div {
 	border: 1px black solid;
 	padding: 6px 15px; /* Adjust padding as needed */
 	margin: 7px;
@@ -102,8 +101,8 @@ tr.even {
 	padding: 1px;
 	cursor: pointer;
 	/* width: 100%; */
-	border: 0.5px black solid;
-  border-radius: 2px;
+	border: 1px black solid;
+	border-radius: 2px;
 	cursor: pointer;
 	font-size: small;
 }

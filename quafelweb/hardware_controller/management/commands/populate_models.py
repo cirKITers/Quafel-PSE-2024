@@ -18,11 +18,13 @@ class Command(BaseCommand):
         hwp_example = HardwareProfile(name='HWP3', description='Dies ist ein Beispiel HWP', protocol='localhost', ip_addr='102.0.0.0', port_addr='3', archived=False)
         hwp_example.save()
 
-        smp_profile = SimulatorProfile(name='QUAFEL', version='1.0')
+        smp_profile = SimulatorProfile(name='pennylane_fw', version='1.0')
         smp_profile.save()
-        smp_profile = SimulatorProfile(name='QUAFEL', version='2.0')
+        smp_profile = SimulatorProfile(name='pennylane_fw', version='1.3')
         smp_profile.save()
-        smp_profile = SimulatorProfile(name='QUAFEL', version='1.3')
+        smp_profile = SimulatorProfile(name='qiskit_fw', version='2.0')
+        smp_profile.save()
+        smp_profile = SimulatorProfile(name='qibo_fw', version='1.3')
         smp_profile.save()
 
 
