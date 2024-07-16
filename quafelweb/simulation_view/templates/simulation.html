@@ -8,7 +8,9 @@
 
 {% block content %}
 <form id="sim_conf_menu">
-  <h2>Configurations</h2>
+  
+  <input type="hidden" name="simulator_filter" value="{{ request.GET.simulator_filter }}">
+  <input type="hidden" name="hardware_filter" value="{{ request.GET.hardware_filter }}">
   <input type="hidden" name="qubit_min" value="{{ request.GET.qubit_min }}">
   <input type="hidden" name="qubit_max" value="{{ request.GET.qubit_max }}">
   
@@ -17,7 +19,7 @@
 
   <input type="hidden" name="shot_min" value="{{ request.GET.shot_min }}">
   <input type="hidden" name="shot_max" value="{{ request.GET.shot_max }}">
-  
+  <h2>Configurations</h2>
   <input type="hidden" name="selected_conf" value="{{ request.GET.selected_conf }}">
   <div id="sim_confs">
     <div class='sim_conf' {% if request.GET.selected_conf|default:"qubit" == "qubit"%} id='selected_conf' {%endif%}>
@@ -89,8 +91,6 @@
   </div>
   <h2>Environments</h2>
   <div id="env_filter">
-    <input type="hidden" name="simulator_filter" value="{{ request.GET.simulator_filter }}">
-    <input type="hidden" name="hardware_filter" value="{{ request.GET.hardware_filter }}">
     <div class="dropdown">
       <div class="dropbtn">{{ request.GET.hardware_filter|default:"Hardware"}}</div>
       <div class="dropdown-content">
@@ -126,6 +126,7 @@
     </div>
     {% endfor %}
   </div>
+  
 </form>
 <div id="graph_container">
   <canvas id="graph_canvast"></canvas>

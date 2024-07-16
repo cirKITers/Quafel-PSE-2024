@@ -16,6 +16,7 @@
     {%for hardware in hardware_profiles %}
       <form class='hardware_entry' action="delete/" method="post">
         <p>{{ hardware.name }}</p>
+        <p>{{ hardware.uuid }}</p>
         <button class="icon_button" name="hardware_id" value={{hardware.uuid}}><span class="material-symbols-outlined">delete</span></button>
       </form>  
     {% empty %}

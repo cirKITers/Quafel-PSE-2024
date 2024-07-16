@@ -52,8 +52,8 @@ class AccountView:
   @require_login
   def remove_admin(request) -> HttpResponse:
 
-    if ident := request.POST.get("admin_id"):
-      AdminAccount.objects.get(uid=ident).delete()
+    if ident := request.POST.get("admin_ident"):
+      AdminAccount.objects.get(identifier=ident).delete()
 
     return redirect(reverse('account'))
   
@@ -72,7 +72,7 @@ class AccountView:
     token = OAUTH.openid.authorize_access_token(request)
 
     ident = token["userinfo"][OPENID_CLIENT_IDENT]
-    if not AdminAccount.objects.filter(identifier=ident).first(): 
+    if not AdminAccount.objects.filter(identifier=ident).exists(): 
       return redirect(reverse('denied'))
 
     request.session['admin_ident'] = token['userinfo'][OPENID_CLIENT_IDENT]

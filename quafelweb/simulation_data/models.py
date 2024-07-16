@@ -2,24 +2,24 @@
 Defines the models used to store SimulationRuns in an database
 '''
 from django.db import models
-from django.db.models.signals import post_init
 from django.contrib.postgres.fields import ArrayField
 from hardware_controller.models import HardwareProfile
 
 
-#TODO do this from a conf file maybe even in the settings
 class SimulatorProfile(models.Model):
 
-  name = models.CharField(max_length=50)
+  name = models.CharField(max_length=50, primary_key=True, unique=True)
 
 
 class SimulationRun(models.Model):
+
+  id = models.IntegerField(primary_key=True)
   
   # ENV
 
-  hardware_profile = models.ForeignKey(HardwareProfile, on_delete=models.CASCADE)
+  hardware = models.ForeignKey(HardwareProfile, on_delete=models.CASCADE)
 
-  simulator_name = models.ForeignKey(SimulatorProfile, on_delete=models.CASCADE)
+  simulator = models.ForeignKey(SimulatorProfile, on_delete=models.CASCADE)
 
   user = models.CharField(max_length=100)
 
@@ -27,30 +27,18 @@ class SimulationRun(models.Model):
 
   shots = models.IntegerField()
 
-  qbits = models.IntegerField()
+  qubits = models.IntegerField()
   
   depth = models.IntegerField()
 
-  evals = models.IntegerField()
-
-
   # STATUS
 
-  finished = models.BooleanField(default=False) # enums in orm ??
+  finished = models.BooleanField(default=False)
 
-  expressability = models.FloatField()  # how to represent optional SimulationResult data ?
+  expressibility = models.FloatField()
 
-  entangelment_cap = models.FloatField()
+  entangling_capability = models.FloatField()
 
-  durations = models.FloatField(max_length=100) # ArrayField(models.FloatField())
+  durations = ArrayField(models.FloatField(), 100)
 
-
-  def __repr__(self) -> str:
-     return f"Simulatorporfile {self.shots=} {self.qbits=} {self.depth=} {self.evals=}"
-
-
-def my_handler(**kwargs):
-    print("Run Handler")
-
-
-post_init.connect(my_handler, sender=SimulatorProfile)
+  duration_avg = models.FloatField(default=0.0)

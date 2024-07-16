@@ -15,10 +15,6 @@ import itertools
 class SimulationView:
 
   @staticmethod
-  def graph(data : pd.DataFrame) -> str:
-    return px.line(data, labels=["Qubits", "Evaluations"]).to_html(full_html=False)
-
-  @staticmethod
   def index(request):
 
     simulators =        [sp for sp in SimulatorProfile.objects.all()  if sp.name == (request.GET.get("simulator_filter") or sp.name)]
@@ -29,17 +25,17 @@ class SimulationView:
 
 
     # Existing envs
-    hps = set(SimulationRun.objects.values_list("hardware_profile", flat=True).distinct())
-    sps = set(SimulationRun.objects.values_list("simulator_name", flat=True).distinct())
+    hps = set(SimulationRun.objects.values_list("hardware", flat=True).distinct())
+    sps = set(SimulationRun.objects.values_list("simulator", flat=True).distinct())
 
     # Filter for existing envs
-    envs = [env for env in envs if env.hardware.uuid in hps and env.simulator.id in sps]
+    envs = [env for env in envs if env.hardware.uuid in hps and env.simulator.name in sps]
 
     # Simulation configuration
     values = {
-    "qubit" : set(SimulationRun.objects.values_list("qbits", flat=True).distinct()) or { 0 },
+    "qubit" : set(SimulationRun.objects.values_list("qubits", flat=True).distinct()) or { 0 },
     "depth" : set(SimulationRun.objects.values_list("depth", flat=True).distinct()) or { 0 },
-    "shot" : set(SimulationRun.objects.values_list("evals", flat=True).distinct()) or { 0 },
+    "shot" : set(SimulationRun.objects.values_list("shots", flat=True).distinct()) or { 0 },
     }
     
     # retrieve the selected range
@@ -55,9 +51,9 @@ class SimulationView:
     # Get all runs existed
     env_to_run_map = [
       (env, SimulationRun.objects.filter(
-        simulator_name=env.simulator.id, 
-        hardware_profile=env.hardware.uuid,
-        qbits__in=get_range("qubit"),
+        simulator=env.simulator.name, 
+        hardware=env.hardware.uuid,
+        qubits__in=get_range("qubit"),
         depth__in=get_range("depth"),
         shots__in=get_range("shot"),
       )) for env in envs
@@ -70,7 +66,7 @@ class SimulationView:
       "data" : [
         {
           "label" : env.hardware.name + " " + env.simulator.name,
-          "data" :  [run.durations for run in runs]
+          "data" :  [run.duration_avg for run in runs]
         }
         for env, runs in env_to_run_map
       ],

@@ -17,7 +17,7 @@
   <form action="delete/"  class='account_entry' method='post'>
     {% csrf_token %}
     <p>{{ account.identifier }}</p>
-    <button class='icon_button' name="admin_id" value={{account.uid}}><span class="material-symbols-outlined">delete</span></button>
+    <button class='icon_button' name="admin_ident" value={{account.identifier}}><span class="material-symbols-outlined">delete</span></button>
   </form>  
   {% endfor %}
 </div>
