@@ -1,7 +1,7 @@
 
 #graph_container {
   height: 100%;   
-  width: 100%;
+  width: 90em;
   position: relative;
   padding: 2em;
   box-sizing: border-box;
@@ -10,9 +10,66 @@
 
 /* Simulation configuration selector*/
 
+#selected_conf {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+}
+
 #sim_confs {
-  margin-top: 5em;
-  flex: 0 1 20%
+  position: relative;
+}
+
+.sim_conf {
+  position: relative;
+  width: 60%;
+  font-weight: bold;
+}
+
+
+.hidden_select_button {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.sim_conf p {
+  z-index: -1;
+  width: 10em;
+}
+.sim_conf .dropdown {
+  width: max-content;
+  position: relative;
+  width: 5em;
+}
+
+
+#sim_conf_menu {
+  width: 30em;
+  position: relative;
+}
+
+.conf_selection_dropdown .dropbtn{
+  padding: .5em;
+  border: 1px black solid;
+  width: 4em;
+  height: 1em;
+  display: flex;
+  justify-content: space-around;
+}
+
+.conf_selection_dropdown .dropbtn::after{
+  display: none;
+}
+
+
+.conf_selection_dropdown:hover .dropbtn::after{
+  transform: none;
 }
 
 .sim_conf {
@@ -27,7 +84,7 @@
 .sim_conf input {
   width: 50px;
   height: 30px;
-}
+} 
 
 /* Environment selector */
 
@@ -48,7 +105,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 30px;
 }
 
 
@@ -59,9 +116,4 @@
 
 .env_container p {
   font-weight: 1.2em;
-}
-
-#add_env_button {
-  width: 100%;
-  height: 3em;
 }

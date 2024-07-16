@@ -155,7 +155,7 @@ input[type='number'] {
 
 .dropdown {
   position: relative;
-  display: inline-block;
+  display: block;
   width: 100%;
   cursor: pointer;
 }
@@ -165,25 +165,28 @@ input[type='number'] {
   position: absolute;
   background-color: #f1f1f1;
   width: 100%;
-  z-index: 100;
   padding: 0;
   max-height: 400%;
   overflow: auto;
   border: 1px solid black;
   box-sizing: border-box;
+  padding: 1px;
+  z-index: 10;
 }
 
 .dropdown-content * {
   color: black;
   padding: 1em;
   text-decoration: none;
-  display: block;
   width: 100%;
   border: none;
+
 }
 
 .dropdown-content *:hover {
   background-color: #ddd;
 }
 
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {
+  display: block !important; 
+}

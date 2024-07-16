@@ -1,3 +1,4 @@
+import math
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -19,10 +20,9 @@ class SimulationView:
 
   @staticmethod
   def index(request):
-    # Generate the plot
-    # Pass the plot to the HTML template
-    hardware_profiles = [hp for hp in HardwareProfile.objects.all() if hp.name == (request.GET.get("hardware_filter") or hp.name)]
-    simulators = [sp for sp in SimulatorProfile.objects.all() if sp.name == (request.GET.get("simulator_filter") or sp.name)]
+
+    simulators =        [sp for sp in SimulatorProfile.objects.all()  if sp.name == (request.GET.get("simulator_filter") or sp.name)]
+    hardware_profiles = [hp for hp in HardwareProfile.objects.all()   if hp.name == (request.GET.get("hardware_filter") or hp.name)]
     
     # Produce all possible environments
     envs = [SimulationEnv(hp, sp) for hp, sp in itertools.product(hardware_profiles, simulators)]
@@ -35,19 +35,34 @@ class SimulationView:
     # Filter for existing envs
     envs = [env for env in envs if env.hardware.uuid in hps and env.simulator.id in sps]
 
+    # Simulation configuration
+    values = {
+    "qubit" : set(SimulationRun.objects.values_list("qbits", flat=True).distinct()) or { 0 },
+    "depth" : set(SimulationRun.objects.values_list("depth", flat=True).distinct()) or { 0 },
+    "shot" : set(SimulationRun.objects.values_list("evals", flat=True).distinct()) or { 0 },
+    }
     
-    max_qbits = 6
+    # retrieve the selected range
+    selected_range = request.GET.get("selected_conf") or "qubit"
+
+    def get_range(name : str):
+      max_v = max(int(request.GET.get(name + "_max") or 0), min(values[name]))
+      min_v = min(int(request.GET.get(name + "_min") or 100000000), max(values[name]))
+      
+      range_v = set(v for v in values[name] if v in range(min_v, max_v + 1)) if selected_range == name else { min_v } 
+      return range_v
 
     # Get all runs existed
     env_to_run_map = [
       (env, SimulationRun.objects.filter(
         simulator_name=env.simulator.id, 
         hardware_profile=env.hardware.uuid,
-        qbits__in=set(range(1, max_qbits + 1)),
-        depth=32,
-        evals=256
+        qbits__in=get_range("qubit"),
+        depth__in=get_range("depth"),
+        shots__in=get_range("shot"),
       )) for env in envs
     ]
+
 
 
 
@@ -55,21 +70,29 @@ class SimulationView:
       "data" : [
         {
           "label" : env.hardware.name + " " + env.simulator.name,
-          "data" : [0] + [run.durations for run in runs]
+          "data" :  [run.durations for run in runs]
         }
         for env, runs in env_to_run_map
       ],
-      'labels' : list(range(0, max_qbits + 1))
     }
 
-    graph_data["max"] = max(max(data["data"]) for data in graph_data["data"]) if len(env_to_run_map) > 0 else 1.0
     
+    graph_data['labels'] = list(sorted(get_range(selected_range)))
 
     context = {
       'environments' : envs,
       'hardware_profiles' : HardwareProfile.objects.all(),
       'simulator_profiles' : SimulatorProfile.objects.all(),
-      'graph_data' : graph_data
+      'graph_data' : graph_data,
+      
+      'qubits_values' : list(sorted(values["qubit"])),
+      'qubit_max' : max(values["qubit"]),
+
+      'depth_values' : list(sorted(values["depth"])),
+      'depth_max' : max(values["depth"]),
+
+      'shot_values' : list(sorted(values["shot"])),
+      'shot_max' : max(values["shot"]),
     }
 
     return render(request, "simulation.html", context=context)

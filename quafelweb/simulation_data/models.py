@@ -45,7 +45,8 @@ class SimulationRun(models.Model):
   durations = models.FloatField(max_length=100) # ArrayField(models.FloatField())
 
 
-
+  def __repr__(self) -> str:
+     return f"Simulatorporfile {self.shots=} {self.qbits=} {self.depth=} {self.evals=}"
 
 
 def my_handler(**kwargs):
