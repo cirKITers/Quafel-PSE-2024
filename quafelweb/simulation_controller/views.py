@@ -1,8 +1,9 @@
 import json
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from account_controller.views import AccountView
 from hardware_controller.models import HardwareProfile
+from simulation_controller.forms import SimulationConfigurationForm
 from simulation_data.models import SimulatorProfile, SimulationRun
 
 
@@ -92,6 +93,7 @@ class SimulationRequestView:
     context = {'n_runs': n_runs,
                'sim_and_finished': sim_and_finished,
                'hwps_sims': json.dumps({'hwps': hwps, 'sims': sims}),
+               'form': SimulationConfigurationForm(), 
     }
     return render(request, "simulation_configuration.html", context)
 
@@ -99,47 +101,97 @@ class SimulationRequestView:
   @AccountView.require_login
   def select_environments(request):
     data = json.loads(request.body)
-    checked_entries = data.get('checkedEntries')
-    print(checked_entries)
-    for entry in checked_entries:
-      hwp = HardwareProfile.objects.get(name=entry[0])
-      sim = SimulatorProfile.objects.get(id=entry[1])
-      print(hwp, sim)
+    # TODO: Check if password or ttop is required
 
-    return render(request, 'simulation_configuration.html')
+    password_required = False
+    if password_required:
+      return JsonResponse({'password_required': True})
+    else:
+      return JsonResponse({'success': True, 'data': 'Processed data here'})
 
 
   @AccountView.require_login
   def submit_request(request):
-    hardware_profile_name = request.POST.get('hardwareprofile')
-    simulator_profile_name = request.POST.get('simulatorprofile')
-    qubits_min : int = request.POST.get('qubits_range_min')
-    qubits_max : int = request.POST.get('qubits_range_max')
-    depth_min : int = request.POST.get('depth_range_min')
-    depth_max : int = request.POST.get('depth_range_max')
-    shots_min : int = request.POST.get('shots_range_min')
-    shots_max : int = request.POST.get('shots_range_max')
-    eval_min : int = request.POST.get('eval_range_min')
-    eval_max : int = request.POST.get('eval_range_max')
+    data = json.loads(request.body)
+    checked_entries = data.get('checkedEntries')
+    hwp_sim_combinations = []
+    for entry in checked_entries:
+      hwp_sim_combinations.append([HardwareProfile.objects.get(name=entry[0]),
+                                   SimulatorProfile.objects.get(name=entry[1], version=entry[2])])
+    qubits_min : int = data.get('qubitsMin')
+    qubits_max : int = data.get('qubitsMax')
+    depth_min : int = data.get('depthMin')
+    depth_max : int = data.get('depthMax')
+    shots_min : int = data.get('shotsMin')
+    shots_max : int = data.get('shotsMax')
+    eval_min : int = data.get('evalMin')
+    eval_max : int = data.get('evalMax')
+    recalculate = data.get('recalculate')
 
+    # Check if data is valid
     if (shots_min > shots_max or qubits_min > qubits_max or depth_min > depth_max or eval_min > eval_max):
-      return render(request, 'simulation_configuration.html', context={'error': 'Invalid range'})
+      return JsonResponse({'error': 'Invalid range'})
     
     n_qubits = qubits_max - qubits_min + 1
     n_depth = depth_max - depth_min + 1
     n_shots = shots_max - shots_min + 1
     n_evals = eval_max - eval_min + 1
-    n_runs = n_qubits * n_depth * n_evals
-    finished_array = [[[[False for _ in range(n_qubits)] for _ in range(n_depth)] for _ in range(n_shots)] for _ in range(n_evals)]
-    n_finished = 0
+    n_runs = n_qubits * n_depth * n_shots * n_evals
 
-    for q in range(qubits_min, qubits_max):
-      for d in range(depth_min, depth_max):
-        for s in range(shots_min, shots_max):
-          for e in range(eval_min, eval_max):
-            if SimulationRun.objects.filter(HardwareProfile__name=hardware_profile_name, SimulatorProfile__name = simulator_profile_name , qbits=q, depth=d, shots=s, evals=e).exists():
-              finished_array[q][d][s][e] = True
-              n_finished += 1
+    if recalculate:
+      finished_array = [[[[[False for _ in range(n_evals)] for _ in range(n_shots)] for _ in range(n_depth)] for _ in range(n_qubits)] for _ in range(hwp_sim_combinations.count())]
+      n_finished = 0
+
+      for comb in range(hwp_sim_combinations.count()):
+      # durch testen hab ich rausgefunden, dass die hwp_sim_combinations hwp__name und simulator__id besitzt
+        for run in SimulationRun.objects.filter(hardware_profile =hwp_sim_combinations[comb][0], 
+                                                simulator_name = hwp_sim_combinations[comb][1],
+                                                qbits__range=(qubits_min, qubits_max),
+                                                depth__range=(depth_min, depth_max),
+                                                shots__range=(shots_min, shots_max),
+                                                evals__range=(eval_min, eval_max)):
+          if run.finished:
+            print("q", run.qbits, "d", run.depth, "s", run.shots, "e", run.evals)
+            finished_array[comb][run.qbits - qubits_min][run.depth - depth_min][run.shots - shots_min][run.evals - eval_min] = True
+            n_finished += 1
+
+
+    # TODO: Check if password or ttop is required
+
+
+    return JsonResponse({'password': 'true', 'ttop': 'true'})
+
+
+
+    # hardware_profile_name = request.POST.get('hardwareprofile')
+    # simulator_profile_name = request.POST.get('simulatorprofile')
+    # qubits_min : int = request.POST.get('qubits_range_min')
+    # qubits_max : int = request.POST.get('qubits_range_max')
+    # depth_min : int = request.POST.get('depth_range_min')
+    # depth_max : int = request.POST.get('depth_range_max')
+    # shots_min : int = request.POST.get('shots_range_min')
+    # shots_max : int = request.POST.get('shots_range_max')
+    # eval_min : int = request.POST.get('eval_range_min')
+    # eval_max : int = request.POST.get('eval_range_max')
+
+    # if (shots_min > shots_max or qubits_min > qubits_max or depth_min > depth_max or eval_min > eval_max):
+    #   return render(request, 'simulation_configuration.html', context={'error': 'Invalid range'})
+    
+    # n_qubits = qubits_max - qubits_min + 1
+    # n_depth = depth_max - depth_min + 1
+    # n_shots = shots_max - shots_min + 1
+    # n_evals = eval_max - eval_min + 1
+    # n_runs = n_qubits * n_depth * n_evals
+    # finished_array = [[[[False for _ in range(n_qubits)] for _ in range(n_depth)] for _ in range(n_shots)] for _ in range(n_evals)]
+    # n_finished = 0
+
+    # for q in range(qubits_min, qubits_max):
+    #   for d in range(depth_min, depth_max):
+    #     for s in range(shots_min, shots_max):
+    #       for e in range(eval_min, eval_max):
+    #         if SimulationRun.objects.filter(HardwareProfile__name=hardware_profile_name, SimulatorProfile__name = simulator_profile_name , qbits=q, depth=d, shots=s, evals=e).exists():
+    #           finished_array[q][d][s][e] = True
+    #           n_finished += 1
 
     
 

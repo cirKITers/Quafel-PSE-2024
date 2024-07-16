@@ -44,7 +44,19 @@
     </div>
     <button id="simulation_conf_submit" type="submit">Search Hardwareprofiles</button>
   </form>
-  <button id="btn_submit">Submit Runs</button>
+
+
+
+  <form id="submit_settings">
+      <!-- <h4>Submit Settings</h4> -->
+      <div>
+        <label for="recalculate">Recalculate existing Datapoints</label>
+        <input name="recalculate" type='checkbox' value={{request.POST.recalculate}}></input>
+      </div>
+    <button type="submit" id="btn_submit">Submit Runs</button>
+  </form>
+  
+  
 
   <!-- <form action="{% url 'select_configuration' %}" method="post" id='table'>
     <div class='conf_selection'>
@@ -71,7 +83,7 @@
 </div>
 
 <div id="computed_overview">
-  <table style="width:100%">
+  <table>
     <thead> <!--  required to make rows scrollable -->
       <tr id="table_header">
         <th><input type="checkbox"></th>
@@ -102,8 +114,12 @@
       {% endfor %}
     </tbody>
   </table>
-  <button id="add-hardwareprofile" data-hwps-sims="{{ hwps_sims }}">+</button>
+  <button id="add-hardwareprofile" data-n-runs="{{n_runs}}" data-hwps-sims="{{ hwps_sims }}">
+    <img src="/static/add.svg" alt="add">
+  </button>
+  
 </div>
+
 
 <script src="{% static 'simulation_scripts.js' %}"></script>
 {% endblock %}

@@ -1,40 +1,4 @@
-function sentCheckedEntries() {
-	// Stores tuples of (hwp_id, simulator_id) for checked checkboxes
-	const checkedEntries = [];
-	document.querySelectorAll(".run-checkbox").forEach((checkbox) => {
-		if (checkbox.checked) {
-			checkedEntries.push([checkbox.getAttribute("data-hwp-name"), checkbox.getAttribute("data-simulator-id")]);
-		}
-	});
-	console.log(checkedEntries);
-	// Example: Sending 'checkedEntries' as JSON
-	fetch("/simulation/select_environments/", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			"X-CSRFToken": getCookie("csrftoken"), // Ensure CSRF token is sent; see note below
-		},
-		body: JSON.stringify({ checkedEntries: checkedEntries }),
-	})
-		// .then((response) => response.json())
-		// .then((data) => console.log(data))
-		.catch((error) => console.error("Error:", error));
-}
 
-function getCookie(name) {
-	let cookieValue = null;
-	if (document.cookie && document.cookie !== "") {
-		const cookies = document.cookie.split(";");
-		for (let i = 0; i < cookies.length; i++) {
-			const cookie = cookies[i].trim();
-			if (cookie.substring(0, name.length + 1) === name + "=") {
-				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-				break;
-			}
-		}
-	}
-	return cookieValue;
-}
 
 //hwps_sims containing all hardware profiles and simulators
 let hwps_sims;
@@ -43,6 +7,9 @@ let hwps_sims;
 let selectedHwp = "";
 let selectedSim = "";
 let selectedSimVersion = "";
+
+// Check if hardwareprofile list is matching with configuration form
+let hwps_uptodate = false;
 
 // Add event listener when the document is loaded
 document.addEventListener("DOMContentLoaded", function () {
@@ -55,20 +22,30 @@ document.addEventListener("DOMContentLoaded", function () {
 	document.querySelector('#table_header input[type="checkbox"]').addEventListener("change", function () {
 		var slaveCheckboxes = document.querySelectorAll('#computed_overview tr input[type="checkbox"]');
 
-		// Step 4: Toggle the state of the slave checkboxes
+		// Toggle the state of the slave checkboxes
 		var isChecked = this.checked;
 		slaveCheckboxes.forEach(function (checkbox) {
 			checkbox.checked = isChecked;
 		});
 	});
 
+	document.querySelectorAll(".conf_selection input").forEach(function(input) {
+		input.addEventListener("change", function () {
+			hwps_uptodate = false;
+			document.getElementById("simulation_conf_submit").innerText = "Please Update Hardwareprofiles";
+		});
+	});
+
+	document.getElementById("simulation_conf_submit").addEventListener("click", function () {
+		hwps_uptodate = true;
+		// this.innerText = "Hardware Profiles List is up to date";
+	});
+
 	hwps_sims = JSON.parse(document.getElementById("add-hardwareprofile").getAttribute("data-hwps-sims"));
 
 	// Add event listener to the "Add Hardware Profile" button
 	document.getElementById("add-hardwareprofile").addEventListener("click", function () {
-		//TODO: Maybe not doing it with fetch, instead getting the information from the html, where it is stored in data-* form django context.
 		console.log(hwps_sims);
-		//TODO: Add logic so already present combinations are not added again
 		const hwpsOptions = hwps_sims.hwps
 			.map((profile) => `<option value="${profile.name}">${profile.name}-${profile.description}</option>`)
 			.join("");
@@ -81,10 +58,23 @@ document.addEventListener("DOMContentLoaded", function () {
 		const simsOptions = uniqueSims.map((profile) => `<option value="${profile.name}">${profile.name}</option>`).join("");
 
 		var tbody = document.querySelector("#computed_overview tbody");
-		var newRow = tbody.rows[tbody.rows.length - 1].cloneNode(true);
+		// var newRow = tbody.rows[tbody.rows.length - 1].cloneNode(true);
+		var newRow = document.createElement("tr");
+		for (let i = 0; i < 5; i++) {
+			newRow.appendChild(document.createElement("td"));
+		}
 		newRow.id = "newRow";
 		// newRow.cells[0].querySelector("input").checked = true;
-		newRow.cells[0].innerHTML = `<button class="apply" onclick="insertNewCombi(this)" disabled>Apply</button>`;
+		// newRow.cells[0].innerHTML = `<button class="apply" onclick="insertNewCombi(this)" disabled>Apply</button>`;
+		newRow.cells[0].innerHTML = `<div class="buttons">
+									<button class="apply" onclick="insertNewCombi(this)" disabled>
+										<img src="/static/valid.svg" width="12" height="12" alt="Delete">
+									</button>
+									<button class="delete" onclick="deleteNewCombi(this)">
+										<img src="/static/delete.svg" width="12" height="12" alt="Delete">
+									</button>
+									</div>
+									`;
 
 		newRow.cells[1].innerHTML = `<select name="hardwareprofile">
 									<option value="" selected disabled hidden>Choose Hardware Profile</option>
@@ -95,9 +85,10 @@ document.addEventListener("DOMContentLoaded", function () {
 									${simsOptions}
 									</select>`;
 		newRow.cells[3].innerHTML = `<select name="simulatorversion">
-									<option value="" selected disabled hidden>Choose Sim Version</option>
+									<option value="" selected disabled hidden>Choose Version</option>
 									</select>`;
-		newRow.cells[4].innerText = newRow.cells[4].innerText.replace(/\d+/, "0");
+		newRow.cells[4].innerText = "0/" + this.getAttribute("data-n-runs");
+
 		tbody.appendChild(newRow);
 		stripeTable();
 		document.querySelector('select[name="hardwareprofile"]').addEventListener("change", function () {
@@ -126,6 +117,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			selectedSim = sim;
 			selectedSimVersion = "";
 			document.querySelector('select[name="simulatorversion"]').innerHTML = "";
+			document.querySelector(
+				'select[name="simulatorversion"]'
+			).innerHTML = `<option value="" selected disabled hidden>Choose Version</option>`;
+			for (const filteredSim of hwps_sims.sims.filter((sim) => sim.name === selectedSim)) {
+				document.querySelector(
+					'select[name="simulatorversion"]'
+				).innerHTML += `<option value="${filteredSim.version}">${filteredSim.version}</option>`;
+			}
 			somethingChanged = true;
 		}
 		if (simVersion != null && simVersion !== selectedSimVersion) {
@@ -133,9 +132,20 @@ document.addEventListener("DOMContentLoaded", function () {
 			somethingChanged = true;
 		}
 
+		let n_selected = 0;
+		if (selectedHwp !== "") {
+			n_selected++;
+		}
+		if (selectedSim !== "") {
+			n_selected++;
+		}
+		if (selectedSimVersion !== "") {
+			n_selected++;
+		}
+
 		console.log(selectedHwp, selectedSim, selectedSimVersion);
 
-		if (somethingChanged) {
+		if (n_selected >= 2 && somethingChanged) {
 			// Get already chosen combinations
 			const usedCombinations = [];
 			document.querySelectorAll(".run-checkbox").forEach((checkbox) => {
@@ -145,69 +155,52 @@ document.addEventListener("DOMContentLoaded", function () {
 					checkbox.getAttribute("data-simulator-version"),
 				]);
 			});
+			console.log(usedCombinations);
 			const matchingCombinations = usedCombinations.filter(([hwpName, simulator, simulatorVersion]) => {
-				if (selectedHwp === "") {
-					if (selectedSim !== "" && selectedSimVersion !== "") {
-						console.log("Schwanz");
-						return simulator === selectedSim && simulatorVersion === selectedSimVersion;
-					} else if (selectedSim !== "") {
-						// && selectedSimVersion === ""
-					}
-				} else if (selectedSim !== "") {
-					// && selectedSimVersion === ""
+				if (selectedHwp === "" && selectedSim !== "" && selectedSimVersion !== "") {
+					return simulator === selectedSim && simulatorVersion === selectedSimVersion;
+				} else if (selectedHwp !== "" && selectedSim !== "" && selectedSimVersion === "") {
 					return hwpName === selectedHwp && simulator === selectedSim;
+				} else if (selectedHwp !== "" && selectedSim !== "" && selectedSimVersion !== "") {
+					return hwpName === selectedHwp && simulator === selectedSim && simulatorVersion === selectedSimVersion;
 				}
 			});
-			console.log(matchingCombinations);
-
-			// Enable all options
 			document.querySelectorAll("#newRow select option").forEach((option) => {
 				option.disabled = false;
 			});
+			if (selectedHwp === "" && selectedSim !== "" && selectedSimVersion !== "") {
+				const matchingCombinations = usedCombinations.filter(([hwpName, simulator, simulatorVersion]) => {
+					return simulator === selectedSim && simulatorVersion === selectedSimVersion;
+				});
 
-			if (selectedHwp === "") {
-				// if already a sim and sim version is selected, then disable all combinations with this sim and sim version and hwps which already are in the table
-				if (selectedSim !== "" && selectedSimVersion !== "") {
-					for (const [hwpName, simulator, simulatorVersion] of matchingCombinations) {
-						document.querySelector(`select[name="hardwareprofile"] option[value="${hwpName}"]`).disabled = true;
-					}
+				for (const [hwpName, simulator, simulatorVersion] of matchingCombinations) {
+					document.querySelector(`select[name="hardwareprofile"] option[value="${hwpName}"]`).disabled = true;
 				}
-				// only sim is selected, then list the versions of the selected sim
-				else if (selectedSim !== "") {
-					//selectedSimVersion === ""
-					document.querySelector(
-						'select[name="simulatorversion"]'
-					).innerHTML = `<option value="" selected disabled hidden>Choose Version</option>`;
-					for (const filteredSim of hwps_sims.sims.filter((sim) => sim.name === selectedSim)) {
-						document.querySelector(
-							'select[name="simulatorversion"]'
-						).innerHTML += `<option value="${filteredSim.version}">${filteredSim.version}</option>`;
-					}
+			} else if (selectedHwp !== "" && selectedSim !== "" && selectedSimVersion === "") {
+				const matchingCombinations = usedCombinations.filter(([hwpName, simulator, simulatorVersion]) => {
+					return hwpName === selectedHwp && simulator === selectedSim;
+				});
+				for (const [hwpName, simulator, simulatorVersion] of matchingCombinations) {
+					document.querySelector(`select[name="simulatorversion"] option[value="${simulatorVersion}"]`).disabled = true;
+				}
+			} else if (selectedHwp !== "" && selectedSim !== "" && selectedSimVersion !== "") {
+				const matchingCombinations1 = usedCombinations.filter(([hwpName, simulator, simulatorVersion]) => {
+					return simulator === selectedSim && simulatorVersion === selectedSimVersion;
+				});
+
+				for (const [hwpName, simulator, simulatorVersion] of matchingCombinations1) {
+					document.querySelector(`select[name="hardwareprofile"] option[value="${hwpName}"]`).disabled = true;
+				}
+
+				const matchingCombinations2 = usedCombinations.filter(([hwpName, simulator, simulatorVersion]) => {
+					return hwpName === selectedHwp && simulator === selectedSim;
+				});
+				for (const [hwpName, simulator, simulatorVersion] of matchingCombinations2) {
+					document.querySelector(`select[name="simulatorversion"] option[value="${simulatorVersion}"]`).disabled = true;
 				}
 			}
-			// hwp and sim are selected, then list the versions of the selected sim, disable all combinations with this sim and sim version and hwps which already are in the table
-			else if (selectedSim !== "") {
-				//&& selectedHwp !== ""
-				if (selectedSimVersion === "") {
-					document.querySelector(
-						'select[name="simulatorversion"]'
-					).innerHTML = `<option value="" selected disabled hidden>Choose Version</option>`;
-					for (const filteredSim of hwps_sims.sims.filter((sim) => sim.name === selectedSim)) {
-						document.querySelector(
-							'select[name="simulatorversion"]'
-						).innerHTML += `<option value="${filteredSim.version}">${filteredSim.version}</option>`;
-					}
-					for (const [hwpName, simulator, simulatorVersion] of matchingCombinations) {
-						document.querySelector(`select[name="simulatorversion"] option[value="${simulatorVersion}"]`).disabled = true;
-					}
-				}
-				else{
-
-				}
-			}
-
 			//enable the apply button if all three values are selected
-			if ((selectedHwp !== "", selectedSim !== "", selectedSimVersion !== "")) {
+			if (selectedHwp !== "" && selectedSim !== "" && selectedSimVersion !== "") {
 				select.closest("tr").querySelector("button.apply").disabled = false;
 			}
 		}
@@ -249,10 +242,129 @@ function insertNewCombi(button) {
 	selectedSimVersion = "";
 }
 
+function deleteNewCombi(button) {
+	const row = button.closest("tr");
+	// Enable the "Add Hardware Profile" button
+	document.getElementById("add-hardwareprofile").disabled = false;
+	row.remove();
+}
+
 function stripeTable() {
 	const rows = document.querySelectorAll("#computed_overview table tr");
 	rows.forEach((row, index) => {
 		row.classList.remove("even", "odd");
 		row.classList.add(index % 2 === 0 ? "odd" : "even");
 	});
+}
+
+function sentCheckedEntries(e) {
+	e.preventDefault()
+	if (!hwps_uptodate) {
+		alert("Hardwareprofiles List is not up to date. Make sure you know what your doing!");
+		return;
+	}
+
+	const qubitsMin = document.querySelector('input[name="qubits_range_min"]').value;
+    const qubitsMax = document.querySelector('input[name="qubits_range_max"]').value;
+    const depthMin = document.querySelector('input[name="depth_range_min"]').value;
+    const depthMax = document.querySelector('input[name="depth_range_max"]').value;
+    const shotsMin = document.querySelector('input[name="shots_range_min"]').value;
+    const shotsMax = document.querySelector('input[name="shots_range_max"]').value;
+    const evalMin = document.querySelector('input[name="eval_range_min"]').value;
+    const evalMax = document.querySelector('input[name="eval_range_max"]').value;
+
+	if (qubitsMin > qubitsMax) {
+		alert("Minimum qubits is bigger than maximum qubits");
+		return;
+	}
+	if (depthMin > depthMax) {
+		alert("Minimum depth is bigger than maximum depth");
+		return;
+	}
+	if (shotsMin > shotsMax) {
+		alert("Minimum shots is bigger than maximum shots");
+		return;
+	}
+	if (evalMin > evalMax) {
+		alert("Minimum eval is bigger than maximum eval");
+		return;
+	}
+
+	// Stores tuples of (hwp_id, simulator_id) for checked checkboxes
+	const checkedEntries = [];
+	const hwps = [];
+	document.querySelectorAll(".run-checkbox").forEach((checkbox) => {
+		if (checkbox.checked) {
+			const hwp_name = checkbox.getAttribute("data-hwp-name");
+			checkedEntries.push([hwp_name, checkbox.getAttribute("data-simulator"). checkbox.getAttribute("data-simulator-version"), checkbox.getAttribute("data-simulator-data-simulator-id")]);
+			hwps.push(hwp_name);
+		}
+	});
+
+	if (checkedEntries.length === 0) {
+		alert("No Hardwareprofiles selected");
+		return;
+	}
+
+	console.log(checkedEntries);
+
+	fetch("/simulation/select_environments/", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"X-CSRFToken": getCookie("csrftoken"), // Ensure CSRF token is sent; see note below
+		},
+		body: JSON.stringify({ hwps: hwps}),
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			
+			// TODO: Popup window with password, totp prompt 
+
+			fetch("/simulation/submit_request/", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"X-CSRFToken": getCookie("csrftoken"), // Ensure CSRF token is sent; see note below
+				},
+				body: JSON.stringify({ checkedEntries: checkedEntries,
+					qubitsMin: qubitsMin,
+					qubitsMax: qubitsMax,
+					depthMin: depthMin,
+					depthMax: depthMax,
+					shotsMin: shotsMin,
+					shotsMax: shotsMax,
+					evalMin: evalMin,
+					evalMax: evalMax,
+					recalculate: document.querySelector('input[name="recalculate"]').checked,
+				}),
+			})
+
+		})
+		.then(response => {
+			if (response) {
+				return response.json();
+			}
+		})
+		.then(data => {
+			if (data) {
+				console.log("Success");
+			}
+		})
+		.catch((error) => console.error("Error:", error));
+}
+
+function getCookie(name) {
+	let cookieValue = null;
+	if (document.cookie && document.cookie !== "") {
+		const cookies = document.cookie.split(";");
+		for (let i = 0; i < cookies.length; i++) {
+			const cookie = cookies[i].trim();
+			if (cookie.substring(0, name.length + 1) === name + "=") {
+				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+				break;
+			}
+		}
+	}
+	return cookieValue;
 }
