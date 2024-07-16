@@ -1,9 +1,9 @@
 import json
+import random
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from account_controller.views import AccountView
 from hardware_controller.models import HardwareProfile
-from simulation_controller.forms import SimulationConfigurationForm
 from simulation_data.models import SimulatorProfile, SimulationRun
 
 
@@ -93,7 +93,6 @@ class SimulationRequestView:
     context = {'n_runs': n_runs,
                'sim_and_finished': sim_and_finished,
                'hwps_sims': json.dumps({'hwps': hwps, 'sims': sims}),
-               'form': SimulationConfigurationForm(), 
     }
     return render(request, "simulation_configuration.html", context)
 
@@ -101,13 +100,27 @@ class SimulationRequestView:
   @AccountView.require_login
   def select_environments(request):
     data = json.loads(request.body)
-    # TODO: Check if password or ttop is required
+    
+    hwps = set(data.get('hwps'))
+    hwps_requirements = []
+    for hwp in hwps:
+      hwp_entry = {}
+      # TODO: Check if password or ttop is required
 
-    password_required = False
-    if password_required:
-      return JsonResponse({'password_required': True})
-    else:
-      return JsonResponse({'success': True, 'data': 'Processed data here'})
+      if random.choice([True, False]):
+        hwp_entry['password_required'] = True
+
+      if random.choice([True, False]):
+        hwp_entry['totp_required'] = True
+
+      # hwp_entry != {}
+      if hwp_entry:
+        hwp_entry['hwp'] = hwp
+        hwps_requirements.append(hwp_entry)
+      else:
+        continue
+        
+    return JsonResponse({'hwps_requirements': hwps_requirements})
 
 
   @AccountView.require_login

@@ -120,6 +120,15 @@
   
 </div>
 
+<!-- Popup Box Container -->
+<div id="popupBox" class="popup-container" style="display:none;">
+  <!-- Popup Content -->
+  <div class="popup-content">
+    <span class="close-btn" onclick="closePopup()"><img src="/static/close.svg" alt="close" width="12" height="12"></span>
+    <!-- <p id="popupMessage">Your message here!</p> -->
+     <div id="popup-div"></div>
+  </div>
+</div>
 
 <script src="{% static 'simulation_scripts.js' %}"></script>
 {% endblock %}

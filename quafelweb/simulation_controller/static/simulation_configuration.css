@@ -1,15 +1,12 @@
 :root {
 	--conf-selection-width: 25em; /* Example width */
-  }
-
+}
 
 #conf_selection_container {
 	/* height: calc(100%  - 8em); */
 	display: flex;
 	flex-direction: column;
 }
-
-
 
 .conf_selection {
 	display: flex;
@@ -112,8 +109,8 @@ tr.even {
 	justify-content: space-between;
 }
 
-
-.apply,.delete {
+.apply,
+.delete {
 	/* margin: 0px;
 	padding: 1px;
 	cursor: pointer;
@@ -123,7 +120,7 @@ tr.even {
 	font-size: small; */
 	border: 1px black solid;
 	border-radius: 2px;
-	background-color:transparent;
+	background-color: transparent;
 	cursor: pointer;
 	display: inline-block;
 	padding: 3px;
@@ -144,8 +141,7 @@ input[type="checkbox" i] {
 
 /* TODO: If rows exceed page make table scrollable */
 
-
-#submit_settings{
+#submit_settings {
 	display: flex;
 	flex-direction: column;
 	/* justify-content: space-between; */
@@ -168,3 +164,59 @@ input[type="checkbox" i] {
 	margin: 1em 1em 0em 1em;
 }
 
+/* Popup box */
+/* Popup Container */
+.popup-container {
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Popup Content */
+.popup-content {
+	background-color: white;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid black;
+	width: 50%;
+	position: relative;
+}
+
+/* The Close Button */
+.close-btn {
+	z-index: 2;
+	position: absolute; /* Position the button absolutely within the popup content */
+	top: 5px; /* Align to the top of the popup content */
+	right: 5px; /* Align to the right of the popup content */
+	cursor: pointer; /* Optional: Makes it clear the button is clickable */
+}
+
+.close-btn:hover,
+.close-btn:focus {
+	cursor: pointer;
+	opacity: 0.5;
+}
+
+#submitInput {
+    display: block; /* Makes the input behave like a block-level element */
+    margin-left: auto; /* Pushes the button to the right */
+    margin-right: 0; /* Ensures the button is aligned right with no extra space on the right side */
+	border: 1px black solid;
+	padding: 0.5em 1em;
+	margin-top: 0.5em;
+}
+
+
+.popup-content input {
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0px 0px 0px;
+	/* display: inline-block; */
+	border: 1px solid #ccc;
+	/* box-sizing: border-box; */
+}

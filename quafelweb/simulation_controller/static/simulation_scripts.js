@@ -1,5 +1,3 @@
-
-
 //hwps_sims containing all hardware profiles and simulators
 let hwps_sims;
 
@@ -9,7 +7,7 @@ let selectedSim = "";
 let selectedSimVersion = "";
 
 // Check if hardwareprofile list is matching with configuration form
-let hwps_uptodate = false;
+let hwps_uptodate = true;
 
 // Add event listener when the document is loaded
 document.addEventListener("DOMContentLoaded", function () {
@@ -29,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 	});
 
-	document.querySelectorAll(".conf_selection input").forEach(function(input) {
+	document.querySelectorAll(".conf_selection input").forEach(function (input) {
 		input.addEventListener("change", function () {
 			hwps_uptodate = false;
 			document.getElementById("simulation_conf_submit").innerText = "Please Update Hardwareprofiles";
@@ -258,20 +256,20 @@ function stripeTable() {
 }
 
 function sentCheckedEntries(e) {
-	e.preventDefault()
+	e.preventDefault();
 	if (!hwps_uptodate) {
 		alert("Hardwareprofiles List is not up to date. Make sure you know what your doing!");
 		return;
 	}
 
 	const qubitsMin = document.querySelector('input[name="qubits_range_min"]').value;
-    const qubitsMax = document.querySelector('input[name="qubits_range_max"]').value;
-    const depthMin = document.querySelector('input[name="depth_range_min"]').value;
-    const depthMax = document.querySelector('input[name="depth_range_max"]').value;
-    const shotsMin = document.querySelector('input[name="shots_range_min"]').value;
-    const shotsMax = document.querySelector('input[name="shots_range_max"]').value;
-    const evalMin = document.querySelector('input[name="eval_range_min"]').value;
-    const evalMax = document.querySelector('input[name="eval_range_max"]').value;
+	const qubitsMax = document.querySelector('input[name="qubits_range_max"]').value;
+	const depthMin = document.querySelector('input[name="depth_range_min"]').value;
+	const depthMax = document.querySelector('input[name="depth_range_max"]').value;
+	const shotsMin = document.querySelector('input[name="shots_range_min"]').value;
+	const shotsMax = document.querySelector('input[name="shots_range_max"]').value;
+	const evalMin = document.querySelector('input[name="eval_range_min"]').value;
+	const evalMax = document.querySelector('input[name="eval_range_max"]').value;
 
 	if (qubitsMin > qubitsMax) {
 		alert("Minimum qubits is bigger than maximum qubits");
@@ -296,7 +294,12 @@ function sentCheckedEntries(e) {
 	document.querySelectorAll(".run-checkbox").forEach((checkbox) => {
 		if (checkbox.checked) {
 			const hwp_name = checkbox.getAttribute("data-hwp-name");
-			checkedEntries.push([hwp_name, checkbox.getAttribute("data-simulator"). checkbox.getAttribute("data-simulator-version"), checkbox.getAttribute("data-simulator-data-simulator-id")]);
+			checkedEntries.push([
+				hwp_name,
+				checkbox.getAttribute("data-simulator"),
+				checkbox.getAttribute("data-simulator-version"),
+				checkbox.getAttribute("data-simulator-data-simulator-id"),
+			]);
 			hwps.push(hwp_name);
 		}
 	});
@@ -314,20 +317,61 @@ function sentCheckedEntries(e) {
 			"Content-Type": "application/json",
 			"X-CSRFToken": getCookie("csrftoken"), // Ensure CSRF token is sent; see note below
 		},
-		body: JSON.stringify({ hwps: hwps}),
+		body: JSON.stringify({ hwps: hwps }),
 	})
 		.then((response) => response.json())
-		.then((data) => {
-			
-			// TODO: Popup window with password, totp prompt 
+		.then(async (data) => {
+			// TODO: Popup window with password, totp prompt
+			hwps_requirements = data.hwps_requirements;
+			console.log(data);
+			console.log(hwps_requirements);
 
-			fetch("/simulation/submit_request/", {
+			let passwords_totps = [];
+			for (const hwp_req of hwps_requirements) {
+				if (
+					"password_required" in hwp_req &&
+					"totp_required" in hwp_req &&
+					hwp_req["password_required"] &&
+					hwp_req["totp_required"]
+				) {
+					await openPopupForInputs(["password", "totp"], `Password and TOTP for ${hwp_req["hwp"]}`)
+						.then((inputs) => passwords_totps.push({ hwp: hwp_req["hwp"], password: inputs[0], totp: inputs[1] }))
+						.catch((reason) => {
+							alert("Submit was cancelled");
+							console.log(reason);
+						});
+				} else if ("password_required" in hwp_req && hwp_req["password_required"]) {
+					await openPopupForInputs(["password"], `Password for ${hwp_req["hwp"]}`)
+						.then((inputs) => passwords_totps.push({ hwp: hwp_req["hwp"], password: inputs[0] }))
+						.catch((reason) => {
+							alert("Submit was cancelled");
+							console.log(reason);
+						});
+				} else if ("totp_required" in hwp_req && hwp_req["totp_required"]) {
+					await openPopupForInputs(["totp"], `TOTP for ${hwp_req["hwp"]}`)
+						.then((inputs) => passwords_totps.push({ hwp: hwp_req["hwp"], totp: inputs[0] }))
+						.catch((reason) => {
+							alert("Submit was cancelled");
+							console.log(reason);
+						});
+				}
+			}
+
+			// for (const hwp of hwps) {
+			// 	if (!hwps_requirements[hwp]) {
+			// 		alert(`Hardwareprofile ${hwp} is not available`);
+			// 		return;
+			// 	}
+			// }
+
+			return fetch("/simulation/submit_request/", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 					"X-CSRFToken": getCookie("csrftoken"), // Ensure CSRF token is sent; see note below
 				},
-				body: JSON.stringify({ checkedEntries: checkedEntries,
+				body: JSON.stringify({
+					checkedEntries: checkedEntries,
 					qubitsMin: qubitsMin,
 					qubitsMax: qubitsMax,
 					depthMin: depthMin,
@@ -337,16 +381,16 @@ function sentCheckedEntries(e) {
 					evalMin: evalMin,
 					evalMax: evalMax,
 					recalculate: document.querySelector('input[name="recalculate"]').checked,
+					passwords_totps: passwords_totps,
 				}),
-			})
-
+			});
 		})
-		.then(response => {
+		.then((response) => {
 			if (response) {
 				return response.json();
 			}
 		})
-		.then(data => {
+		.then((data) => {
 			if (data) {
 				console.log("Success");
 			}
@@ -368,3 +412,79 @@ function getCookie(name) {
 	}
 	return cookieValue;
 }
+
+// Function to open the popup
+function openPopupMessage(message) {
+	document.getElementById("popup-div").innerText = message;
+	document.getElementById("popupBox").style.display = "block";
+}
+
+function openPopupInnerHtml(innerHTML) {
+	document.getElementById("popup-div").innerHTML = innerHTML;
+	document.getElementById("popupBox").style.display = "block";
+}
+
+function openPopupForInputs(inputNames, description) {
+	return new Promise((resolve, reject) => {
+		// Set the innerHTML to include a label, input, and a hidden submit button
+		let innerHTMLStr = `<label for="${inputNames[0]}">${description}:</label>`;
+		for (const entry of inputNames) {
+			innerHTMLStr += `<input type="text" id="${entry}" name="${entry}" placeholder="${entry}">`;
+		}
+		innerHTMLStr += `<button type="button" id="submitInput">Submit</button>`;
+		document.getElementById("popup-div").innerHTML = innerHTMLStr;
+		document.getElementById("popupBox").style.display = "block";
+
+		// Focus the input field
+		const firstField = document.getElementById(inputNames[0]);
+		firstField.focus();
+
+		const lastField = document.getElementById(inputNames[inputNames.length - 1]);
+
+		document.querySelector("#popupBox .close-btn").addEventListener("click", function () {
+			reject("User closed the popup");
+		});
+
+		function submitInputs() {
+			let inputs = [];
+			let allFieldsFilled = true;
+			const inputElements = document.querySelectorAll("#popup-div input");
+
+			for (const input of inputElements) {
+				if (input.value === "") {
+					alert("Please fill out all fields");
+					allFieldsFilled = false;
+					break; // Exit the loop if a field is empty
+				} else {
+					inputs.push(input.value);
+				}
+			}
+
+			if (!allFieldsFilled) return;
+			// Close the popup
+			document.getElementById("popupBox").style.display = "none";
+			document.getElementById("popup-div").innerHTML = "";
+			// Resolve the promise with the input value
+			resolve(inputs);
+		}
+
+		// Event listener for the Enter key press
+		lastField.addEventListener("keypress", function (event) {
+			if (event.key === "Enter") {
+				// Prevent the default action to avoid form submission
+				event.preventDefault();
+				submitInputs();
+			}
+		});
+
+		// Handle the click event on the submit button
+		document.getElementById("submitInput").addEventListener("click", submitInputs);
+	});
+}
+
+// Function to close the popup
+function closePopup() {
+	document.getElementById("popupBox").style.display = "none";
+}
+
+// openPopupMessage("Penis");
