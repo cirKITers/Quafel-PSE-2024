@@ -11,7 +11,8 @@ class SimulationRequestView:
 
   @AccountView.require_login
   def select_environments(request):
-    ...
+    
+    return render(request, 'environment_configuration.html')
 
 
   @AccountView.require_login
