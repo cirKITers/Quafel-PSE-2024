@@ -2,7 +2,7 @@
 
 # These are replaced by the script-builder
 CONFIGURATION=""  # yml configuration file for quafel/kedro
-OUTPUT_LOCATION=""  # the output folder the data will be saved to
+OUTPUT_LOCATION=""  # the output user, host and folder the data will be saved to (used by scp)
 
 cd Quafel
 
@@ -29,6 +29,6 @@ if [ $COMBINE_STATUS -ne 0 ]; then
 fi
 
 # copy the output to the output folder
-# TODO
+sshpass -p "password" scp -r "data/07_evaluations_combined/evaluations_combined.csv" "user@server_side:~/$OUTPUT_LOCATION"
 
 exit 0
