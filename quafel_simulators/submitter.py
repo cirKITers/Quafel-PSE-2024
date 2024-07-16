@@ -1,10 +1,14 @@
 """
 Here is the submission class that is used to submit a simulation request to the hardware.
 """
+import logging
+from time import sleep
 
-
+from paramiko import AutoAddPolicy
 from paramiko.client import SSHClient
+
 from quafel_simulators.base.simulation_request import QuafelSimulationRequest
+from quafel_simulators.util.script_builder import build_quafel_script_submit, build_quafel_script_setup
 
 
 class HardwareConnection:
@@ -13,8 +17,8 @@ class HardwareConnection:
     Helper class for the submitter
     """
 
-    simulation_request: QuafelSimulationRequest = None
-    ssh_client: SSHClient = None
+    simulation_request: QuafelSimulationRequest | None = None
+    ssh_client: SSHClient | None = None
 
     def __init__(self, simulation_request: QuafelSimulationRequest):
         """
@@ -37,6 +41,7 @@ class HardwareConnection:
         password = self.simulation_request.get_hardware().get_password()
         needs_totp = self.simulation_request.get_hardware().needs_totp()
         self.ssh_client = SSHClient()
+        self.ssh_client.set_log_channel("connection.connect")
 
         if needs_totp:
             # TODO: totp = self.simulation_request.get_totp()
@@ -44,6 +49,7 @@ class HardwareConnection:
             return False
         else:
             try:
+                self.ssh_client.set_missing_host_key_policy(AutoAddPolicy())  # TODO: check
                 self.ssh_client.connect(
                     hostname=host,
                     port=port,
@@ -55,6 +61,29 @@ class HardwareConnection:
                 return False
 
         return True
+
+    def run(self, command: str, log_channel: str = "connection.all") -> bool:
+        """
+        Run a command on the hardware
+        """
+        if self.ssh_client is None:
+            return False
+
+        self.ssh_client.set_log_channel(log_channel)
+        channel = self.ssh_client.get_transport().open_session()
+
+        channel.exec_command(command)
+
+        while channel.active:
+            sleep(0.01)
+            if channel.recv_ready():
+                logging.getLogger(log_channel).debug(msg=channel.recv(100000000).decode("utf-8"))
+            if channel.recv_stderr_ready():
+                logging.getLogger(log_channel).debug(msg=channel.recv_stderr(100000000).decode("utf-8"))
+            if channel.exit_status_ready():
+                break
+
+        return channel.exit_status == 0
 
     def _set_setup_script(self) -> bool:
         """
@@ -68,8 +97,8 @@ class HardwareConnection:
         self.ssh_client.exec_command("touch setup_script")
 
         # Write the setup script to the file
-        setup_script = self.simulation_request.get_hardware().get_setup_script()
-        self.ssh_client.exec_command(f"echo 'setup_flag' > {setup_script}") # TODO check
+        setup_script = build_quafel_script_setup(self.simulation_request)
+        self.ssh_client.exec_command(f"cat << EOT > setup_script\n{setup_script}\nEOT\n")
 
         return True
 
@@ -80,10 +109,11 @@ class HardwareConnection:
         if self.ssh_client is None:
             return False
 
-        _, stdout, _ = self.ssh_client.exec_command("ls setup_script")
-        return "setup_flag" in stdout.read().decode("utf-8")
+        self.ssh_client.set_log_channel("connection.setup_script")
+        _, stdout, _ = self.ssh_client.exec_command("ls")
+        return "setup_script" in stdout.read().decode("utf-8")
 
-    def initiate(self) -> bool:
+    def initiate(self, force: bool = False) -> bool:
         """
         Initiate the hardware profile
         (setup if needed)
@@ -93,17 +123,17 @@ class HardwareConnection:
                 (self.simulation_request.get_hardware() is None)):
             return False
 
-        if not self._setup_script_is_set():
+        self.ssh_client.set_log_channel("connection.initiate")
+        if (not self._setup_script_is_set()) or force:
             self._set_setup_script()
-            _, stdout, stderr = self.ssh_client.exec_command("bash setup_script")
-            if stderr.read().decode("utf-8") != "":
-                return False
-            if "Error" in stdout.read().decode("utf-8"):
-                return False
+            return self.run(
+                command="bash setup_script\n",
+                log_channel="connection.setup_script",
+            )
 
         return True
 
-    def run(self) -> bool:
+    def submit(self) -> bool:
         """
         Run the simulation request
         """
@@ -112,11 +142,8 @@ class HardwareConnection:
                 (self.simulation_request.get_simulator() is None)):
             return False
 
-        # TODO: Create run script
-
-        # TODO: Run the simulation request
-
-        return False  # TODO: return the result of the simulation
+        self.ssh_client.set_log_channel("connection.run")
+        return self.run(build_quafel_script_submit(self.simulation_request), "connection.run")  # TODO: check
 
     def disconnect(self) -> bool:
         """
@@ -126,10 +153,11 @@ class HardwareConnection:
         if self.ssh_client is None:
             return False
 
+        self.ssh_client.set_log_channel("connection.disconnect")
         self.ssh_client.close()
         self.ssh_client = None
 
-        return False
+        return True
 
 
 class Submitter:
@@ -149,7 +177,7 @@ class Submitter:
         if not hardware_connection.initiate():
             return False
 
-        if not hardware_connection.run():
+        if not hardware_connection.submit():
             return False
 
         if not hardware_connection.disconnect():

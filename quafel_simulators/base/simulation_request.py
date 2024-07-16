@@ -80,7 +80,7 @@ class QuafelSimulationRequest:
         """
 
     @abstractmethod
-    def get_totp(self) -> str:
+    def get_totp(self) -> None | str:
         """
         Get the TOTP
         """
@@ -89,8 +89,10 @@ class QuafelSimulationRequest:
         """
         Get a unique identifier for the simulation request
         """
-        return (f"{self.get_hardware()}_"
-                f"{self.get_simulator()}_"
+        return (f"{self.get_hardware().get_host()}_"
+                f"{self.get_hardware().get_port()}_"
+                f"{self.get_simulator().get_name()}_"
+                f"{self.get_simulator().get_version()}_"
                 f"{self.get_min_qubits()}_"
                 f"{self.get_max_qubits()}_"
                 f"{self.get_qubits_increment()}_"
