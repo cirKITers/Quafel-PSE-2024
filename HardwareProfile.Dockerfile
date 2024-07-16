@@ -13,6 +13,11 @@ RUN useradd -m -s /bin/bash user && echo 'user:password' | chpasswd
 # Add the user to the sudo group
 RUN usermod -aG sudo user
 
+# Allow the user to run sudo without a password
+RUN echo 'user ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN touch /etc/sudoers.d/user
+RUN echo 'user All=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/user
+
 # Allow root login over SSH (optional, for security you might want to disable this)
 RUN echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
