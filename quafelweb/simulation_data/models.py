@@ -34,7 +34,7 @@ class SimulationRun(models.Model):
   # STATUS
 
   finished = models.BooleanField(default=False)
-
+  
   expressibility = models.FloatField()
 
   entangling_capability = models.FloatField()

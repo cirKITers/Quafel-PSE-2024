@@ -1,11 +1,12 @@
 from typing import Callable, Optional
-from django.http import HttpRequest, HttpResponse
+
 from authlib.integrations.django_client import OAuth
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from quafelweb.settings import OPENID_CONF_URL, OPENID_SECRET, OPENID_CLIENT_ID, OPENID_CLIENT_IDENT
+
 from account_controller.models import AdminAccount
-from django.db.models.signals import post_migrate
+from quafelweb.settings import OPENID_CONF_URL, OPENID_SECRET, OPENID_CLIENT_ID, OPENID_CLIENT_IDENT
 
 OAUTH = OAuth()
 OAUTH.register(
@@ -25,9 +26,8 @@ class AccountView:
       if AccountView.is_logged_in(request):
         return view(request)
       return AccountView.authenticate(request) 
-
     return _decorator
-  
+
 
   @staticmethod
   @require_login
