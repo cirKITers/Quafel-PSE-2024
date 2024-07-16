@@ -7,76 +7,152 @@
 {%endblock%}
 
 {% block content %}
+<form id="sim_conf_menu">
+  
+  <input type="hidden" name="simulator_filter" value="{{ request.GET.simulator_filter }}">
+  <input type="hidden" name="hardware_filter" value="{{ request.GET.hardware_filter }}">
+  <input type="hidden" name="qubit_min" value="{{ request.GET.qubit_min }}">
+  <input type="hidden" name="qubit_max" value="{{ request.GET.qubit_max }}">
+  
+  <input type="hidden" name="depth_min" value="{{ request.GET.depth_min }}">
+  <input type="hidden" name="depth_max" value="{{ request.GET.depth_max }}">
 
-<div id="sim_envs">
-  {% for env in environments %}
-  <div class='env_container'>
-    <button class='env_visibility_toggle' type='checkbox'></button>
-    <div>
-      <p>{{ env.simulator.name }}</p>
-      <p>{{ env.hardware.name }}</p>
+  <input type="hidden" name="shot_min" value="{{ request.GET.shot_min }}">
+  <input type="hidden" name="shot_max" value="{{ request.GET.shot_max }}">
+  <h2>Configurations</h2>
+  <input type="hidden" name="selected_conf" value="{{ request.GET.selected_conf }}">
+  <div id="sim_confs">
+    <div class='sim_conf' {% if request.GET.selected_conf|default:"qubit" == "qubit"%} id='selected_conf' {%endif%}>
+      <button type="submit" class="hidden_select_button" name="selected_conf" value="qubit"></button>
+      <p>Qubits</p>
+      <div class="dropdown conf_selection_dropdown">
+        <div class="dropbtn">{{request.GET.qubit_min|default:"0"}}</div>
+        <div class="dropdown-content">
+          {% for qubit_option in qubits_values %}
+            <button name="qubit_min" type="submit" value="{{qubit_option}}">{{qubit_option}}</button>    
+          {% endfor %}
+        </div>
+      </div>
+      {% if request.GET.selected_conf|default:"qubit" == "qubit"%}
+      <div class="dropdown conf_selection_dropdown">
+        <div class="dropbtn">{{request.GET.qubit_max|default:qubit_max}}</div>
+        <div class="dropdown-content">
+          {% for qubit_option in qubits_values %}
+            <button name="qubit_max" type="submit" value="{{qubit_option}}">{{qubit_option}}</button>    
+          {% endfor %}
+        </div>
+      </div>
+      {%endif%}
     </div>
-    <p>{{ env.simulator.version }}</p>
-    <button class='icon_button'><span class="material-symbols-outlined">delete</span></button>
+    <div class = 'sim_conf' {% if request.GET.selected_conf == "depth" %} id='selected_conf' {%endif%}>
+      <button type="submit" class="hidden_select_button" name="selected_conf" value="depth"></button>
+      <p>Depth</p>
+      <div class="dropdown conf_selection_dropdown">
+        <div class="dropbtn">{{request.GET.depth_min|default:"0"}}</div>
+        <div class="dropdown-content">
+          {% for depth_value in depth_values %}
+            <button name="depth_min" type="submit" value="{{depth_value}}">{{depth_value}}</button>    
+          {% endfor %}
+        </div>
+      </div>
+      {% if request.GET.selected_conf == "depth"%}
+      <div class="dropdown conf_selection_dropdown">
+        <div class="dropbtn">{{request.GET.depth_max|default:depth_max}}</div>
+        <div class="dropdown-content">
+          {% for depth_value in depth_values %}
+            <button name="depth_max" type="submit" value="{{depth_value}}">{{depth_value}}</button>    
+          {% endfor %}
+        </div>
+      </div>
+      {%endif%}
+    </div>
+    <div class = 'sim_conf' {% if request.GET.selected_conf == "shot"%} id='selected_conf' {%endif%}>
+      <button type="submit"  class="hidden_select_button"name="selected_conf" value="shot"></button>
+      <p>Shots</p>
+      <div class="dropdown conf_selection_dropdown">
+        <div class="dropbtn">{{request.GET.shot_min|default:"0"}}</div>
+        <div class="dropdown-content">
+          {% for shot_value in shot_values %}
+            <button name="shot_min" type="submit" value="{{shot_value}}">{{shot_value}}</button>    
+          {% endfor %}
+        </div>
+      </div>
+      {% if request.GET.selected_conf == "shot"%}
+      <div class="dropdown conf_selection_dropdown">
+        <div class="dropbtn">{{request.GET.shot_max|default:shot_max}}</div>
+        <div class="dropdown-content">
+          {% for shot_value in shot_values %}
+            <button name="shot_max" type="submit" value="{{shot_value}}">{{shot_value}}</button>    
+          {% endfor %}
+        </div>
+      </div>
+      {%endif%}
+    </div>
   </div>
-  {% endfor %}
-  <button id='add_env_button'>Add Environment</button>
-</div>
+  <h2>Environments</h2>
+  <div id="env_filter">
+    <div class="dropdown">
+      <div class="dropbtn">{{ request.GET.hardware_filter|default:"Hardware"}}</div>
+      <div class="dropdown-content">
+        {% if request.GET.hardware_filter %}
+          <button name="hardware_filter" type="submit" value="">All</button>
+        {% endif %}
+        {% for hardware in hardware_profiles %}
+          {% if request.GET.hardware_filter != hardware.name%}
+            <button name="hardware_filter" type="submit" value="{{hardware.name}}">{{hardware.name}}</button>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="dropdown">
+      <div class="dropbtn">{{ request.GET.simulator_filter|default:"Simulator"}}</div>
+      <div class="dropdown-content">
+        {% if request.GET.simulator_filter %}
+          <button name="simulator_filter" type="submit" value="">All</button>
+        {% endif %}
+        {% for simulator in simulator_profiles %}
+          {% if request.GET.simulator_filter != simulator.name%}
+            <button name="simulator_filter" type="submit" value="{{simulator.name}}">{{simulator.name}}</button>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div id="sim_envs">
+    {% for env in environments %}
+    <div class='env_container'>
+      <p>{{ env.hardware.name }}</p>
+      <p>{{ env.simulator.name }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  
+</form>
 <div id="graph_container">
-  <canvas id='graph'></canvas>
+  <canvas id="graph_canvast"></canvas>
 </div>
-<div id="sim_confs">
-<div class = 'sim_conf'>
-  <p>Qubits</p>
-  
-  <div>
-    <input></input>
-    <input></input>
-  </div>
-</div>
-<div class = 'sim_conf'>
-  <p>Depth</p>
-  <div>
-    <input type='number'></input>
-  </div>
-</div>
-<div class = 'sim_conf'>
-  <p>Evaluations</p>
-  <div>
-    <input></input>
-  </div>
-</div>
-</div>
-
+{{ graph_data|json_script:"grap_data_container" }}
 <script>
-  const ctx = document.getElementById('graph');
-  (async function() {
-    const data = [
-      { year: 2010, count: 10 },
-      { year: 2011, count: 20 },
-      { year: 2012, count: 15 },
-      { year: 2013, count: 25 },
-      { year: 2014, count: 22 },
-      { year: 2015, count: 30 },
-      { year: 2016, count: 28 },
-    ];
+  const graph_data = JSON.parse(
+    document.getElementById('grap_data_container').textContent
+  );
+
+  console.log(graph_data.max)
+  const config = {
+    type: 'line',
+    data: {
+      labels: graph_data.labels,
+      datasets: graph_data.data
+    },
+    options: {
+      responsive: true,
+    }
+  }
   
-    new Chart(
-      ctx,
-      {
-        type: 'line',
-        data: {
-          labels: data.map(row => row.year),
-          datasets: [
-            {
-              label: 'Acquisitions by year',
-              data: data.map(row => row.count)
-            }
-          ]
-        } 
-      }
-    );
-  })();
-   
+
+  new Chart(
+    document.getElementById("graph_canvast"),
+    config
+  )
 </script>
 {% endblock %}

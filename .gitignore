@@ -2,6 +2,8 @@
 *.pyc
 mydatabase
 .env_secret
+data
+
 
 #Simulation results
 source/api_out_input/results/

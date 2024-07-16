@@ -1,0 +1,192 @@
+:root {
+  --color-light: white;
+  --color-dark: #212121;
+  --color-signal: #fab700;
+  
+  --color-background: var(--color-light);
+  --color-text: var(--color-dark);
+  --color-accent: var(--color-signal);
+  
+  --size-bezel: .5rem;
+  --size-radius: 4px;
+}
+
+
+input {
+  width: 100%;
+  font-size: 0.8em;
+  padding: 0 1em;
+  box-sizing: border-box;
+  position: relative;
+}
+
+input + span,
+textarea + span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0 1em;
+  margin: 5px;
+  white-space: nowrap;
+  transform: translate(0, 0);
+  transform-origin: 0 0;
+  background: var(--color-background);
+  font-weight: bold;
+  line-height: 1.1;
+  transform: translate(0.25rem, -50%) scale(.9);
+}
+
+textarea {
+  width: 100%;
+  font-size: 0.9em;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+.link_button,
+button {
+  text-align: center;
+  text-decoration: none;
+  padding: .7em 2em;
+  background-color: white;
+  border: 2px black solid;
+  color: black;
+  margin: 0;
+  
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+
+.icon_button {
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  color: black;
+  background-color: unset;
+}
+
+.icon_button:hover{
+  text-decoration: none;
+  cursor: pointer;
+}
+.link_button:hover,
+button:hover{
+  transition-duration: 0.1s;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+button:active {
+  transition-duration: 0.1s;
+  top: 1px;
+}
+
+input[type=number] {
+  /*for absolutely positioning spinners*/
+  position: relative; 
+  padding: 5px;
+  padding-right: 25px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 0;
+}
+
+input[type=number]::-webkit-outer-spin-button, 
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: inner-spin-button !important;
+  width: 25px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+
+input[type='number'] {
+  width: 3em;
+  height: 80%;
+  padding: 0.3em;
+}
+
+/* Dropdown */
+
+.dropbtn {
+  text-align: center;
+  text-decoration: none;
+  padding: .7em 1em;
+  background-color: white;
+  border: 2px black solid;
+  color: black;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  font-size: 0.9em;
+  font-weight: bold;
+  position: relative;
+  align-items: center;
+  justify-content: space-between;
+  text-overflow: ellipsis;
+}
+
+.dropbtn:after {
+  content: 'chevron_right';
+  transform: rotate(90deg);
+  font-weight: bold;
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  transition: 200ms;
+  width: 30px;
+}
+
+.dropdown:hover .dropbtn:after{
+  transform: rotate(-90deg);
+}
+
+.dropdown {
+  position: relative;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  width: 100%;
+  padding: 0;
+  max-height: 400%;
+  overflow: auto;
+  border: 1px solid black;
+  box-sizing: border-box;
+  padding: 1px;
+  z-index: 10;
+}
+
+.dropdown-content * {
+  color: black;
+  padding: 1em;
+  text-decoration: none;
+  width: 100%;
+  border: none;
+
+}
+
+.dropdown-content *:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block !important; 
+}

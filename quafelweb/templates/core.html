@@ -2,9 +2,25 @@
 <html>
   <head>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KIT - SCC - QuafelWeb</title>
+    <link rel="icon" type="image/png" href="https://www.scc.kit.edu/favicon-32x32.png" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="57x57" href="https://www.scc.kit.edu/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://www.scc.kit.edu/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://www.scc.kit.edu/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://www.scc.kit.edu/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://www.scc.kit.edu/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://www.scc.kit.edu/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://www.scc.kit.edu/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://www.scc.kit.edu/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.scc.kit.edu/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="https://www.scc.kit.edu/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://www.scc.kit.edu/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="https://www.scc.kit.edu/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="https://www.scc.kit.edu/favicon-16x16.png" sizes="16x16">
     {% load static %}
     <link rel="stylesheet" href="{% static 'default.css' %}">
-    <link rel="stylesheet" href="{% static 'input.css' %}">
+    <link rel="stylesheet" href="{% static 'components.css' %}">
     {% block head %}
     {% endblock %}
   </head>
@@ -18,7 +34,7 @@
       </div>
       <div id='site_navbar_links'>
         {% if request.session.logged_in %}
-        <a class='site_navbar_link' href="{% url 'simulation' %}">Simulation</a>
+        <a class='site_navbar_link' href="{% url 'simulation_configuration' %}">Simulation</a>
         <a class='site_navbar_link' href="{% url 'hardware' %}">Hardware</a>
         <a class='site_navbar_link' href="{% url 'account' %}">Accounts</a>
         <a class='site_navbar_link' href="{% url 'logout' %}">Logout</a>

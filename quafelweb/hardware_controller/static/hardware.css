@@ -45,6 +45,15 @@
   width: 40em;
 }
 
+
+#add_hardware_container div {
+  margin: 2em 0;
+}
+
+#add_hardware_container div:first-of-type {
+  margin: 0 0 2em 0;
+}
+
 #add_hardware_container div input,
 #add_hardware_container div textarea {
   width: 100%;
@@ -53,13 +62,16 @@
 
 
 #add_hardware_container div textarea{
-  height: 20em;
+  height: 15em;
   resize: none;
   overflow: auto;
 }
 
 #add_hardware_container button {
   width: 100%;
-  margin: 2em 0;
 }
 
+.hardware_entry .icon_button:hover {
+  transition-duration: 0.2s;
+  color: red;
+}

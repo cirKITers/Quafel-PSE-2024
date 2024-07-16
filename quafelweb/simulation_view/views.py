@@ -1,41 +1,94 @@
+import math
 from django.http import HttpResponse
 from django.shortcuts import render
 
 import plotly.express as px
 from random import randint
-from simulation_data.simulation import SimulationEnv, HardwareProfile, SimulatorProfile
+from simulation_data.simulation import SimulationEnv, HardwareProfile
+from simulation_data.models import SimulatorProfile, SimulationRun
 import pandas as pd
+import itertools
+
+
+
 
 class SimulationView:
 
   @staticmethod
-  def graph(data : pd.DataFrame) -> str:
-    return px.line(data, labels=["Qubits", "Evaluations"]).to_html(full_html=False)
-
   def index(request):
-    # Generate the plot
-    # Pass the plot to the HTML template
-    envs = [
-      SimulationEnv(hardware=HardwareProfile(name='GPU-Cluster'), simulator=SimulatorProfile(name='Quiver', version='v0.17')),
-      SimulationEnv(hardware=HardwareProfile(name='GPU-Cluster'), simulator=SimulatorProfile(name='Qalle', version='v0.17'))
-    ]  
 
-    df = pd.DataFrame(data={ env.simulator.name : [randint(0, 100) for _ in range(16)] for env in envs })
+    simulators =        [sp for sp in SimulatorProfile.objects.all()  if sp.name == (request.GET.get("simulator_filter") or sp.name)]
+    hardware_profiles = [hp for hp in HardwareProfile.objects.all()   if hp.name == (request.GET.get("hardware_filter") or hp.name)]
+    
+    # Produce all possible environments
+    envs = [SimulationEnv(hp, sp) for hp, sp in itertools.product(hardware_profiles, simulators)]
 
-    graph = SimulationView.graph(df)
 
-    context = { 
-      'environments' : envs
+    # Existing envs
+    hps = set(SimulationRun.objects.values_list("hardware", flat=True).distinct())
+    sps = set(SimulationRun.objects.values_list("simulator", flat=True).distinct())
+
+    # Filter for existing envs
+    envs = [env for env in envs if env.hardware.uuid in hps and env.simulator.name in sps]
+
+    # Simulation configuration
+    values = {
+    "qubit" : set(SimulationRun.objects.values_list("qubits", flat=True).distinct()) or { 0 },
+    "depth" : set(SimulationRun.objects.values_list("depth", flat=True).distinct()) or { 0 },
+    "shot" : set(SimulationRun.objects.values_list("shots", flat=True).distinct()) or { 0 },
+    }
+    
+    # retrieve the selected range
+    selected_range = request.GET.get("selected_conf") or "qubit"
+
+    def get_range(name : str):
+      max_v = max(int(request.GET.get(name + "_max") or 0), min(values[name]))
+      min_v = min(int(request.GET.get(name + "_min") or 100000000), max(values[name]))
+      
+      range_v = set(v for v in values[name] if v in range(min_v, max_v + 1)) if selected_range == name else { min_v } 
+      return range_v
+
+    # Get all runs existed
+    env_to_run_map = [
+      (env, SimulationRun.objects.filter(
+        simulator=env.simulator.name, 
+        hardware=env.hardware.uuid,
+        qubits__in=get_range("qubit"),
+        depth__in=get_range("depth"),
+        shots__in=get_range("shot"),
+      )) for env in envs
+    ]
+
+
+
+
+    graph_data = {
+      "data" : [
+        {
+          "label" : env.hardware.name + " " + env.simulator.name,
+          "data" :  [run.duration_avg for run in runs]
+        }
+        for env, runs in env_to_run_map
+      ],
+    }
+
+    
+    graph_data['labels'] = list(sorted(get_range(selected_range)))
+
+    context = {
+      'environments' : envs,
+      'hardware_profiles' : HardwareProfile.objects.all(),
+      'simulator_profiles' : SimulatorProfile.objects.all(),
+      'graph_data' : graph_data,
+      
+      'qubits_values' : list(sorted(values["qubit"])),
+      'qubit_max' : max(values["qubit"]),
+
+      'depth_values' : list(sorted(values["depth"])),
+      'depth_max' : max(values["depth"]),
+
+      'shot_values' : list(sorted(values["shot"])),
+      'shot_max' : max(values["shot"]),
     }
 
     return render(request, "simulation.html", context=context)
-  
-  def specific(request, qbit_start, qbit_end, depth_start, depth_end, evals_start, evals_end):
-      ...
-
-
-  def render_view(request, sim_envs : list[SimulationEnv], sim_confs : dict[str, list[int]]):
-  
-    context = { 'environments' : sim_envs }
-
-    return render(request, 'simulation.html', context)
