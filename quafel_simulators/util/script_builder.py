@@ -55,6 +55,6 @@ def build_quafel_script_submit(simulation_request: QuafelSimulationRequest) -> s
     output_location = simulation_request.get_id()
 
     script = script.replace("CONFIGURATION=\"\"", "CONFIGURATION=\'" + configuration + "\'")
-    script = script.replace("OUTPUT_LOCATION=\"\"", "OUTPUT_LOCATION=\'" + output_location + "\'")
+    script = script.replace("OUTPUT_LOCATION=\"\"", "OUTPUT_LOCATION=\'" + output_location + ".csv" + "\'")
 
     return script

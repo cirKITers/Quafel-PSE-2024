@@ -222,7 +222,7 @@ class TestSubmitter(unittest.TestCase):
 
         # This test takes a long time to run
         warning("forced initiate test skipped")
-        # success = hardware_connection.initiate(force=True)
+        success = hardware_connection.initiate(force=True)
         assert success
 
         success = hardware_connection.disconnect()
