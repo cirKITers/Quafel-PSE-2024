@@ -16,6 +16,9 @@ from quafel_simulators.util.script_builder import build_quafel_script_submit
 
 class TestHardware(HardwareBase):
 
+    def get_id(self) -> str:
+        return "testid"
+
     def get_host(self) -> str:
         return "localhost"
 
@@ -221,7 +224,7 @@ class TestSubmitter(unittest.TestCase):
         assert success
 
         # This test takes a long time to run
-        warning("forced initiate test skipped")
+        # warning("forced initiate test skipped")
         success = hardware_connection.initiate(force=True)
         assert success
 
