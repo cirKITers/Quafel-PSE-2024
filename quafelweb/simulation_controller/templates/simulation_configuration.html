@@ -7,55 +7,107 @@
 {% endblock%}
 
 {% block content %}
-<div id="conf_selection_container">
-  <form action="{% url 'select_configuration' %}" method="post" id='configuration'>
-    {% csrf_token %}
+
+<form action="" method="get">
+  <div id="conf_selection_container">
     <div class='conf_selection'>
       <h3>Qubits</h3>
       <div>
-        <input name="qubits_range_min" type='number' value={{request.POST.qubits_range_min}}></input>
+        <input name="qubits_range_min" type='number' value={{request.GET.qubits_range_min}}></input>
         <div></div>
-        <input name="qubits_range_max" type='number' value={{request.POST.qubits_range_max}}></input>
+        <input name="qubits_range_max" type='number' value={{request.GET.qubits_range_max}}></input>    
       </div>
     </div>
     <div class='conf_selection'>
       <h3>Depth</h3>
       <div>
-        <input name="depth_range_min" type='number' value={{request.POST.depth_range_min}}></input>
+        <input name="depth_range_max" type='number' value={{request.GET.depth_range_max}}></input>
         <div></div>
-        <input name="depth_range_max" type='number' value={{request.POST.depth_range_max}}></input>
-      </div>
-    </div>
-    <div class='conf_selection'>
-      <h3>Shots</h3>
-      <div>
-        <input name="shots_range_min" type='number' value={{request.POST.shots_range_min}}></input>
-        <div></div>
-        <input name="shots_range_max" type='number' value={{request.POST.shots_range_max}}></input>
+        <input name="depth_range_min" type='number' value={{request.GET.depth_range_min}}></input>
       </div>
     </div>
     <div class='conf_selection'>
       <h3>Evals</h3>
       <div>
-        <input name="eval_range_min" type='number' value={{request.POST.eval_range_min}}></input>
+        <input name="eval_range_min" type='number' value={{request.GET.eval_range_min}}></input>
         <div></div>
-        <input name="eval_range_max" type='number' value={{request.POST.eval_range_max}}></input>
+        <input name="eval_range_min" type='number' value={{request.GET.eval_range_min}}></input>
       </div>
     </div>
-    <button id="simulation_conf_submit" type="submit">Search Hardwareprofiles</button>
-  </form>
-
-
-
-  <form id="submit_settings">
-      <!-- <h4>Submit Settings</h4> -->
-      <div>
-        <label for="recalculate">Recalculate existing Datapoints</label>
-        <input name="recalculate" type='checkbox' value={{request.POST.recalculate}}></input>
+    <button id="simulation_conf_submit" type="submit">Search</button>
+  </div>  
+</form>
+<div id='environment_panel'>
+  <form  action="" method="get">
+    <div id="selection_panel">
+      <input type="checkbox"></input>
+      <div class="dropdown">
+        <button class="link_btn">Hardware</button>
+        <div class="dropdown-content">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+        </div>
       </div>
-    <button type="submit" id="btn_submit">Submit Runs</button>
+      <div class="dropdown">
+        <button class="dropbtn">Simulator</button>
+        <div class="dropdown-content">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">Version</button>
+        <div class="dropdown-content">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+        </div>
+      </div>
+      <h3>Finished</h3>
+    </div>
+  </form>
+  <div id="simulation_container">
+  {%for name in hardware_profiles %}
+    <div class='hardware_entry'>
+      <p>{{ name }}</p>
+      <button><span class="material-symbols-outlined">delete</span></button>
+    </div>  
+  {% empty %}
+    <p id="no_profiles">No simulations found</p>
+  {% endfor %}
+  </div>
+  <form id="add_simulation_panel">
+    <div></div>
+    <div class="dropdown">
+      <div class="dropdown-content">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+      </div>
+      <button class="link_btn">Hardware</button>
+    </div>
+    <div class="dropdown">
+      <div class="dropdown-content">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+      </div>
+      <button class="dropbtn">Simulator</button>
+    </div>
+    <div class="dropdown">
+      <div class="dropdown-content">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+      </div>
+      <button class="dropbtn">Version</button>
+    </div>
+    <button>Submit</button>
   </form>
   
+</div>
   
 
   <!-- <form action="{% url 'select_configuration' %}" method="post" id='table'>

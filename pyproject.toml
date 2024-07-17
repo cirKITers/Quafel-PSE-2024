@@ -15,7 +15,8 @@ plotly = "^5.22.0"
 pandas = "^2.2.2"
 authlib = "^1.3.1"
 requests = "^2.32.3"
-django-debug-toolbar = "^4.4.6"
+paramiko = "^3.4.0"
+pyyaml = "^6.0.1"
 
 
 [build-system]

@@ -1,11 +1,12 @@
 from typing import Callable, Optional
-from django.http import HttpRequest, HttpResponse
+
 from authlib.integrations.django_client import OAuth
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from quafelweb.settings import OPENID_CONF_URL, OPENID_SECRET, OPENID_CLIENT_ID, OPENID_CLIENT_IDENT
+
 from account_controller.models import AdminAccount
-from django.db.models.signals import post_migrate
+from quafelweb.settings import OPENID_CONF_URL, OPENID_SECRET, OPENID_CLIENT_ID, OPENID_CLIENT_IDENT
 
 OAUTH = OAuth()
 OAUTH.register(
@@ -19,15 +20,14 @@ OAUTH.register(
 class AccountView:
   
   @staticmethod
-  def require_login(view : Callable) -> HttpResponse:
+  def require_login(view : Callable) -> Callable:
 
     def _decorator(request : HttpResponse):
       if AccountView.is_logged_in(request):
         return view(request)
       return AccountView.authenticate(request) 
-
     return _decorator
-  
+
 
   @staticmethod
   @require_login
@@ -52,8 +52,8 @@ class AccountView:
   @require_login
   def remove_admin(request) -> HttpResponse:
 
-    if ident := request.POST.get("admin_id"):
-      AdminAccount.objects.filter(uid=ident).delete()
+    if ident := request.POST.get("admin_ident"):
+      AdminAccount.objects.get(identifier=ident).delete()
 
     return redirect(reverse('account'))
   
@@ -72,7 +72,7 @@ class AccountView:
     token = OAUTH.openid.authorize_access_token(request)
 
     ident = token["userinfo"][OPENID_CLIENT_IDENT]
-    if not AdminAccount.objects.filter(identifier=ident).first(): # TODO replace this with an data base access
+    if not AdminAccount.objects.filter(identifier=ident).exists(): 
       return redirect(reverse('denied'))
 
     request.session['admin_ident'] = token['userinfo'][OPENID_CLIENT_IDENT]

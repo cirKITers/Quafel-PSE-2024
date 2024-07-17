@@ -1,9 +1,11 @@
 from django.db import models
-
+import uuid
 
 class HardwareProfile(models.Model):
 
-  name = models.CharField(max_length=100, primary_key=True)
+  uuid = models.UUIDField(default=uuid.uuid4, primary_key=True)
+
+  name = models.CharField(max_length=100)
 
   description = models.CharField(max_length=1000)
 
