@@ -28,13 +28,13 @@ class SimulationRun(models.Model):
   shots = models.IntegerField()
 
   qubits = models.IntegerField()
-  
+
   depth = models.IntegerField()
 
   # STATUS
 
   finished = models.BooleanField(default=False)
-  
+
   expressibility = models.FloatField()
 
   entangling_capability = models.FloatField()

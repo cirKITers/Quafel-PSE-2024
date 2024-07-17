@@ -11,6 +11,12 @@ class HardwareBase:
     """
 
     @abstractmethod
+    def get_id(self) -> str:
+        """
+        Get the ID of the hardware
+        """
+
+    @abstractmethod
     def get_host(self) -> str:
         """
         Get the host of the hardware
