@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.urls import path, include
 from django.views.generic.base import RedirectView
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
   
@@ -24,4 +25,4 @@ urlpatterns = [
     path('account/', include('account_controller.urls')),
     path('simulation/', include('simulation_controller.urls')),
     path('hardware/', include('hardware_controller.urls'))
-]
+] + debug_toolbar_urls()

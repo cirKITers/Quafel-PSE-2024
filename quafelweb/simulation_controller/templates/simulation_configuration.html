@@ -7,6 +7,7 @@
 {% endblock%}
 
 {% block content %}
+
 <form action="" method="get">
   <div id="conf_selection_container">
     <div class='conf_selection'>
@@ -108,4 +109,78 @@
   
 </div>
   
+
+  <!-- <form action="{% url 'select_configuration' %}" method="post" id='table'>
+    <div class='conf_selection'>
+      <h3>Hardwareprofile</h3>
+      <div>
+        <select name="hardwareprofile">
+          {% for profile in hardware_profiles %}
+          <option value="{{ profile.name }}">{{ profile.name }} - {{profile.protocol}}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class='conf_selection'>
+      <h3>Simulatorprofile</h3>
+      <div>
+        <select name="simulatorprofile">
+          {% for profile in simulator_profiles %}
+          <option value="{{ profile.name }}">{{ profile.name }} - {{profile.version}}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </form> -->
+</div>
+
+<div id="computed_overview">
+  <table>
+    <thead> <!--  required to make rows scrollable -->
+      <tr id="table_header">
+        <th><input type="checkbox"></th>
+        <th><div>Hardware</div></th>
+        <th><div>Simulator</div></th>
+        <th><div>Version</div></th>
+        <th><div class="no_border">Finished</div></th>
+      </tr>
+    </thead>
+    <!-- {% for run in simulation_runs %}
+    <tr>
+      <td><input type="checkbox"></td>
+      <td>{{ run.simulator_name.name }}</td>
+      <td>{{ run.hardware_profile.name }}</td>
+      <td>{{ run.simulator_name.version}}</td>
+      <td>Schwanz</td>
+    </tr>
+    {% endfor %} -->
+    <tbody> <!--  required to make rows scrollable -->
+      {% for run in sim_and_finished %}
+      <tr>
+        <td><input type="checkbox" class="run-checkbox" data-hwp-name="{{ run.hardwareprofile_name }}" data-simulator="{{ run.simulatorprofile.name }}" data-simulator-version="{{ run.simulatorprofile.version}}" data-simulator-id="{{ run.simulatorprofile_id }}"></td>
+        <td class="hardware_profile_name">{{ run.hardwareprofile.name }}</td>
+        <td class="simulator_name">{{ run.simulatorprofile.name }}</td>
+        <td class="simulator_version">{{ run.simulatorprofile.version}}</td>
+        <td>{{ run.finished }}/{{n_runs}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button id="add-hardwareprofile" data-n-runs="{{n_runs}}" data-hwps-sims="{{ hwps_sims }}">
+    <img src="/static/add.svg" alt="add">
+  </button>
+  
+</div>
+
+<!-- Popup Box Container -->
+<div id="popupBox" class="popup-container" style="display:none;">
+  <!-- Popup Content -->
+  <div class="popup-content">
+    <span class="close-btn" onclick="closePopup()"><img src="/static/close.svg" alt="close" width="12" height="12"></span>
+    <!-- <p id="popupMessage">Your message here!</p> -->
+     <div id="popup-div"></div>
+  </div>
+</div>
+
+<script src="{% static 'simulation_scripts.js' %}"></script>
 {% endblock %}

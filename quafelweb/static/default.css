@@ -111,3 +111,14 @@ body {
   height: max-content;
   text-align: center;
 }
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  /* pointer-events: none; */
+}
+
+/* button {
+  opacity: 1;
+  cursor: pointer;  
+} */

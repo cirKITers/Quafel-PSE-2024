@@ -1,12 +1,16 @@
+
+:root {
+	--conf-selection-width: 25em; /* Example width */
+}
 #site_content {
   justify-content: space-between;
 }
 
 
 #conf_selection_container {
-  height: calc(100%  - 8em);
-  display: flex;
-  flex-direction: column;
+	/* height: calc(100%  - 8em); */
+	display: flex;
+	flex-direction: column;
 }
 
 .conf_selection {
@@ -20,20 +24,206 @@
 }
 
 .conf_selection div {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
 }
 
 .conf_selection div div {
-  height: 2px;
-  width: 20px;
-  background-color: black;
-  margin: 1em;
+	height: 2px;
+	width: 20px;
+	background-color: black;
+	margin: 1em;
 }
 
 #env_selector {
+	background-color: blanchedalmond;
+}
+
+#simulation_conf_submit {
+	width: 100%;
+	border: 1px black solid;
+	margin-bottom: 2em;
+}
+
+#add-hardwareprofile {
+	border: 1px black solid;
+	padding: 0.5em 4em;
+	margin-top: 1em;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 1em;
+	display: block;
+}
+
+#computed_overview {
+	width: 100%;
+	margin-left: 5em;
+	/* max-height: 100%;
+  overflow-y: auto; */
+}
+
+#computed_overview table {
+	border-collapse: collapse;
+	border: 1px gray solid;
+	table-layout: fixed;
+	width: 100%;
+}
+
+#computed_overview #table_header th {
+	border-bottom: 2px black solid;
+}
+
+#computed_overview th div {
+	border: 1px black solid;
+	padding: 6px 15px; /* Adjust padding as needed */
+	margin: 7px;
+	display: inline-block;
+}
+
+#computed_overview th .no_border {
+	border: none;
+}
+
+#computed_overview td {
+	padding: 6px 15px; /* Adjust padding as needed */
+	margin: 7px;
+	text-align: center;
+}
+
+#computed_overview th:first-child {
+	width: 70px;
+}
+
+#computed_overview th:last-child {
+	width: 8em;
+}
+
+tr.even {
+	background-color: rgb(240, 240, 240);
+}
+
+#btn_submit {
+	/* margin-top: auto; */
+}
+
+.buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.apply,
+.delete {
+	/* margin: 0px;
+	padding: 1px;
+	cursor: pointer;
+	border: 1px black solid;
+	border-radius: 2px;
+	cursor: pointer;
+	font-size: small; */
+	border: 1px black solid;
+	border-radius: 2px;
+	background-color: transparent;
+	cursor: pointer;
+	display: inline-block;
+	padding: 3px;
+}
+.apply {
+	/* background-color: rgb(22, 151, 22); */
+	margin-right: 5px;
+	margin-left: auto;
+}
+.delete {
+	/* background-color: red; */
+	margin-right: auto;
+}
+
+input[type="checkbox" i] {
+	width: unset;
+}
+
+/* TODO: If rows exceed page make table scrollable */
+
+#submit_settings {
+	display: flex;
+	flex-direction: column;
+	/* justify-content: space-between; */
+	width: 100%;
+	margin-bottom: 0em;
+	margin-top: auto;
+	border: 1px black solid;
+	box-sizing: border-box;
+}
+
+#submit_settings div {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1em;
+}
+
+#submit_settings h4 {
+	margin: 1em 1em 0em 1em;
+}
+
+/* Popup box */
+/* Popup Container */
+.popup-container {
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Popup Content */
+.popup-content {
+	background-color: white;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid black;
+	width: 50%;
+	position: relative;
+}
+
+/* The Close Button */
+.close-btn {
+	z-index: 2;
+	position: absolute; /* Position the button absolutely within the popup content */
+	top: 5px; /* Align to the top of the popup content */
+	right: 5px; /* Align to the right of the popup content */
+	cursor: pointer; /* Optional: Makes it clear the button is clickable */
+}
+
+.close-btn:hover,
+.close-btn:focus {
+	cursor: pointer;
+	opacity: 0.5;
+}
+
+#submitInput {
+    display: block; /* Makes the input behave like a block-level element */
+    margin-left: auto; /* Pushes the button to the right */
+    margin-right: 0; /* Ensures the button is aligned right with no extra space on the right side */
+	border: 1px black solid;
+	padding: 0.5em 1em;
+	margin-top: 0.5em;
+}
+
+
+.popup-content input {
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0px 0px 0px;
+	/* display: inline-block; */
+	border: 1px solid #ccc;
+	/* box-sizing: border-box; */
   background-color: blanchedalmond;
 }
 
