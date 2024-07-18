@@ -33,6 +33,7 @@ class AccountView:
   @require_login
   def manage_accounts(request : HttpRequest) -> HttpResponse:
     accounts = AdminAccount.objects.all()
+
     if search := request.GET.get("search"):
       accounts = [acc for acc in accounts if search in acc.identifier]
 
@@ -86,7 +87,7 @@ class AccountView:
 
   @staticmethod
   def is_logged_in(request : HttpRequest) -> bool:
-    return 'admin_ident' in request.session
+    return 'admin_ident' in request.session and AdminAccount.objects.filter(identifier=request.session["admin_ident"]).exists()
   
   @staticmethod
   def denied(request : HttpRequest):

@@ -7,7 +7,6 @@
 
 {% block content %}
 <form action="/account" method="get" id='account_search'>
-  {% csrf_token %}
   <input type="text" name='search' value={{request.GET.search}}>
   <span>Search</span>
   <button type="submit"><span class="material-symbols-outlined">search</span></button>

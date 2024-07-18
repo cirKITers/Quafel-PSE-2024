@@ -18,6 +18,7 @@ input {
   padding: 0 1em;
   box-sizing: border-box;
   position: relative;
+  border: 1px solid black;
 }
 
 input + span,
@@ -41,6 +42,8 @@ textarea {
   font-size: 0.9em;
   padding: 1em;
   box-sizing: border-box;
+  
+  border: 1px solid black;
 }
 
 .link_button,

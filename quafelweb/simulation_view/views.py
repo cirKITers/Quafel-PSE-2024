@@ -1,12 +1,7 @@
-import math
-from django.http import HttpResponse
 from django.shortcuts import render
 
-import plotly.express as px
-from random import randint
 from simulation_data.simulation import SimulationEnv, HardwareProfile
 from simulation_data.models import SimulatorProfile, SimulationRun
-import pandas as pd
 import itertools
 
 
@@ -17,52 +12,58 @@ class SimulationView:
   @staticmethod
   def index(request):
 
-    simulators =        [sp for sp in SimulatorProfile.objects.all()  if sp.name == (request.GET.get("simulator_filter") or sp.name)]
-    hardware_profiles = [hp for hp in HardwareProfile.objects.all()   if hp.name == (request.GET.get("hardware_filter") or hp.name)]
+    simulators =        [sp for sp in SimulatorProfile.objects.all() if sp.name == (request.GET.get("simulator_filter") or sp.name)]
+    hardware_profiles = [hp for hp in HardwareProfile.objects.all()  if hp.name == (request.GET.get("hardware_filter") or hp.name)]
     
-    # Produce all possible environments
-    envs = [SimulationEnv(hp, sp) for hp, sp in itertools.product(hardware_profiles, simulators)]
-
-
     # Existing envs
     hps = set(SimulationRun.objects.values_list("hardware", flat=True).distinct())
     sps = set(SimulationRun.objects.values_list("simulator", flat=True).distinct())
 
-    # Filter for existing envs
-    envs = [env for env in envs if env.hardware.uuid in hps and env.simulator.name in sps]
+    # Produce all possible environments and apply the filter at the same time
+    envs = [SimulationEnv(hp, sp) for hp, sp in itertools.product(hardware_profiles, simulators) if hp.uuid in hps and sp.name in sps ]
+
+    
+    context = {
+      'environments': envs,
+      'hardware_profiles' : HardwareProfile.objects.all(),
+      'simulator_profiles' : SimulatorProfile.objects.all(),
+    }
 
     # Simulation configuration
     values = {
-    "qubit" : set(SimulationRun.objects.values_list("qubits", flat=True).distinct()) or { 0 },
-    "depth" : set(SimulationRun.objects.values_list("depth", flat=True).distinct()) or { 0 },
-    "shot" : set(SimulationRun.objects.values_list("shots", flat=True).distinct()) or { 0 },
+      "qubit" : set(SimulationRun.objects.values_list("qubits", flat=True).distinct()) or { 0 },
+      "depth" : set(SimulationRun.objects.values_list("depth", flat=True).distinct()) or { 0 },
+      "shot" :  set(SimulationRun.objects.values_list("shots", flat=True).distinct()) or { 0 },
     }
     
-    # retrieve the selected range
-    selected_range = request.GET.get("selected_conf") or "qubit"
+    selected_range = request.GET.get("selected_conf") or "qubit" # selected range 
 
-    def get_range(name : str):
-      max_v = max(int(request.GET.get(name + "_max") or 0), min(values[name]))
-      min_v = min(int(request.GET.get(name + "_min") or 100000000), max(values[name]))
+    for name in { "qubit", "depth", "shot"}:
+      max_v = min(int(request.GET.get(name + "_max") or max(values[name])), max(values[name]))
+      min_v = max(int(request.GET.get(name + "_min") or min(values[name])), min(values[name]))
       
       range_v = set(v for v in values[name] if v in range(min_v, max_v + 1)) if selected_range == name else { min_v } 
-      return range_v
+
+      context[name + "_values"] = list(sorted(values[name]))
+      context[name + "_range"] = range_v
+      context[name + "_min"] = min_v
+      context[name + "_max"] = max_v
+      
+    
 
     # Get all runs existed
     env_to_run_map = [
       (env, SimulationRun.objects.filter(
         simulator=env.simulator.name, 
         hardware=env.hardware.uuid,
-        qubits__in=get_range("qubit"),
-        depth__in=get_range("depth"),
-        shots__in=get_range("shot"),
+        qubits__in=context["qubit_range"],
+        depth__in= context["depth_range"],
+        shots__in= context["shot_range"],
       )) for env in envs
     ]
 
-
-
-
-    graph_data = {
+    # graph data to save in json for chart.js
+    context['graph_data'] = {
       "data" : [
         {
           "label" : env.hardware.name + " " + env.simulator.name,
@@ -70,25 +71,10 @@ class SimulationView:
         }
         for env, runs in env_to_run_map
       ],
+      'labels' : list(sorted(context[selected_range + "_range"])),
+      'x_axis' : selected_range.capitalize(),
+      'y_axis' : "Average duration",
+      'scale_type' : 'logarithmic'
     }
-
-    
-    graph_data['labels'] = list(sorted(get_range(selected_range)))
-
-    context = {
-      'environments' : envs,
-      'hardware_profiles' : HardwareProfile.objects.all(),
-      'simulator_profiles' : SimulatorProfile.objects.all(),
-      'graph_data' : graph_data,
       
-      'qubits_values' : list(sorted(values["qubit"])),
-      'qubit_max' : max(values["qubit"]),
-
-      'depth_values' : list(sorted(values["depth"])),
-      'depth_max' : max(values["depth"]),
-
-      'shot_values' : list(sorted(values["shot"])),
-      'shot_max' : max(values["shot"]),
-    }
-
     return render(request, "simulation.html", context=context)
