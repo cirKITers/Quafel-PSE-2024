@@ -42,7 +42,7 @@ class SimulationView:
       max_v = min(int(request.GET.get(name + "_max") or max(values[name])), max(values[name]))
       min_v = max(int(request.GET.get(name + "_min") or min(values[name])), min(values[name]))
       
-      range_v = set(v for v in values[name] if v in range(min_v, max_v + 1)) if selected_range == name else { min_v } 
+      range_v = set(v for v in values[name] if v in range(min_v, max_v + 1)) if selected_range == name else { max_v } 
 
       context[name + "_values"] = list(sorted(values[name]))
       context[name + "_range"] = range_v

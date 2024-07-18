@@ -73,6 +73,7 @@ class AccountView:
     token = OAUTH.openid.authorize_access_token(request)
 
     ident = token["userinfo"][OPENID_CLIENT_IDENT]
+    
     if not AdminAccount.objects.filter(identifier=ident).exists(): 
       return redirect(reverse('denied'))
 

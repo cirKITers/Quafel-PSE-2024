@@ -133,6 +133,7 @@ input[type='number'] {
   text-overflow: ellipsis;
 }
 
+
 .dropbtn:after {
   content: 'chevron_right';
   transform: rotate(90deg);

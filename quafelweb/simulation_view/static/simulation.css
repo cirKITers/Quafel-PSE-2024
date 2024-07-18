@@ -1,7 +1,10 @@
+#site_content {
+  flex-direction: column;
+  align-items: center;
 
+}
 #graph_container {
-  height: 100%;   
-  width: 90em;
+  width: 80em;
   position: relative;
   padding: 2em;
   box-sizing: border-box;
@@ -9,22 +12,52 @@
 }
 
 /* Simulation configuration selector*/
-
-#selected_conf {
-  width: 80%;
+#sim_conf_menu {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  position: relative;
+  width: max-content;
+}
+
+.sim_conf {
+  padding: 2px 12px;
+  display: flex;
+  justify-content: space-around;
+  width: 20em;
+}
+
+.sim_conf p {
+  width: max-content;  
+  z-index: -1;
+  width: 6em;
+
+}
+
+
+#selected_conf {
+  border: 2px solid black;
+  padding: 0 10px;
+
+}
+
+.sim_conf p + div {
+  z-index: -10;
+  opacity: 0;
+}
+
+
+#selected_conf p + div {
+  z-index: initial;
+  opacity: 1;
 }
 
 #sim_confs {
   position: relative;
+  display: flex;
+  flex-direction: row;
 }
 
 .sim_conf {
   position: relative;
-  width: 60%;
   font-weight: bold;
 }
 
@@ -38,29 +71,25 @@
   left: 0;
 }
 
-.sim_conf p {
-  z-index: -1;
-  width: 10em;
-}
-.sim_conf .dropdown {
-  width: max-content;
-  position: relative;
-  width: 5em;
-}
 
 
 #sim_conf_menu {
-  width: 30em;
   position: relative;
 }
 
-.conf_selection_dropdown .dropbtn{
-  padding: .5em;
+#sim_confs .dropdown {
+  width: 10em;
+}
+.conf_selection_dropdown {
+  width: 5em !important; 
+}
+.conf_selection_dropdown .dropbtn {
   border: 1px black solid;
-  width: 4em;
-  height: 1em;
-  display: flex;
-  justify-content: space-around;
+  text-align: center;
+}
+
+.conf_selection_dropdown .dropbtn {
+  text-align: center;
 }
 
 .conf_selection_dropdown .dropbtn::after{
@@ -85,35 +114,3 @@
   width: 50px;
   height: 30px;
 } 
-
-/* Environment selector */
-
-#sim_envs {
-  overflow: auto;
-  flex: 0 1 20%;
-}
-
-#env_filter { 
-  display: flex;
-  flex-direction: row;
-}
-
-
-.env_container {
-  border: 1px solid black;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 30px;
-}
-
-
-.env_container .icon_button:hover {
-  transition-duration: 0.2s;
-  color: red;
-}
-
-.env_container p {
-  font-weight: 1.2em;
-}
