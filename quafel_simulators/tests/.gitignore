@@ -1,0 +1,6 @@
+# Ignore test outputs
+
+simulators.json
+test.json
+output.json
+outputs/

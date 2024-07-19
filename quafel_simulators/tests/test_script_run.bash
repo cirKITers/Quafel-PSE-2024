@@ -1,42 +1,41 @@
 #!/bin/bash
 
-# These are replaced by the script-builder
-CONFIGURATION=""  # yml configuration file for quafel/kedro
-OUTPUT_LOCATION=""  # the output user, host and folder the data will be saved to (used by scp)
+# Parameters to be overridden by the script_builder
+SIMULATION_ID=""
+CONFIGURATION=""
+OUTPUT_LOCATION=""
 
-# copy quafel to another location
-# this location will be used for all inputs and outputs
-# the location is deleted after the script is done
-# the build of the actual quafel will be used for the script
-scp -r ~/Quafel "$HOME/$OUTPUT_LOCATION"
+# Function definitions
+copy_quafel() {
+  cp -r "$HOME/Quafel" "$HOME/$SIMULATION_ID" &&
+  cd "$HOME/Quafel" || return 1
+}
 
-cd Quafel
+write_configuration() {
+  echo "$CONFIGURATION" > "conf/base/parameters/data_generation.yml"
+}
 
-# write the configuration file
-echo "$CONFIGURATION" > "$HOME/$OUTPUT_LOCATION/conf/base/parameters/data_generation.yml"
+run_kedro_pipelines() {
+  poetry env use ~/.pyenv/versions/3.9.19/bin/python3 &&
+  poetry run bash -c "cd $HOME/$SIMULATION_ID && kedro run --pipeline prepare" &&
+  poetry run bash -c "cd $HOME/$SIMULATION_ID && kedro run --pipeline measure" &&
+  poetry run bash -c "cd $HOME/$SIMULATION_ID && kedro run --pipeline combine"
+}
 
-# run the quafel pipeline
-poetry run bash -c "cd $HOME/$OUTPUT_LOCATION && kedro run --pipeline prepare"
-PREPARE_STATUS=$?
-if [ $PREPARE_STATUS -ne 0 ]; then
+copy_output() {
+  sshpass -p "password" scp -o StrictHostKeyChecking=no -r "$HOME/$SIMULATION_ID/data/07_evaluations_combined/evaluations_combined.csv" "user@server_side:$OUTPUT_LOCATION/$SIMULATION_ID"
+}
+
+cleanup() {
+  rm -rf "$HOME/$SIMULATION_ID"
+}
+
+# Main execution flow
+if copy_quafel && write_configuration && run_kedro_pipelines && copy_output; then
+  cleanup
+  exit 0
+else
+  echo "An error occurred."
+  cleanup
   exit 1
 fi
-
-poetry run bash -c "cd $HOME/$OUTPUT_LOCATION && kedro run --pipeline measure"  # TODO: parallel runner
-MEASURE_STATUS=$?
-if [ $MEASURE_STATUS -ne 0 ]; then
-  exit 1
-fi
-
-poetry run bash -c "cd $HOME/$OUTPUT_LOCATION && kedro run --pipeline combine"
-COMBINE_STATUS=$?
-if [ $COMBINE_STATUS -ne 0 ]; then
-  exit 1
-fi
-
-# copy the output to the output folder
-sshpass -p "password" scp -o StrictHostKeyChecking=no -r "$HOME/$OUTPUT_LOCATION/data/07_evaluations_combined/evaluations_combined.csv" "user@server_side:~/$OUTPUT_LOCATION"
-# TODO: remove the working directory
-
-
-exit 0

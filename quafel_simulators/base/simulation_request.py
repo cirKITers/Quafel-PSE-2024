@@ -4,7 +4,7 @@ Here the simulation request is defined to request a simulation from specific a h
 
 
 from abc import abstractmethod
-from quafel_simulators.base.hardware import HardwareBase
+from quafel_simulators.base.hardware import QuafelHardwareBase
 from quafel_simulators.base.simulator import QuafelSimulatorBase
 
 
@@ -14,7 +14,7 @@ class QuafelSimulationRequest:
     """
 
     @abstractmethod
-    def get_hardware(self) -> HardwareBase:
+    def get_hardware(self) -> QuafelHardwareBase:
         """
         Get the hardware profile of the simulation request
         """
@@ -77,12 +77,6 @@ class QuafelSimulationRequest:
     def get_shots_increment(self) -> int:
         """
         Get the increment of shots
-        """
-
-    @abstractmethod
-    def get_totp(self) -> None | str:
-        """
-        Get the TOTP
         """
 
     def get_id(self) -> str:
