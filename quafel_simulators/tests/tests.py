@@ -3,6 +3,7 @@ Here are tests defined to test the quafel_simulators module.
 """
 import logging
 import unittest
+from pathlib import Path
 from time import sleep
 
 import yaml
@@ -10,10 +11,13 @@ import yaml
 from quafel_simulators.base.hardware import QuafelHardwareBase
 from quafel_simulators.base.simulation_request import QuafelSimulationRequest
 from quafel_simulators.base.simulator import QuafelSimulatorBase
-from quafel_simulators.quafelsubmitter import SubmitConnection, QuafelOutputHardware, OutputConnection, QuafelSubmitter, \
-    QuafelSubmissionState
-from quafel_simulators.util.json_handler import read_dict, write_json_file
-from quafel_simulators.util.script_builder import build_quafel_script_submit
+from quafel_simulators.output import QuafelOutputHardware
+from quafel_simulators.quafelsubmitter import QuafelSubmissionState, QuafelSubmitter
+from quafel_simulators.simulators import simulators
+from quafel_simulators.util.connection import SubmitConnection, OutputConnection
+from quafel_simulators.util.json_handler import read_dict, write_json_file, _read_json_file
+from quafel_simulators.util.script_builder import build_quafel_script_submit, build_quafel_yml_configuration, \
+    build_quafel_script_setup, build_quafel_script_pull_output
 
 
 class TestClassHardware(QuafelHardwareBase):
@@ -41,12 +45,12 @@ class TestClassHardware(QuafelHardwareBase):
 
     def get_setup_script(self) -> str:
         # read the setup script from the file
-        with open("test_script_setup.bash", "r") as test_script_setup_file:
+        with open("test_script_setup.bash", "r", encoding="utf-8") as test_script_setup_file:
             return test_script_setup_file.read()
 
     def get_run_script(self) -> str:
         # read the run script from the file
-        with open("test_script_run.bash", "r") as test_script_run_file:
+        with open("test_script_run.bash", "r", encoding="utf-8") as test_script_run_file:
             return test_script_run_file.read()
 
 
@@ -66,8 +70,6 @@ class TestClassSimulationRequest(QuafelSimulationRequest):
     """
     Test simulation request
     """
-    def get_totp(self) -> None | str:
-        return None
 
     def get_hardware(self) -> QuafelHardwareBase:
         return TestClassHardware()
@@ -104,6 +106,9 @@ class TestClassSimulationRequest(QuafelSimulationRequest):
 
 
 class TestClassSimulationRequest2(TestClassSimulationRequest):
+    """
+    Test simulation request 2
+    """
     def get_max_qubits(self) -> int:
         return 2
 
@@ -114,20 +119,25 @@ class TestJsonHandler(unittest.TestCase):
     """
 
     def test_read_dict_without_file(self):
+        """
+        Test if the read_dict method creates a file if it does not exist
+        """
+
         # assure the file is not existent
-        from pathlib import Path
         Path("test.json").unlink(missing_ok=True)
 
         # read the dict
-        from quafel_simulators.util.json_handler import read_dict
         read = read_dict("test.json")
 
         # check if the dict is empty
         assert read == {}
 
     def test_write_and_read_dict(self):
+        """
+        Test if the write and read of a dict works
+        """
+
         # write the dict
-        from quafel_simulators.util.json_handler import write_json_file, _read_json_file
         write_json_file("test.json", {"test": "test"})
 
         # read the dict
@@ -137,8 +147,11 @@ class TestJsonHandler(unittest.TestCase):
         assert read == {"test": "test"}
 
     def test_write_and_read_list(self):
+        """
+        Test if the write and read of a list works
+        """
+
         # write the list
-        from quafel_simulators.util.json_handler import write_json_file, _read_json_file
         write_json_file("test.json", ["test", "test"])
 
         # read the list
@@ -159,13 +172,11 @@ class TestSimulators(unittest.TestCase):
         """
 
         # Delete the simulators.json file
-        from pathlib import Path
         Path("simulators.json").unlink(missing_ok=True)
 
         # Check if the file exists
         assert not Path("simulators.json").exists()
 
-        from quafel_simulators.simulators import simulators
         simulators.update_simulators()
 
         # Check if the file exists
@@ -177,10 +188,9 @@ class TestSimulators(unittest.TestCase):
         """
 
         # write the file content
-        with open("simulators.json", "w") as file:
+        with open("simulators.json", "w", encoding="utf-8") as file:
             file.write('[{"name": "sim1", "version": "1.0"}, {"name": "sim2", "version": "2.0"}]')
 
-        from quafel_simulators.simulators import simulators
         simulators.update_simulators()
 
         # Check if the simulators are read
@@ -202,11 +212,10 @@ class TestScriptBuilder(unittest.TestCase):
         """
 
         simulation_request = TestClassSimulationRequest()
-        from quafel_simulators.util.script_builder import build_quafel_yml_configuration
         generated_yml = build_quafel_yml_configuration(simulation_request)
 
         # Read yml from path:
-        with open("quafel_test_yml.yml", "r") as yml_file:
+        with open("quafel_test_yml.yml", "r", encoding="utf-8") as yml_file:
             read_yml = yml_file.read()
 
         assert str(yaml.compose(generated_yml)) == str(yaml.compose(read_yml))
@@ -224,7 +233,6 @@ class TestScriptBuilder(unittest.TestCase):
         Test the building of the quafel script
         """
 
-        from quafel_simulators.util.script_builder import build_quafel_script_setup
         build_script = build_quafel_script_setup(TestClassSimulationRequest())
         print(build_script)
 
@@ -235,9 +243,36 @@ class TestScriptBuilder(unittest.TestCase):
         Test the building of the pull output script
         """
 
-        from quafel_simulators.util.script_builder import build_quafel_script_pull_output
         build_script = build_quafel_script_pull_output(QuafelOutputHardware(), "test")
         print(build_script)
+
+
+def write_output_file_submission():
+    """
+    Write the output file for the submission
+    """
+
+    write_json_file("output.json", {
+        "output_location": "~",
+        "host": "server_side",
+        "port": 22,
+        "username": "user",
+        "password": "password"
+    })
+
+
+def write_output_file_pull_output():
+    """
+    Write the output file for the pull output
+    """
+
+    write_json_file("output.json", {
+        "output_location": "~",
+        "host": "localhost",
+        "port": 2223,
+        "username": "user",
+        "password": "password"
+    })
 
 
 class TestSubmitter(unittest.TestCase):
@@ -251,13 +286,11 @@ class TestSubmitter(unittest.TestCase):
         """
 
         # Delete the output_hardware.json file
-        from pathlib import Path
         Path("output.json").unlink(missing_ok=True)
 
         # Check if the file exists
         assert not Path("output.json").exists()
 
-        from quafel_simulators.quafelsubmitter import QuafelOutputHardware
         output_hardware = QuafelOutputHardware()
         assert not output_hardware.update()
 
@@ -281,7 +314,6 @@ class TestSubmitter(unittest.TestCase):
             "password": "password"
         })
 
-        from quafel_simulators.quafelsubmitter import QuafelOutputHardware
         output_hardware = QuafelOutputHardware()
         assert output_hardware.update()
 
@@ -292,6 +324,10 @@ class TestSubmitter(unittest.TestCase):
         assert output_hardware.get_password() == "password"
 
     def test_connecting_and_disconnecting_without_totp(self):
+        """
+        Test the connection and disconnection to the hardware without a totp
+        """
+
         logging.basicConfig()
         logging.getLogger("connection.connect").setLevel(logging.DEBUG)
         logging.getLogger("connection.disconnect").setLevel(logging.DEBUG)
@@ -299,10 +335,20 @@ class TestSubmitter(unittest.TestCase):
         hardware_connection = SubmitConnection(TestClassSimulationRequest(), QuafelOutputHardware())
 
         assert hardware_connection.connect()
-        
+
         assert hardware_connection.disconnect()
 
+    @unittest.skip("Not Implemented yet")
+    def test_connecting_and_disconnecting_with_totp(self):
+        """
+        Test the connection and disconnection to the hardware with a totp
+        """
+
     def test_set_setup_script(self):
+        """
+        Test the setting of the setup script
+        """
+
         logging.basicConfig()
         logging.getLogger("connection.connect").setLevel(logging.DEBUG)
         logging.getLogger("connection.disconnect").setLevel(logging.DEBUG)
@@ -319,6 +365,10 @@ class TestSubmitter(unittest.TestCase):
 
     @unittest.skip("This test does take a long time to run.")
     def test_forced_initiate(self):
+        """
+        Test the forced initiation of the hardware
+        """
+
         logging.basicConfig()
         logging.getLogger("connection.connect").setLevel(logging.DEBUG)
         logging.getLogger("connection.disconnect").setLevel(logging.DEBUG)
@@ -332,21 +382,19 @@ class TestSubmitter(unittest.TestCase):
 
         assert hardware_connection.disconnect()
 
+    @unittest.skip("Just run the simoutaneous submissions test")
     def test_submit_and_get_output_process(self):
+        """
+        Test the submission and pulling of the output
+        """
+
         logging.basicConfig()
         logging.getLogger("connection.connect").setLevel(logging.DEBUG)
         logging.getLogger("connection.disconnect").setLevel(logging.DEBUG)
         logging.getLogger("connection.initiate").setLevel(logging.DEBUG)
         logging.getLogger("connection.run").setLevel(logging.DEBUG)
 
-        # write output file for the docker container
-        write_json_file("output.json", {
-            "output_location": "~",
-            "host": "server_side",
-            "port": 22,
-            "username": "user",
-            "password": "password"
-        })
+        write_output_file_submission()
 
         submit_connection = SubmitConnection(TestClassSimulationRequest(), QuafelOutputHardware())
 
@@ -358,28 +406,27 @@ class TestSubmitter(unittest.TestCase):
 
         assert submit_connection.disconnect()
 
-        # write output file for localhost to connect to container
-        write_json_file("output.json", {
-            "output_location": "~",
-            "host": "localhost",
-            "port": 2223,
-            "username": "user",
-            "password": "password"
-        })
+        write_output_file_pull_output()
         output_hardware = QuafelOutputHardware()
         output_hardware.update()
         output_connection = OutputConnection(output_hardware, TestClassSimulationRequest().get_id())
         assert output_connection._move_remote_output()
-        
+
         assert output_connection._get_local_output() is not None
 
+    @unittest.skip("Just run the simultaneous submissions test")
     def test_submitter_class(self):
+        """
+        Test the submitter class
+        """
+
         logging.basicConfig()
         logging.getLogger("connection.connect").setLevel(logging.DEBUG)
         logging.getLogger("connection.disconnect").setLevel(logging.DEBUG)
         logging.getLogger("connection.initiate").setLevel(logging.DEBUG)
         logging.getLogger("connection.run").setLevel(logging.DEBUG)
 
+        write_output_file_submission()
         submitter = QuafelSubmitter()
         assert submitter.submit(TestClassSimulationRequest())
 
@@ -392,18 +439,24 @@ class TestSubmitter(unittest.TestCase):
 
             print("waiting for simulation to finish")
             sleep(1.0)
-        
+
+        write_output_file_pull_output()
         assert submitter.get_output(TestClassSimulationRequest()) is not None
 
     def test_simultaneous_submissions(self):
+        """
+        Test the simultaneous submission of multiple requests on one hardware_profile
+        """
+
         logging.basicConfig()
         logging.getLogger("connection.connect").setLevel(logging.DEBUG)
         logging.getLogger("connection.disconnect").setLevel(logging.DEBUG)
         logging.getLogger("connection.initiate").setLevel(logging.DEBUG)
         logging.getLogger("connection.run").setLevel(logging.DEBUG)
 
+        write_output_file_submission()
         submitter = QuafelSubmitter()
-        
+
         request_1 = TestClassSimulationRequest()
         request_2 = TestClassSimulationRequest2()
 
@@ -415,7 +468,7 @@ class TestSubmitter(unittest.TestCase):
 
         counter = 200
         for i in range(counter):
-            if (submitter.get_state(request_1) == QuafelSubmissionState.READY and 
+            if (submitter.get_state(request_1) == QuafelSubmissionState.READY and
                     submitter.get_state(request_2) == QuafelSubmissionState.READY):
                 break
             if i == counter - 1:
@@ -423,9 +476,17 @@ class TestSubmitter(unittest.TestCase):
 
             print("waiting for simulations to finish")
             sleep(1.0)
-        
-        assert submitter.get_output(request_1) is not None
-        assert submitter.get_output(request_2) is not None
-     
+
+        write_output_file_pull_output()
+        output1 = submitter.get_output(request_1)
+        output2 = submitter.get_output(request_2)
+
+        print(output1)
+        print(output2)
+
+        assert output1 is not None
+        assert output2 is not None
+
+
 if __name__ == '__main__':
     unittest.main()

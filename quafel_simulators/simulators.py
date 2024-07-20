@@ -6,6 +6,7 @@ Here are the simulators defined that are pulled from a configuration file.
 import json
 from pathlib import Path
 from threading import Lock, Thread
+
 from quafel_simulators.base.simulator import QuafelSimulatorBase
 
 
@@ -52,13 +53,13 @@ class QuafelSimulators:
 
         # Check if the file exists
         if (not Path(self.configuration_file_path).exists()) or (not Path(self.configuration_file_path).is_file()):
-            with open(self.configuration_file_path, "w") as file:
+            with open(self.configuration_file_path, "w", encoding="utf-8") as file:
                 file.write("[]")
                 return
 
         # Read the simulators from the configuration file
         json_simulators = None
-        with open(self.configuration_file_path, "r") as file:
+        with open(self.configuration_file_path, "r", encoding="utf-8") as file:
             try:
                 json_simulators = json.load(file)
             except json.JSONDecodeError:

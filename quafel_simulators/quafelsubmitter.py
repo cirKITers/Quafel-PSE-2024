@@ -5,8 +5,6 @@ Here is the submission class that is used to submit a simulation request to the 
 from enum import Enum
 from threading import Lock, Thread
 
-from numpy.random import get_state
-
 from quafel_simulators.base.simulation_request import QuafelSimulationRequest
 from quafel_simulators.output import QuafelOutputHardware
 from quafel_simulators.util.connection import SubmitConnection, OutputConnection
@@ -105,12 +103,13 @@ class QuafelSubmitter:
 
         return True
 
-    def get_state(self, simulation_request: QuafelSimulationRequest) -> QuafelSubmissionState:
+    def get_state(self, simulation_request: QuafelSimulationRequest) -> QuafelSubmissionState | None:
         """
         Get the state of the request
+        :return: The state of the request or None if the request does not exist
         """
         with self._requests_lock:
-            return simulation_request.get_id() in self._requests.keys() and self._requests[simulation_request.get_id()]
+            return self._requests.get(simulation_request.get_id(), None)
 
     def get_output(self, simulation_request) -> str | None:
         """
@@ -122,7 +121,7 @@ class QuafelSubmitter:
         if not self._has_request(simulation_request):
             return None
 
-        if get_state(simulation_request) == QuafelSubmissionState.RUNNING:
+        if self.get_state(simulation_request) == QuafelSubmissionState.RUNNING:
             return None
 
         if self.quafel_output_hardware is None:
