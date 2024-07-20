@@ -48,6 +48,9 @@ class QuafelOutputHardware(QuafelHardwareBase):
         return ""  # The default script is build in the script_builder
 
     def get_output_location(self) -> str:
+        """
+        Get the output location
+        """
         return self._output_location
 
     def update(self) -> bool:

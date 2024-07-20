@@ -3,7 +3,6 @@ Util for building scripts
 """
 
 from pathlib import Path
-from sys import platform
 
 import yaml
 
@@ -76,7 +75,7 @@ def build_quafel_script_pull_output(output_hardware: QuafelOutputHardware, submi
     if script == "":
         # Read the default script from the directory
         path = f"{Path(__file__).parent}/pull_output.bash"
-        
+
         with open(path, mode="r", encoding="utf-8") as file:
             script = file.read()
 
