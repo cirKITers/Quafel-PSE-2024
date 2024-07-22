@@ -4,14 +4,13 @@ Tests for the quafelsubmitter module and the output module
 
 import logging
 import unittest
-from pathlib import Path
 from time import sleep
 
 from quafel_simulators.output import QuafelOutputHardware
 from quafel_simulators.quafelsubmitter import QuafelSubmissionState, QuafelSubmitter
 from quafel_simulators.tests.util import TestClassSimulationRequest, TestCase, TestClassSimulationRequest2
 from quafel_simulators.util.connection import SubmitConnection
-from quafel_simulators.util.json_handler import write_json_file, read_dict
+from quafel_simulators.util.json_handler import write_json_file
 
 
 def write_output_file_submission():

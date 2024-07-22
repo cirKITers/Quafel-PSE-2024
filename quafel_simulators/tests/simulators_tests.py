@@ -27,7 +27,7 @@ class TestSimulators(TestCase):
 
         # Check if the file exists
         assert Path("simulators.json").exists()
-        assert sims == []
+        assert not sims
 
     def test_read_configuration_file(self):
         """
@@ -37,8 +37,6 @@ class TestSimulators(TestCase):
         # write the file content
         with open("simulators.json", "w", encoding="utf-8") as file:
             file.write('[{"name": "sim1", "version": "1.0"}, {"name": "sim2", "version": "2.0"}]')
-
-        simulators._update_simulators()
 
         # Check if the simulators are read
         assert len(simulators.get_simulators()) == 2
@@ -55,8 +53,6 @@ class TestSimulators(TestCase):
         # write the file content
         with open("simulators.json", "w", encoding="utf-8") as file:
             file.write('[{"name": "sim1", "version": "1.0"}, {"name": "sim2", "version": "2.0"}]')
-
-        simulators._update_simulators()
 
         first_read = simulators.get_simulators()
 

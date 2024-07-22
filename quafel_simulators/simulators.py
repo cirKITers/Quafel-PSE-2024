@@ -5,7 +5,6 @@ Here are the simulators defined that are pulled from a configuration file.
 
 import json
 from pathlib import Path
-from threading import Lock
 
 from quafel_simulators.base.simulator import QuafelSimulatorBase
 
@@ -88,11 +87,11 @@ class QuafelSimulators:
         """
         Get the simulators known to the system
         """
-        
+
         # Update the simulators if the configuration file has changed
         if self._configuration_changed():
             self._update_simulators()
-        
+
         return self._simulators
 
 
