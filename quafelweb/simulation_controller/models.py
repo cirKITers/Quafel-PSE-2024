@@ -3,6 +3,7 @@ Defines the models used for creating new simulations runs
 """
 
 from django.db import models
+
 from simulation_data.models import SimulationRun
 
 

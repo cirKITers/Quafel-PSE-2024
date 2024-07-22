@@ -1,8 +1,9 @@
 '''
 Defines the models used to store SimulationRuns in an database
 '''
-from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.db import models
+
 from hardware_controller.models import HardwareProfile
 
 

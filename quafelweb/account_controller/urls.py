@@ -1,5 +1,6 @@
 
 from django.urls import path
+
 from account_controller import views
 
 urlpatterns = [

@@ -1,6 +1,9 @@
 from django.shortcuts import redirect, render
+
 from account_controller.views import AccountView
 from hardware_controller.models import HardwareProfile
+
+
 # Create your views here.
 
 class HardwareView:

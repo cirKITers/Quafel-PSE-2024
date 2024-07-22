@@ -1,15 +1,9 @@
-import math
-from django.http import HttpResponse
-from django.shortcuts import render
-
-import plotly.express as px
-from random import randint
-from simulation_data.simulation import SimulationEnv, HardwareProfile
-from simulation_data.models import SimulatorProfile, SimulationRun
-import pandas as pd
 import itertools
 
+from django.shortcuts import render
 
+from simulation_data.models import SimulatorProfile, SimulationRun
+from simulation_data.simulation import SimulationEnv, HardwareProfile
 
 
 class SimulationView:

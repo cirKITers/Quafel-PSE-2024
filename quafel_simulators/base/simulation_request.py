@@ -4,6 +4,7 @@ Here the simulation request is defined to request a simulation from specific a h
 
 
 from abc import abstractmethod
+
 from quafel_simulators.base.hardware import QuafelHardwareBase
 from quafel_simulators.base.simulator import QuafelSimulatorBase
 

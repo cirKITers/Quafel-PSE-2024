@@ -4,9 +4,9 @@ from authlib.integrations.django_client import OAuth
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from quafelweb.settings import OPENID_CONF_URL, OPENID_SECRET, OPENID_CLIENT_ID, OPENID_CLIENT_IDENT
 
 from account_controller.models import AdminAccount
-from quafelweb.settings import OPENID_CONF_URL, OPENID_SECRET, OPENID_CLIENT_ID, OPENID_CLIENT_IDENT
 
 OAUTH = OAuth()
 OAUTH.register(
