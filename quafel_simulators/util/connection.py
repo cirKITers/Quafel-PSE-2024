@@ -10,6 +10,7 @@ from pathlib import Path
 from time import sleep
 
 from paramiko import SSHClient, AutoAddPolicy
+from paramiko.ssh_exception import SSHException
 
 from quafel_simulators.base.hardware import QuafelHardwareBase
 from quafel_simulators.base.simulation_request import QuafelSimulationRequest
@@ -53,15 +54,15 @@ class Connection:
             return False
 
         try:
-            self._ssh_client.set_missing_host_key_policy(AutoAddPolicy()) # Secure? TODO
+            self._ssh_client.set_missing_host_key_policy(AutoAddPolicy())
             self._ssh_client.connect(
                 hostname=host,
                 port=port,
                 username=username,
                 password=password,
             )
-        except Exception as e:  # TODO: specify the exception
-            print("Error connecting to the hardware: ", e)
+        except SSHException as ssh_exception:
+            print("Error connecting to the hardware: ", ssh_exception)
             return False
 
         return True
@@ -212,7 +213,7 @@ class OutputConnection:
         """
 
         build_pull_script = build_quafel_script_pull_output(self._output_hardware, self._submit_id)
-        completed_process = subprocess.run(["bash", "-c", build_pull_script])
+        completed_process = subprocess.run(["bash", "-c", build_pull_script], check=False)
 
         print(completed_process.stdout)
 
@@ -230,10 +231,10 @@ class OutputConnection:
 
         # inside this path should be another directory with an unknown name
         output_path = "outputs/" + self._submit_id + "/"
-        
+
         # get the name of the directory
         # there should be only one subdirectory
-        completed_process = subprocess.run(["bash", "-c", f"ls {output_path}"], capture_output=True)
+        completed_process = subprocess.run(["bash", "-c", f"ls {output_path}"], capture_output=True, check=False)
         subdir = completed_process.stdout.decode("utf-8").strip()
 
         if completed_process.returncode != 0 or subdir == "":
@@ -253,7 +254,7 @@ class OutputConnection:
             file.close()
 
         # Delete the output_location
-        completed_process = subprocess.run(["bash", "-c", f"rm -rf {output_path}"])
+        completed_process = subprocess.run(["bash", "-c", f"rm -rf {output_path}"], check=False)
         if completed_process.returncode != 0:
             return None
 
