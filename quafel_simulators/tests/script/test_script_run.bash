@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/sandbox/bash
 
 # Parameters to be overridden by the script_builder
 SIMULATION_ID=""

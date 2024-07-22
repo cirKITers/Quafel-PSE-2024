@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y openssh-server sudo
 RUN mkdir /var/run/sshd
 
 # Create a user with a password and SSH access
-RUN useradd -m -s /bin/bash user && echo 'user:password' | chpasswd
+RUN useradd -m -s /sandbox/bash user && echo 'user:password' | chpasswd
 
 # Add the user to the sudo group
 RUN usermod -aG sudo user

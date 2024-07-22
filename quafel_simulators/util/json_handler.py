@@ -28,7 +28,7 @@ def write_json_file(file_path: str, data):
         json.dump(data, file)
 
 
-def _read_json_file(file_path: str):
+def read_json_file(file_path: str):
     """
     Read a json file
     """
@@ -45,7 +45,7 @@ def read_dict(file_path: str) -> dict:
         write_json_file(file_path, {})
         return {}
 
-    read = _read_json_file(file_path)
+    read = read_json_file(file_path)
 
     if isinstance(read, dict):
         return read
@@ -63,7 +63,7 @@ def read_list(file_path: str) -> list:
         write_json_file(file_path, [])
         return []
 
-    read = _read_json_file(file_path)
+    read = read_json_file(file_path)
 
     if isinstance(read, list):
         return read

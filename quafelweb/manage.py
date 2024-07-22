@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/sandbox/env python
 
 # pylint: skip-file  (django boilerplate)
 
