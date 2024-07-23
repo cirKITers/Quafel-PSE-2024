@@ -12,31 +12,33 @@ class SimulationView:
   @staticmethod
   def index(request):
 
+    # Get all selected simulator and hardware profiles
     simulators =        [sp for sp in SimulatorProfile.objects.all() if sp.name == (request.GET.get("simulator_filter") or sp.name)]
     hardware_profiles = [hp for hp in HardwareProfile.objects.all()  if hp.name == (request.GET.get("hardware_filter") or hp.name)]
     
-    # Existing envs
-    hps = set(SimulationRun.objects.values_list("hardware", flat=True).distinct())
-    sps = set(SimulationRun.objects.values_list("simulator", flat=True).distinct())
+    # Get existing envs
+    hps = set(SimulationRun.objects.values_list("hardware", flat=True))
+    sps = set(SimulationRun.objects.values_list("simulator", flat=True))
 
-    # Produce all possible environments and apply the filter at the same time
-    envs = [SimulationEnv(hp, sp) for hp, sp in itertools.product(hardware_profiles, simulators) if hp.uuid in hps and sp.name in sps ]
-
+    # Produce all available environments
+    envs = [SimulationEnv(hp, sp) for hp, sp in itertools.product(hardware_profiles, simulators) if hp.uuid in hps and sp.name in sps]
     
+    # this context will be passed to the template
     context = {
-      'environments': envs,
-      'hardware_profiles' : HardwareProfile.objects.all(),
-      'simulator_profiles' : SimulatorProfile.objects.all(),
+      "environments": envs,
+      "hardware_profiles" : HardwareProfile.objects.all(),
+      "simulator_profiles" : SimulatorProfile.objects.all(),
     }
 
-    # Get all possible configurations from existing runs in the db
+    # Get all possible configurations from existing runs in the database
     values = {
-      "qubit" : set(SimulationRun.objects.values_list("qubits", flat=True).distinct()) or { 0 },
-      "depth" : set(SimulationRun.objects.values_list("depth", flat=True).distinct()) or { 0 },
-      "shot" :  set(SimulationRun.objects.values_list("shots", flat=True).distinct()) or { 0 },
+      "qubit" : set(SimulationRun.objects.values_list("qubits", flat=True)) or { 0 },
+      "depth" : set(SimulationRun.objects.values_list("depth", flat=True)) or { 0 },
+      "shot" :  set(SimulationRun.objects.values_list("shots", flat=True)) or { 0 },
     }
     
-    selected_range = request.GET.get("selected_conf") or "qubit" # selected range 
+  
+    selected_range = request.GET.get("selected_conf") or "qubit" 
 
     for name in ["qubit", "depth", "shot"]:
       max_v = min(int(request.GET.get(name + "_max") or max(values[name])), max(values[name]))
@@ -48,30 +50,40 @@ class SimulationView:
       context[name + "_range"] = range_v
       context[name + "_min"] = min_v
       context[name + "_max"] = max_v
-      
-    # Get all runs existed
-    env_to_run_map = [
-      (env.hardware.name + " " + env.simulator.name, SimulationRun.objects.filter(
-        simulator=env.simulator.name, 
-        hardware=env.hardware.uuid,
-        qubits__in=context["qubit_range"],
-        depth__in= context["depth_range"],
-        shots__in= context["shot_range"],
-      )) for env in envs
-    ]
 
-    context['graph_data'] = {
-      "data" : [
-        {
-          "label" : name,
-          "data" :  [run.duration_avg for run in runs]
-        }
-        for name, runs in env_to_run_map
-      ],
-      'labels' : list(sorted(context[selected_range + "_range"])),
-      'x_axis' : selected_range.capitalize(),
-      'y_axis' : "Average duration",
-      'scale_type' : 'logarithmic'
+    conf_filter = {
+      "qubits__gte" : min(context["qubit_range"]),
+      "qubits__lte" : max(context["qubit_range"]),
+
+      "depth__gte" : min(context["depth_range"]),
+      "depth__lte" : max(context["depth_range"]),
+      
+      "shots__gte" : min(context["shot_range"]),
+      "shots__lte" : max(context["shot_range"]),
+    }
+      
+    # Create a data structure for chart.js
+    data = list()
+    for env in envs:
+      name = env.hardware.name + " " + env.simulator.name
+      runs = SimulationRun.objects.filter(
+          simulator=env.simulator.name, 
+          hardware=env.hardware.uuid, 
+          **conf_filter
+      )
+
+      data.append({
+        "label" : name, 
+        "data" : [run.duration_avg for run in runs]
+      })
+     
+
+    context["graph_data"] = {
+      "data" : data,
+      "labels" : list(sorted(context[selected_range + "_range"])),
+      "x_axis" : selected_range.capitalize(),
+      "y_axis" : "Average duration",
+      "scale_type" : "logarithmic"
     }
       
     return render(request, "simulation.html", context=context)
