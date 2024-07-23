@@ -29,7 +29,7 @@ class SimulationView:
       'simulator_profiles' : SimulatorProfile.objects.all(),
     }
 
-    # Simulation configuration
+    # Get all possible configurations from existing runs in the db
     values = {
       "qubit" : set(SimulationRun.objects.values_list("qubits", flat=True).distinct()) or { 0 },
       "depth" : set(SimulationRun.objects.values_list("depth", flat=True).distinct()) or { 0 },
@@ -38,7 +38,7 @@ class SimulationView:
     
     selected_range = request.GET.get("selected_conf") or "qubit" # selected range 
 
-    for name in { "qubit", "depth", "shot"}:
+    for name in ["qubit", "depth", "shot"]:
       max_v = min(int(request.GET.get(name + "_max") or max(values[name])), max(values[name]))
       min_v = max(int(request.GET.get(name + "_min") or min(values[name])), min(values[name]))
       
@@ -49,11 +49,9 @@ class SimulationView:
       context[name + "_min"] = min_v
       context[name + "_max"] = max_v
       
-    
-
     # Get all runs existed
     env_to_run_map = [
-      (env, SimulationRun.objects.filter(
+      (env.hardware.name + " " + env.simulator.name, SimulationRun.objects.filter(
         simulator=env.simulator.name, 
         hardware=env.hardware.uuid,
         qubits__in=context["qubit_range"],
@@ -62,14 +60,13 @@ class SimulationView:
       )) for env in envs
     ]
 
-    # graph data to save in json for chart.js
     context['graph_data'] = {
       "data" : [
         {
-          "label" : env.hardware.name + " " + env.simulator.name,
+          "label" : name,
           "data" :  [run.duration_avg for run in runs]
         }
-        for env, runs in env_to_run_map
+        for name, runs in env_to_run_map
       ],
       'labels' : list(sorted(context[selected_range + "_range"])),
       'x_axis' : selected_range.capitalize(),
