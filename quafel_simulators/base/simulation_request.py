@@ -4,10 +4,15 @@ Here the simulation request is defined to request a simulation from specific a h
 
 
 from abc import abstractmethod
+from enum import Enum
 
 from quafel_simulators.base.hardware import QuafelHardwareBase
 from quafel_simulators.base.simulator import QuafelSimulatorBase
 
+
+class IncrementType(Enum):
+    LINEAR = "linear"
+    EXPONENTIAL = "exp2"
 
 class QuafelSimulationRequest:
     """
@@ -44,6 +49,13 @@ class QuafelSimulationRequest:
         Get the increment of qubits
         """
 
+    def get_qubits_increment_type(self) -> IncrementType:
+        """
+        Get the increment type of qubits
+        The default is LINEAR
+        """
+        return IncrementType.LINEAR
+
     @abstractmethod
     def get_min_depth(self) -> int:
         """
@@ -62,6 +74,13 @@ class QuafelSimulationRequest:
         Get the increment of depth
         """
 
+    def get_depth_increment_type(self) -> IncrementType:
+        """
+        Get the increment type of depth
+        The default is LINEAR
+        """
+        return IncrementType.LINEAR
+
     @abstractmethod
     def get_min_shots(self) -> int:
         """
@@ -79,6 +98,13 @@ class QuafelSimulationRequest:
         """
         Get the increment of shots
         """
+
+    def get_shots_increment_type(self) -> IncrementType:
+        """
+        Get the increment type of shots
+        The default is LINEAR
+        """
+        return IncrementType.LINEAR
 
     def get_id(self) -> str:
         """
