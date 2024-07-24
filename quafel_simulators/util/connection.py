@@ -50,8 +50,8 @@ class Connection:
         totp = self._hardware_base.get_totp()
 
         if totp is not None:
-            print("TOTP is needed but not implemented yet")
-            return False
+            self._ssh_client.set_missing_host_key_policy(AutoAddPolicy())
+            self._ssh_client.connect(hostname=host, port=port, username=username, password=password)
 
         try:
             self._ssh_client.set_missing_host_key_policy(AutoAddPolicy())
