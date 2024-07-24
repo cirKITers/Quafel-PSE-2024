@@ -12,14 +12,14 @@ class QuafelOutputHardware(QuafelHardwareBase):
     """
     The output hardware to get the output from
     """
+    def __init__(self):
+        self.configuration_file_path: str = "output.json"  # path to the configuration file
 
-    configuration_file_path: str = "output.json"  # path to the configuration file
-
-    _output_location: str = ""  # location where all outputs are stored (not the id of the output)
-    _host: str = ""  # host of the output server
-    _port: int = 22  # port of the output server
-    _username: str = ""  # username to connect to the output server
-    _password: str = ""  # password to connect to the output server
+        self._output_location: str = ""  # location where all outputs are stored (not the id of the output)
+        self._host: str = ""  # host of the output server
+        self._port: int = 22  # port of the output server
+        self._username: str = ""  # username to connect to the output server
+        self._password: str = ""  # password to connect to the output server
 
     def get_id(self) -> str:
         return "output"

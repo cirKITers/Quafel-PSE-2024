@@ -43,10 +43,22 @@ class QuafelSimulators:
     """
     The simulators that are inside the simulators.json file
     """
-    configuration_file_path: str = "simulators.json"  # path to the configuration file
 
-    _last_change = None  # last time the configuration file was changed
-    _simulators: list[QuafelSimulatorBase] = []  # list of simulators known to the system
+    __quafel_simulators_instance = None
+
+    def __new__(cls, *args, **kwargs):
+        """
+        Return the singleton instance
+        """
+        if cls.__quafel_simulators_instance is None:
+            cls.__quafel_simulators_instance = super(QuafelSimulators, cls).__new__(cls)
+        return cls.__quafel_simulators_instance
+
+    def __init__(self):
+        self.configuration_file_path: str = "simulators.json"  # path to the configuration file
+
+        self._last_change = None  # last time the configuration file was changed
+        self._simulators: list[QuafelSimulatorBase] = []  # list of simulators known to the system
 
     def _configuration_changed(self) -> bool:
         # Check if the file exists
@@ -93,7 +105,3 @@ class QuafelSimulators:
             self._update_simulators()
 
         return self._simulators
-
-
-# The simulators singleton
-simulators = QuafelSimulators()

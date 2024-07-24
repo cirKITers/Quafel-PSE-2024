@@ -24,14 +24,12 @@ class Connection:
     Connection to a hardware_base
     Uses SSH
     """
-    _hardware_base: QuafelHardwareBase | None = None
-    _ssh_client: SSHClient | None = None
-
     def __init__(self, hardware_base: QuafelHardwareBase):
         """
         Initialize the connection
         """
-        self._hardware_base = hardware_base
+        self._hardware_base: QuafelHardwareBase | None = hardware_base
+        self._ssh_client: SSHClient | None = None
 
     def connect(self) -> bool:
         """

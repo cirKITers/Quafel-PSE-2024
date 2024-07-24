@@ -22,14 +22,26 @@ class QuafelSubmissionState(Enum):
 class QuafelSubmitter:
     """
     The submitter class to submit a simulation request
+    This class is a singleton
     """
 
-    # The output hardware
-    # Change this to a custom object of quafel_output_hardware to disable the configuration file
-    quafel_output_hardware: QuafelOutputHardware = QuafelOutputHardware()
+    __quafel_submitter_instance = None
 
-    _requests: dict[str, QuafelSubmissionState] = {}  # dict of requests and their states (id: state)
-    _requests_lock = Lock()  # Lock for the requests
+    def __new__(cls, *args, **kwargs):
+        """
+        Return the singleton instance
+        """
+        if cls.__quafel_submitter_instance is None:
+            cls.__quafel_submitter_instance = super(QuafelSubmitter, cls).__new__(cls)
+        return cls.__quafel_submitter_instance
+
+    def __init__(self):
+        # The output hardware
+        # Change this to a custom object of quafel_output_hardware to disable the configuration file
+        self.quafel_output_hardware: QuafelOutputHardware = QuafelOutputHardware()
+
+        self._requests: dict[str, QuafelSubmissionState] = {}  # dict of requests and their states (id: state)
+        self._requests_lock = Lock()  # Lock for the requests
 
     def _add_request(self, simulation_request: QuafelSimulationRequest):
         """
@@ -135,7 +147,3 @@ class QuafelSubmitter:
 
         self._remove_request(simulation_request)
         return output
-
-
-# The submitter singleton
-submitter = QuafelSubmitter()

@@ -3,7 +3,7 @@ Tests for the simulators module
 """
 from pathlib import Path
 
-from quafel_simulators.simulators import simulators
+from quafel_simulators.simulators import QuafelSimulators
 from quafel_simulators.tests.util import TestCase
 
 
@@ -23,7 +23,7 @@ class TestSimulators(TestCase):
         # Check if the file exists
         assert not Path("simulators.json").exists()
 
-        sims = simulators.get_simulators()
+        sims = QuafelSimulators().get_simulators()
 
         # Check if the file exists
         assert Path("simulators.json").exists()
@@ -39,11 +39,11 @@ class TestSimulators(TestCase):
             file.write('[{"name": "sim1", "version": "1.0"}, {"name": "sim2", "version": "2.0"}]')
 
         # Check if the simulators are read
-        assert len(simulators.get_simulators()) == 2
-        assert simulators.get_simulators()[0].get_name() == "sim1"
-        assert simulators.get_simulators()[0].get_version() == "1.0"
-        assert simulators.get_simulators()[1].get_name() == "sim2"
-        assert simulators.get_simulators()[1].get_version() == "2.0"
+        assert len(QuafelSimulators().get_simulators()) == 2
+        assert QuafelSimulators().get_simulators()[0].get_name() == "sim1"
+        assert QuafelSimulators().get_simulators()[0].get_version() == "1.0"
+        assert QuafelSimulators().get_simulators()[1].get_name() == "sim2"
+        assert QuafelSimulators().get_simulators()[1].get_version() == "2.0"
 
     def test_configuration_file_changed(self):
         """
@@ -54,7 +54,7 @@ class TestSimulators(TestCase):
         with open("simulators.json", "w", encoding="utf-8") as file:
             file.write('[{"name": "sim1", "version": "1.0"}, {"name": "sim2", "version": "2.0"}]')
 
-        first_read = simulators.get_simulators()
+        first_read = QuafelSimulators().get_simulators()
 
         # change the file content
         with open("simulators.json", "w", encoding="utf-8") as file:
@@ -62,6 +62,6 @@ class TestSimulators(TestCase):
                        '{"name": "sim2", "version": "2.0"}, '
                        '{"name": "sim3", "version": "3.0"}]')
 
-        last_read = simulators.get_simulators()
+        last_read = QuafelSimulators().get_simulators()
 
         assert len(first_read) != len(last_read)
