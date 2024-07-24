@@ -5,7 +5,6 @@ Util for building scripts
 from pathlib import Path
 
 import yaml
-from plotly.express import strip
 
 from quafel_simulators.base.simulation_request import QuafelSimulationRequest
 from quafel_simulators.output import QuafelOutputHardware
