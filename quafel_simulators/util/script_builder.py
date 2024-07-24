@@ -5,6 +5,7 @@ Util for building scripts
 from pathlib import Path
 
 import yaml
+from plotly.express import strip
 
 from quafel_simulators.base.simulation_request import QuafelSimulationRequest
 from quafel_simulators.output import QuafelOutputHardware
@@ -23,15 +24,15 @@ def build_quafel_yml_configuration(simulation_request: QuafelSimulationRequest) 
             "min_qubits": simulation_request.get_min_qubits(),
             "max_qubits": simulation_request.get_max_qubits(),
             "qubits_increment": simulation_request.get_qubits_increment(),
-            "qubits_type": simulation_request.get_qubits_increment_type(),
+            "qubits_type": str(simulation_request.get_qubits_increment_type()),
             "min_depth": simulation_request.get_min_depth(),
             "max_depth": simulation_request.get_max_depth(),
             "depth_increment": simulation_request.get_depth_increment(),
-            "depth_type": simulation_request.get_depth_increment_type(),
+            "depth_type": str(simulation_request.get_depth_increment_type()),
             "min_shots": simulation_request.get_min_shots(),
             "max_shots": simulation_request.get_max_shots(),
             "shots_increment": simulation_request.get_shots_increment(),
-            "shots_type": simulation_request.get_shots_increment_type(),
+            "shots_type": str(simulation_request.get_shots_increment_type()),
             "skip_combinations": [],
             "frameworks": [simulation_request.get_simulator().get_name()],
         },

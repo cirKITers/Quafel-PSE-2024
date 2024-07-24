@@ -123,6 +123,3 @@ class TestCase(unittest.TestCase):
     def tearDownClass(cls):
         # Change back to the original sandbox directory
         os.chdir(Path(__file__).parent)
-
-    if __name__ == '__main__':
-        unittest.main()

@@ -13,6 +13,9 @@ from quafel_simulators.base.simulator import QuafelSimulatorBase
 class IncrementType(Enum):
     LINEAR = "linear"
     EXPONENTIAL = "exp2"
+    
+    def __str__(self):
+        return self.value
 
 class QuafelSimulationRequest:
     """
