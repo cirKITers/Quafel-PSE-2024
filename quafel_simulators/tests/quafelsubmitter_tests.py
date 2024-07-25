@@ -20,7 +20,7 @@ def write_output_file_submission():
 
     write_json_file("output.json", {
         "output_location": "~",
-        "host": "server_side",
+        "host": "output_server",
         "port": 22,
         "username": "user",
         "password": "password"
@@ -46,6 +46,7 @@ class TestSubmitter(TestCase):
     Test the submitter module
     """
 
+    # Run This test if other test cases are not running
     @unittest.skip("This test does take a long time to run.")
     def test_forced_initiate(self):
         """
@@ -117,7 +118,7 @@ class TestSubmitter(TestCase):
 
         submitter.submit(request_2)
 
-        counter = 200
+        counter = 600
         for i in range(counter):
             if (submitter.get_state(request_1) == QuafelSubmissionState.READY and
                     submitter.get_state(request_2) == QuafelSubmissionState.READY):

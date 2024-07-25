@@ -1,4 +1,4 @@
-#!/sandbox/bash
+#!/bin/bash
 
 sudo -S apt-get update
 

@@ -1,4 +1,4 @@
-#!/sandbox/bash
+#!/bin/bash
 
 # This script pulls the output from the remote server to the local machine
 # The pull_output script is run on the local machine

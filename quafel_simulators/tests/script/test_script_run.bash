@@ -1,4 +1,4 @@
-#!/sandbox/bash
+#!/bin/bash
 
 # Parameters to be overridden by the script_builder
 SIMULATION_ID=""
@@ -23,7 +23,7 @@ run_kedro_pipelines() {
 }
 
 copy_output() {
-  sshpass -p "password" scp -o StrictHostKeyChecking=no -r "$HOME/$SIMULATION_ID/data/07_evaluations_combined/evaluations_combined.csv" "user@server_side:$OUTPUT_LOCATION/$SIMULATION_ID"
+  sshpass -p "password" scp -o StrictHostKeyChecking=no -r "$HOME/$SIMULATION_ID/data/07_evaluations_combined/evaluations_combined.csv" "user@output_server:$OUTPUT_LOCATION/$SIMULATION_ID"
 }
 
 cleanup() {

@@ -131,6 +131,7 @@ class Connection:
 
         return True
 
+
 class SubmitConnection(Connection):
     """
     The hardware connection class to connect to the hardware
