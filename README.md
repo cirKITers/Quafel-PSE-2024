@@ -20,22 +20,14 @@ poetry install
 ```
 
 ### Run the project
-To run the project, the following commands must be executed:
+To run the project, the following command must be executed:
 
-- This will start the database and the simulated hardware profile:
 ```bash
-docker-compose up -d
+docker-compose up --build
 ```
 
-- this will update the database schema:
-```bash
-poetry run python quafelweb/manage.py migrate
-```
+This will start all docker-containers, migrate the database and start the web application.
 
-- This will start the web application:
-```bash
-poetry run python quafelweb/manage.py runserver
-```
 
 ### Additional information
 - The web application can be accessed at `http://localhost:8000/`
