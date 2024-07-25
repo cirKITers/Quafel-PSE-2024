@@ -5,10 +5,12 @@ SSH connections
 """
 
 import logging
+import socket
 import subprocess
 from pathlib import Path
 from time import sleep
 
+import paramiko
 from paramiko import SSHClient, AutoAddPolicy
 from paramiko.ssh_exception import SSHException
 
@@ -33,6 +35,22 @@ class Connection:
         """
         self._hardware_base = hardware_base
 
+    def _top_handler(self, title, instructions, prompt_list):
+        """
+        Top handler for the connection
+        """
+        response = []
+
+        for prompt in prompt_list:
+            if str(prompt[0]).lower().find("name") != -1:
+                response.append(self._hardware_base.get_username())
+            if str(prompt[0]).lower().find("word") != -1:
+                response.append(self._hardware_base.get_password())
+            if str(prompt[0]).lower().find("otp") != -1:
+                response.append(self._hardware_base.get_totp())
+
+        return tuple(response)
+
     def connect(self) -> bool:
         """
         Connect to the hardware
@@ -50,20 +68,31 @@ class Connection:
         totp = self._hardware_base.get_totp()
 
         if totp is not None:
-            self._ssh_client.set_missing_host_key_policy(AutoAddPolicy())
-            self._ssh_client.connect(hostname=host, port=port, username=username, password=password)
+            try:
+                self._ssh_client.set_missing_host_key_policy(AutoAddPolicy())
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.connect((host, port))
 
-        try:
-            self._ssh_client.set_missing_host_key_policy(AutoAddPolicy())
-            self._ssh_client.connect(
-                hostname=host,
-                port=port,
-                username=username,
-                password=password,
-            )
-        except SSHException as ssh_exception:
-            print("Error connecting to the hardware: ", ssh_exception)
-            return False
+                transport = paramiko.Transport(sock)
+                transport.start_client(timeout=10)
+                transport.auth_interactive(username, self._top_handler)
+
+            except SSHException as ssh_exception:
+                print("Error connecting to the hardware: ", ssh_exception)
+                return False
+        else:
+            try:
+                self._ssh_client.set_missing_host_key_policy(AutoAddPolicy())
+                self._ssh_client.connect(
+                    hostname=host,
+                    port=port,
+                    username=username,
+                    password=password,
+                )
+
+            except SSHException as ssh_exception:
+                print("Error connecting to the hardware: ", ssh_exception)
+                return False
 
         return True
 
@@ -103,7 +132,6 @@ class Connection:
         self._ssh_client = None
 
         return True
-
 
 class SubmitConnection(Connection):
     """

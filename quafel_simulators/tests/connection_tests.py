@@ -1,7 +1,9 @@
 """
 Unit tests for the connection module
 """
+
 import logging
+import unittest
 
 from quafel_simulators.base.hardware import QuafelHardwareBase
 from quafel_simulators.output import QuafelOutputHardware
@@ -29,7 +31,7 @@ class TestConnections(TestCase):
 
         assert hardware_connection.disconnect()
 
-    # @unittest.skip("Test needs credentials")
+    @unittest.skip("Test needs credentials and KIT network")
     def test_connecting_and_disconnecting_with_totp(self):
         """
         Test the connection and disconnection to the hardware with a totp
@@ -57,10 +59,6 @@ class TestClassHardwareBWUniCluster(QuafelHardwareBase):
     """
     Test class for the bwUniCluster2.0
     """
-
-    username: str
-    password: str
-    totp: str
 
     def __init__(self, username: str, password: str, totp: str):
         self.username = username
