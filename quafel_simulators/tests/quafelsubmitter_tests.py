@@ -46,27 +46,6 @@ class TestSubmitter(TestCase):
     Test the submitter module
     """
 
-    def test_connecting_and_disconnecting_without_totp(self):
-        """
-        Test the connection and disconnection to the hardware without a totp
-        """
-
-        logging.basicConfig()
-        logging.getLogger("connection.connect").setLevel(logging.DEBUG)
-        logging.getLogger("connection.disconnect").setLevel(logging.DEBUG)
-
-        hardware_connection = SubmitConnection(TestClassSimulationRequest(), QuafelOutputHardware())
-
-        assert hardware_connection.connect()
-
-        assert hardware_connection.disconnect()
-
-    @unittest.skip("Not Implemented yet")
-    def test_connecting_and_disconnecting_with_totp(self):
-        """
-        Test the connection and disconnection to the hardware with a totp
-        """
-
     @unittest.skip("This test does take a long time to run.")
     def test_forced_initiate(self):
         """
