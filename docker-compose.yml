@@ -1,18 +1,4 @@
-version: '3.8'
-
 services:
-  server_side:
-    build:
-      dockerfile: ServerSide.Dockerfile
-    ports:
-      - "2223:22"
-  
-  hardware_profile_1:
-    build:
-      dockerfile: HardwareProfile.Dockerfile
-    ports:
-      - "2222:22"
-  
   postgres:
     image: postgres:latest
     container_name: postgres_quafel_web
@@ -24,6 +10,24 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  hardware_profile_1:
+    build:
+      dockerfile: dockerfile/HardwareProfile.Dockerfile
+    ports:
+      - "2222:22"
+
+  output_server:
+    build:
+      dockerfile: dockerfile/OutputServer.Dockerfile
+    ports:
+      - "2223:22"
+
+  webapp_server:
+    build:
+      dockerfile: dockerfile/Webapp.Dockerfile
+    ports:
+      - "8000:8000"
 
 volumes:
   postgres_data:
