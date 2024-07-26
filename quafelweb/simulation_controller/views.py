@@ -55,7 +55,6 @@ class SimulationRequestView:
                         int(math.log(max_v, increment) + 1),
                     )
                 ]
-            print(context[conf + "_values"])
 
         conf_filter = {
             "qubits__in": context["qubits_values"],

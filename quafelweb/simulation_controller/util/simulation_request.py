@@ -270,7 +270,6 @@ class SimulationRequestRange:
                     self.depth_increment,
                     self.depth_increment_type,
                 ):
-                    print(f"Checking {q} {s} {d}")
                     if run.qubits == q and run.shots == s and run.depth == d:
                         return True
         return False

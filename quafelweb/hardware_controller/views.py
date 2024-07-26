@@ -8,6 +8,7 @@ import re as regex
 
 # Create your views here.
 
+
 class HardwareView:
 
     # /hardware
@@ -103,6 +104,5 @@ class HardwareView:
                 port_addr=port_addr,
                 needs_totp=needs_totp,
             )
-        print(needs_totp)
 
         return redirect("hardware")

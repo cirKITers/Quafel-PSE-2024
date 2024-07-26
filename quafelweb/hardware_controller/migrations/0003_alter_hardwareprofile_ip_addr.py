@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hardware_controller', '0002_hardwareprofile_needs_totp_and_more'),
+        ("hardware_controller", "0002_hardwareprofile_needs_totp_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='hardwareprofile',
-            name='ip_addr',
-            field=models.CharField(default=''),
+            model_name="hardwareprofile",
+            name="ip_addr",
+            field=models.CharField(default=""),
         ),
     ]

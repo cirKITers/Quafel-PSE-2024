@@ -35,10 +35,8 @@ def get_missing_runs_as_ranges(
     for run in existing_runs:
         for r in missing_ranges.copy():
             if r.run_in_range(run):
-                print("Splitting range", r, "at", run)
                 missing_ranges.remove(r)
                 to_append_list = r.split(run)
-                print(f"append {len(to_append_list)} ranges")
                 for to_append in to_append_list:
                     missing_ranges.append(to_append)
                 break

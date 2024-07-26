@@ -99,8 +99,6 @@ class QuafelSubmitter:
             self._set_state(simulation_request, QuafelSubmissionState.ERROR)
 
         self._set_state(simulation_request, QuafelSubmissionState.READY)
-        
-        print(self.get_output(simulation_request))  # TODO: delete
 
     def submit(self, simulation_request: QuafelSimulationRequest) -> bool:
         """
