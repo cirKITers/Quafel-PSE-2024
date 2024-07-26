@@ -2,7 +2,6 @@ import itertools
 import json
 import math
 import random
-from email.policy import default
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -49,6 +48,12 @@ class SimulationRequestView:
 
         envs = list()
         for hp, sp in itertools.product(HardwareProfile.objects.all(), SimulatorProfile.objects.all()):
+            if hfilter := request.GET.get("hardware_filter"):
+                if hfilter != hp.name: continue
+
+            if sfilter := request.GET.get("simulator_filter"):
+                if sfilter != sp.name: continue
+
             name = f"ENV::{hp.uuid}::{sp.name}"
 
             finished_runs = SimulationRun.objects.filter(hardware=hp.uuid, simulator=sp.name, **conf_filter).count()
