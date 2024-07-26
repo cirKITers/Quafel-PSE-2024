@@ -18,5 +18,7 @@ class HardwareProfile(models.Model):
 
   archived = models.BooleanField(default=False)
 
+  needs_totp = models.BooleanField(default=False)
+
   def __str__(self):
         return self.name + " " + self.description + " " + self.protocol + " " + self.ip_addr + " " + str(self.port_addr) + " " + str(self.archived)
