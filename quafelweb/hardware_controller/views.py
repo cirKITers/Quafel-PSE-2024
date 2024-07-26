@@ -46,12 +46,41 @@ class HardwareView:
 
     return redirect("hardware")
 
+  @AccountView.require_login
+  def configure_profile(request):
+    
+    
+    if request.method == "POST":
+      id = request.POST["hardware_id"]
 
-  # /hardware/archive with post
+      profile = HardwareProfile.objects.filter(uuid=id)
+
+      if not profile.exists():
+        raise RuntimeError("Invalid hardware profile requested") # TODO
+
+
+      context = { 'hardware' : profile.get()  }
+
+    return render(request, 'configuration.html', context=context)
+
   
   @AccountView.require_login
-  def archive_profile(request):
-    ...
+  def change_profile(request):
+    
+    if request.method == "GET":
+      id = request.GET["hardware_id"]
+      name = request.GET["hardware_name"]
+      description = request.GET["hardware_description"]
+    
+      
+      profile = HardwareProfile.objects.filter(uuid=id)
 
-
-  
+      if not profile.exists():
+        raise RuntimeError("Invalid hardware profile requested") # TODO
+      
+      profile.update(
+        name = name,
+        description = description
+      )
+      
+    return redirect("hardware")

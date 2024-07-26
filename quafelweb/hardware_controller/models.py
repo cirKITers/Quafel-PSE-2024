@@ -7,7 +7,7 @@ class HardwareProfile(models.Model):
 
   name = models.CharField(max_length=100)
 
-  description = models.CharField(max_length=1000)
+  description = models.CharField(max_length=500)
 
   # example "clust-gpu://192.168.0.95:22"
   protocol = models.CharField(max_length=100)

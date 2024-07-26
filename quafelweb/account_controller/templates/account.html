@@ -6,24 +6,26 @@
 {%endblock%}
 
 {% block content %}
-<form action="/account" method="get" id='account_search'>
-  <input type="text" name='search' value={{request.GET.search}}>
-  <span>Search</span>
-  <button type="submit"><span class="material-symbols-outlined">search</span></button>
-</form>
-<div id='account_container'>
-  {%for account in accounts %}
-  <form action="delete/"  class='account_entry' method='post'>
+<div class="page_panel">
+  <form action="/account" method="get" id='account_search'>
+    <input type="text" name='search' value={{request.GET.search}}>
+    <span>Search</span>
+    <button type="submit"><span class="material-symbols-outlined">search</span></button>
+  </form>
+  <div id='account_container'>
+    {%for account in accounts %}
+    <form action="delete/"  class='account_entry' method='post'>
+      {% csrf_token %}
+      <p>{{ account.identifier }}</p>
+      <button class='icon_button' name="admin_ident" value={{account.identifier}}><span class="material-symbols-outlined">delete</span></button>
+    </form>  
+    {% endfor %}
+  </div>
+  <form action="add/" method="post" id='new_account_div'>
     {% csrf_token %}
-    <p>{{ account.identifier }}</p>
-    <button class='icon_button' name="admin_ident" value={{account.identifier}}><span class="material-symbols-outlined">delete</span></button>
-  </form>  
-  {% endfor %}
+    <input name="admin_ident"></input>
+    <span>Add admin</span>
+    <button type="submit"><span class="material-symbols-outlined">add</span></button>
+  </form>
 </div>
-<form action="add/" method="post" id='new_account_div'>
-  {% csrf_token %}
-  <input name="admin_ident"></input>
-  <span>Add admin</span>
-  <button type="submit"><span class="material-symbols-outlined">add</span></button>
-</form>
 {% endblock %}

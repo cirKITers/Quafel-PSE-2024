@@ -6,39 +6,37 @@
 {%endblock%}
 
 {% block content %}
-<div id="hardware_list">
-  <form id='hardware_search' action="/hardware">
+<div class="page_panel">
+  <div id='hardware_search'>
     <input type="text" name="search" value="{{request.GET.search}}">
     <span>Search</span>
-    <button type="submit"><span class="material-symbols-outlined">search</span></button>
-  </form>
+    <button type="submit" action="/hardware"><span class="material-symbols-outlined">search</span></button>
+  </div>
   <div id='hardware_container'>
     {%for hardware in hardware_profiles %}
-      <form class='hardware_entry' action="delete/" method="post">
+      <form class='hardware_entry' >
         <p>{{ hardware.name }}</p>
         <p>{{ hardware.uuid }}</p>
-        <button class="icon_button" name="hardware_id" value={{hardware.uuid}}><span class="material-symbols-outlined">delete</span></button>
-      </form>  
+        <button class="icon_button" name="hardware_id" value={{hardware.uuid}} action="configure/" method="get"><span class="material-symbols-outlined">edit</span></button> 
     {% empty %}
       <p id="no_profiles">No hardware profiles found</p>
     {% endfor %}
   </div>
 </div>
-<form action='add/' method="post" id='add_hardware_container'>
+<div class='page_panel'>
   {% csrf_token %}
   <div id="add_hardware_name">
-    <input required name="name"></input>
+    <input name="name">
     <span>Name</span>
   </div>
   <div id="add_hardware_description">
-    <textarea fixed=True required name="description"></textarea>
+    <textarea name="description"></textarea>
     <span>Description</span>
   </div>
   <div id="add_hardware_connection">
-    <input required name="connection"></input>
+    <input name="connection">
     <span>Connection</span>
   </div>
-  
-  <button type='submit'>Submit</button>
-</form>
+  <button id="add_hardware_button" type='submit' action='add/' method="post">Submit</button>
+</div>
 {% endblock %}

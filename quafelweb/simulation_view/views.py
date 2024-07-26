@@ -32,15 +32,15 @@ class SimulationView:
 
     # Get all possible configurations from existing runs in the database
     values = {
-      "qubit" : set(SimulationRun.objects.values_list("qubits", flat=True)) or { 0 },
+      "qubits" : set(SimulationRun.objects.values_list("qubits", flat=True)) or { 0 },
       "depth" : set(SimulationRun.objects.values_list("depth", flat=True)) or { 0 },
-      "shot" :  set(SimulationRun.objects.values_list("shots", flat=True)) or { 0 },
+      "shots" :  set(SimulationRun.objects.values_list("shots", flat=True)) or { 0 },
     }
     
   
-    selected_range = request.GET.get("selected_conf") or "qubit" 
+    selected_range = request.GET.get("selected_conf") or "qubits" 
 
-    for name in ["qubit", "depth", "shot"]:
+    for name in ["qubits", "depth", "shots"]:
       max_v = min(int(request.GET.get(name + "_max") or max(values[name])), max(values[name]))
       min_v = max(int(request.GET.get(name + "_min") or min(values[name])), min(values[name]))
       
@@ -52,14 +52,14 @@ class SimulationView:
       context[name + "_max"] = max_v
 
     conf_filter = {
-      "qubits__gte" : min(context["qubit_range"]),
-      "qubits__lte" : max(context["qubit_range"]),
+      "qubits__gte" : min(context["qubits_range"]),
+      "qubits__lte" : max(context["qubits_range"]),
 
       "depth__gte" : min(context["depth_range"]),
       "depth__lte" : max(context["depth_range"]),
       
-      "shots__gte" : min(context["shot_range"]),
-      "shots__lte" : max(context["shot_range"]),
+      "shots__gte" : min(context["shots_range"]),
+      "shots__lte" : max(context["shots_range"]),
     }
       
     # Create a data structure for chart.js
@@ -86,4 +86,4 @@ class SimulationView:
       "scale_type" : "logarithmic"
     }
       
-    return render(request, "simulation.html", context=context)
+    return render(request, "simulation_view.html", context=context)

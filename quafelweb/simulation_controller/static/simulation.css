@@ -1,0 +1,47 @@
+#env_container{
+  overflow: auto;
+  height: 20em;
+}
+
+#env_container div {
+  width: 100%;
+  
+  display: grid;
+  grid-auto-flow: column;
+  align-items: left;
+}
+
+#env_container div * {
+  width: 10em;
+}
+
+.conf_selection {
+  align-items: baseline;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 2em;
+  border: 2px solid black;
+  padding: 1em 2em;
+  box-sizing: border-box;
+}
+
+.conf_selection input,
+.conf_selection select {
+  width: 15em;
+  margin-bottom: 2em;
+}
+
+.selection_group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#query_button {
+  width: 100%;
+}
+
+#filter_menu {
+  display: grid;
+  grid-auto-flow: column;
+}

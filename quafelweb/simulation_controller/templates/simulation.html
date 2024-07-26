@@ -1,0 +1,143 @@
+{% extends "core.html" %}
+
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'simulation.css' %}">
+{% endblock%}
+
+{% block content %}
+<div class="page_panel">
+  
+  <!-- Qubits -->
+  <div class='conf_selection'>
+
+    <h4>Qubits</h4>
+    <div class="selection_group">
+      <div>
+        <input name="qubits_min" type='number' value={{qubits_min}}>
+        <span>From</span>
+      </div>
+      <div>
+        <input name="qubits_max" type='number' value={{qubits_max}}>
+        <span>To</span>
+      </div>
+    </div>
+    <div class="selection_group">
+      <div>
+        <input name="qubits_increment" type='number' value={{qubits_increment}}>
+        <span>Increment</span>
+      </div>
+      <div>
+        <select name="qubits_increment_type" type='select'>
+          <option value="lin" {% if qubits_increment_type == "lin" %}selected{% endif%}>Linear</option>
+          <option value="log" {% if qubits_increment_type == "log" %}selected{% endif%}>Logarithmic</option>
+        </select>
+        <span>Increment type</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Depth -->
+
+  <div class='conf_selection'>
+    <h4>Depth</h4>
+    <div class="selection_group">
+      <div>
+        <input name="depth_min" type='number' value={{depth_min}}>
+        <span>From</span>
+      </div>
+      <div>
+        <input name="depth_max" type='number' value={{depth_max}}>
+        <span>To</span>
+      </div>
+    </div>
+    <div class="selection_group">
+      <div>
+        <input name="depth_increment" type='number' value={{depth_increment}}>
+        <span for="depth_increment">Increment</span>
+      </div>
+      <div>
+        <select name="depth_increment_type" type='select'>
+          <option value="lin" {% if depth_increment_type == "lin" %}selected{% endif%}>Linear</option>
+          <option value="log" {% if depth_increment_type == "log" %}selected{% endif%}>Logarithmic</option>
+        </select>
+        <span for="depth_increment_type">Increment type</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shots -->
+  
+  <div class='conf_selection'>
+    <h4>Shots</h4>
+    <div class="selection_group">
+      <div>
+        <input name="shots_min" type='number' value={{shots_min}}>
+        <span>From</span>
+      </div>
+      <div>
+        <input name="shots_max" type='number' value={{shots_max}}>
+        <span>To</span>
+      </div>
+    </div>
+    <div class="selection_group">
+      <div>
+        <input name="shots_increment" type='number' value={{shots_increment}}></input>
+        <span>Increment</span>
+      </div>
+      <div>
+        <select name="shots_increment_type" type='select'>
+          <option value="lin" {% if shots_increment_type == "lin" %}selected{% endif%}>Linear</option>
+          <option value="log" {% if shots_increment_type == "log" %}selected{% endif%}>Logarithmic</option>
+        </select>
+        <span>Increment type</span>
+      </div>
+    </div>
+  </div>
+  <button id="query_button">Update</button>
+</div>
+<div class="page_panel">
+  <div id="filter_menu">
+    <button id="simulation_conf_submit" type="submit" method="get" name="check_all">All</button>
+    <div class="dropdown">
+      <div class="dropbtn">{{ request.GET.hardware_filter|default:"Hardware"}}</div>
+      <div class="dropdown-content">
+        {% if request.GET.hardware_filter %}
+          <button name="hardware_filter" type="submit" value="">All</button>
+        {% endif %}
+        {% for hardware in hardware_profiles %}
+          {% if request.GET.hardware_filter != hardware.name%}
+            <button name="hardware_filter" type="submit" value="{{hardware.name}}">{{hardware.name}}</button>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="dropdown">
+      <div class="dropbtn">{{ request.GET.simulator_filter|default:"Simulator"}}</div>
+      <div class="dropdown-content">
+        {% if request.GET.simulator_filter %}
+          <button name="simulator_filter" type="submit" value="">All</button>
+        {% endif %}
+        {% for simulator in simulator_profiles %}
+          {% if request.GET.simulator_filter != simulator.name%}
+            <button name="simulator_filter" type="submit" value="{{simulator.name}}">{{simulator.name}}</button>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <p>Finished</p>
+  </div>
+  <div id="env_container">
+    {% for env in envs %}
+      <div class="env_entry">
+        <input type="checkbox" name={{ env.3 }} {% if env.4 %}checked{% endif %}></button>
+        <p>{{env.0.name}}</p>
+        <p>{{env.1.name}}</p>
+        <p>{{env.2}}/{{max_amount}}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <button id="simulation_conf_submit" type="submit" method="get">Compute</button>
+</div>
+{% endblock %}

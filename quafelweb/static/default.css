@@ -83,27 +83,14 @@ body {
   flex-direction: row;
   height: calc(100% - 11em);
   flex-flow: row;
-}
-
-
-/* labeled_button */
-.labeled_button {
-  position: relative;
-  display: flex;
   justify-content: space-around;
-  flex-direction: column;
-  text-align: center;
-  border: none;
-  border-radius: 50%;
-  padding: 2%;
+  width: 100%;
 }
 
-.labeled_button span {
-  width: max-content;
-  height: max-content;
-  text-align: center;
-}
-
-button:disabled {
-  opacity: 0.5;
+.page_panel {
+  width: 40em;
+  height: 100%;
+  box-sizing: border-box;
+  padding-bottom: 2em;
+  position: relative;
 }
