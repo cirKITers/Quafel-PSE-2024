@@ -12,16 +12,24 @@
 }
 
 
-input {
+
+
+input:not([type="checkbox"]),
+select {
   width: 100%;
   font-size: 0.8em;
   padding: 0 1em;
   box-sizing: border-box;
   position: relative;
+  border: 1px solid black;
+  height: 4em;
+  position: relative;
 }
 
+
 input + span,
-textarea + span {
+textarea + span,
+select + span {
   position: absolute;
   left: 0;
   top: 0;
@@ -41,6 +49,8 @@ textarea {
   font-size: 0.9em;
   padding: 1em;
   box-sizing: border-box;
+  
+  border: 1px solid black;
 }
 
 .link_button,
@@ -55,6 +65,7 @@ button {
   
   font-size: 0.9em;
   font-weight: bold;
+  box-sizing: border-box  ;
 }
 
 
@@ -82,33 +93,6 @@ button:active {
   top: 1px;
 }
 
-input[type=number] {
-  /*for absolutely positioning spinners*/
-  position: relative; 
-  padding: 5px;
-  padding-right: 25px;
-}
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  opacity: 0;
-}
-
-input[type=number]::-webkit-outer-spin-button, 
-input[type=number]::-webkit-inner-spin-button {
-  -webkit-appearance: inner-spin-button !important;
-  width: 25px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-}
-
-input[type='number'] {
-  width: 3em;
-  height: 80%;
-  padding: 0.3em;
-}
 
 /* Dropdown */
 
@@ -129,6 +113,7 @@ input[type='number'] {
   justify-content: space-between;
   text-overflow: ellipsis;
 }
+
 
 .dropbtn:after {
   content: 'chevron_right';
@@ -190,3 +175,27 @@ input[type='number'] {
 .dropdown:hover .dropdown-content {
   display: block !important; 
 }
+
+
+/* labeled_button */
+.labeled_button {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  text-align: center;
+  border: none;
+  border-radius: 50%;
+  padding: 2%;
+}
+
+.labeled_button span {
+  width: max-content;
+  height: max-content;
+  text-align: center;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+

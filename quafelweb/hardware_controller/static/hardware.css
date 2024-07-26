@@ -1,8 +1,3 @@
-
-#site_content {
-  justify-content: space-between;
-  width: 100%;
-}
 #hardware_container {
   overflow: auto;
   width: 40em;
@@ -41,37 +36,42 @@
   font-weight: 2em;
 }
 
-#add_hardware_container {
-  width: 40em;
+
+#add_hardware_name,
+#add_hardware_description,
+#add_hardware_connection {
+  margin-bottom: 2em;
 }
 
-
-#add_hardware_container div {
-  margin: 2em 0;
-}
-
-#add_hardware_container div:first-of-type {
-  margin: 0 0 2em 0;
-}
-
-#add_hardware_container div input,
-#add_hardware_container div textarea {
+#add_hardware_description div input,
+#add_hardware_description div textarea {
   width: 100%;
   height: 4em;
 }
 
 
-#add_hardware_container div textarea{
+#add_hardware_description textarea{
   height: 15em;
   resize: none;
   overflow: auto;
 }
 
-#add_hardware_container button {
+#add_hardware_button {
   width: 100%;
 }
 
 .hardware_entry .icon_button:hover {
   transition-duration: 0.2s;
   color: red;
+}
+
+#button_array {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#button_array button,
+#button_array a {
+  width: 10em;
 }

@@ -132,3 +132,9 @@ OPENID_CLIENT_ID = os.environ["OPENID_KIT_CLIENT_ID"]
 
 OPENID_CONF_URL = "https://oidc.scc.kit.edu/auth/realms/kit/.well-known/openid-configuration"
 OPENID_CLIENT_IDENT = 'email'
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]

@@ -9,7 +9,7 @@ class HardwareProfile(models.Model):
 
   name = models.CharField(max_length=100)
 
-  description = models.CharField(max_length=1000)
+  description = models.CharField(max_length=500)
 
   # example "clust-gpu://192.168.0.95:22"
   protocol = models.CharField(max_length=100)
@@ -20,6 +20,7 @@ class HardwareProfile(models.Model):
 
   archived = models.BooleanField(default=False)
 
+  needs_totp = models.BooleanField(default=False)
 
-
-
+  def __str__(self):
+        return self.name + " " + self.description + " " + self.protocol + " " + self.ip_addr + " " + str(self.port_addr) + " " + str(self.archived)

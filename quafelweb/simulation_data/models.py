@@ -37,9 +37,13 @@ class SimulationRun(models.Model):
   finished = models.BooleanField(default=False)
 
   expressibility = models.FloatField()
-
+  
   entangling_capability = models.FloatField()
 
   durations = ArrayField(models.FloatField(), 100)
 
   duration_avg = models.FloatField(default=0.0)
+  
+  def __str__(self):
+    return self.hardware_profile.name + " " + self.simulator_name.name + " " + self.user + " " + str(self.shots) + " " + str(self.qbits) + " " + str(self.depth) + " " + str(self.evals) + " " + str(self.finished) + " " + str(self.expressability) + " " + str(self.entangelment_cap) + " " + str(self.durations)
+
