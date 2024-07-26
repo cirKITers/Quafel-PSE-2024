@@ -46,55 +46,55 @@ class SimulationRequestView:
             "shots__in": context["shots_values"],
         }
 
-      if inc_type == "linear" or increment == 1:
-        context[conf + "_values"] = list(range(min_v, max_v + 1, increment))
-      else:
-        context[conf + "_values"] = [int(increment ** i) for i in range(int(math.log(min_v, increment)), int(math.log(max_v, increment) + 1))]  
+        if inc_type == "linear" or increment == 1:
+            context[conf + "_values"] = list(range(min_v, max_v + 1, increment))
+        else:
+            context[conf + "_values"] = [int(increment ** i) for i in range(int(math.log(min_v, increment)), int(math.log(max_v, increment) + 1))]  
 
 
 
-    conf_filter = {
-      "qubits__in" : context["qubits_values"],
-      "depth__in" : context["depth_values"],
-      "shots__in" : context["shots_values"],
-    }
-    
-    # get selected envs
-    envs = list()
-    for hp, sp in itertools.product(HardwareProfile.objects.all(), SimulatorProfile.objects.all()):
-      if hfilter := request.GET.get("hardware_filter"):
-        if hfilter != hp.name: continue
+        conf_filter = {
+        "qubits__in" : context["qubits_values"],
+        "depth__in" : context["depth_values"],
+        "shots__in" : context["shots_values"],
+        }
+        
+        # get selected envs
+        envs = list()
+        for hp, sp in itertools.product(HardwareProfile.objects.all(), SimulatorProfile.objects.all()):
+            if hfilter := request.GET.get("hardware_filter"):
+                if hfilter != hp.name: continue
 
-      if sfilter := request.GET.get("simulator_filter"):
-        if sfilter != sp.name: continue
-      
-      name = f"ENV::{hp.uuid}::{sp.name}" 
-               
-      finished_runs = SimulationRun.objects.filter(hardware=hp.uuid, simulator=sp.name, **conf_filter).count()
-      selected = bool(request.GET.get(name, False))
+            if sfilter := request.GET.get("simulator_filter"):
+                if sfilter != sp.name: continue
+            
+            name = f"ENV::{hp.uuid}::{sp.name}" 
+                    
+            finished_runs = SimulationRun.objects.filter(hardware=hp.uuid, simulator=sp.name, **conf_filter).count()
+            selected = bool(request.GET.get(name, False))
 
-      envs.append([hp, sp, finished_runs, name, selected])
-    
-    # (un)check all functionality 
-    if "check_all" in request.GET:
-      value = not all(env[4] for env in envs)
-      for env in envs:
-        env[4] = value
+            envs.append([hp, sp, finished_runs, name, selected])
+        
+        # (un)check all functionality 
+        if "check_all" in request.GET:
+            value = not all(env[4] for env in envs)
+            for env in envs:
+                env[4] = value
 
 
-    # Sort after hardware then simulator
-    envs.sort(key=lambda x: x[1].name)
-    envs.sort(key=lambda x: x[0].name) 
+        # Sort after hardware then simulator
+        envs.sort(key=lambda x: x[1].name)
+        envs.sort(key=lambda x: x[0].name) 
 
-    context["envs"] = envs
-    context["max_amount"] = math.prod(len(context[name + "_values"]) for name in ["qubits", "depth", "shots"])
+        context["envs"] = envs
+        context["max_amount"] = math.prod(len(context[name + "_values"]) for name in ["qubits", "depth", "shots"])
 
-    context["hardware_profiles"] = HardwareProfile.objects.all()
-    context["simulator_profiles"] = SimulatorProfile.objects.all()
+        context["hardware_profiles"] = HardwareProfile.objects.all()
+        context["simulator_profiles"] = SimulatorProfile.objects.all()
 
-    context["selected_hardware"] = set(env[0] for env in envs if env[4])
+        context["selected_hardware"] = set(env[0] for env in envs if env[4])
 
-    return render(request, "simulation.html", context=context)
+        return render(request, "simulation.html", context=context)
 
     @AccountView.require_login
     def select_environments(request):
