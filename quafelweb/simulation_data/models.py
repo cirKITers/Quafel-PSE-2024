@@ -1,13 +1,20 @@
-'''
+"""
 Defines the models used to store SimulationRuns in an database
-'''
+"""
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 from hardware_controller.models import HardwareProfile
+from quafel_simulators.base.simulator import QuafelSimulatorBase
 
 
-class SimulatorProfile(models.Model):
+class SimulatorProfile(models.Model, QuafelSimulatorBase):
+
+  def get_name(self) -> str:
+      return self.name
+
+  def get_version(self) -> str:
+      return "latest"
 
   name = models.CharField(max_length=50, primary_key=True, unique=True)
 
