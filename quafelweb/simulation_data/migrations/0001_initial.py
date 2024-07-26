@@ -10,31 +10,61 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('hardware_controller', '0001_initial'),
+        ("hardware_controller", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SimulatorProfile',
+            name="SimulatorProfile",
             fields=[
-                ('name', models.CharField(max_length=50, primary_key=True, serialize=False, unique=True)),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=50, primary_key=True, serialize=False, unique=True
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='SimulationRun',
+            name="SimulationRun",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user', models.CharField(max_length=100)),
-                ('shots', models.IntegerField()),
-                ('qubits', models.IntegerField()),
-                ('depth', models.IntegerField()),
-                ('finished', models.BooleanField(default=False)),
-                ('expressibility', models.FloatField()),
-                ('entangling_capability', models.FloatField()),
-                ('durations', django.contrib.postgres.fields.ArrayField(base_field=models.FloatField(), size=100)),
-                ('duration_avg', models.FloatField(default=0.0)),
-                ('hardware', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hardware_controller.hardwareprofile')),
-                ('simulator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='simulation_data.simulatorprofile')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("user", models.CharField(max_length=100)),
+                ("shots", models.IntegerField()),
+                ("qubits", models.IntegerField()),
+                ("depth", models.IntegerField()),
+                ("finished", models.BooleanField(default=False)),
+                ("expressibility", models.FloatField()),
+                ("entangling_capability", models.FloatField()),
+                (
+                    "durations",
+                    django.contrib.postgres.fields.ArrayField(
+                        base_field=models.FloatField(), size=100
+                    ),
+                ),
+                ("duration_avg", models.FloatField(default=0.0)),
+                (
+                    "hardware",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="hardware_controller.hardwareprofile",
+                    ),
+                ),
+                (
+                    "simulator",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="simulation_data.simulatorprofile",
+                    ),
+                ),
             ],
         ),
     ]

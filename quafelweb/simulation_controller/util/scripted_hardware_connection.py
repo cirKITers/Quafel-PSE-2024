@@ -1,6 +1,7 @@
 """
 This file contains the definition of a hardware connection that is controlled by a script.
 """
+
 from hardware_controller.models import HardwareProfile
 from quafel_simulators.base.hardware import QuafelHardwareBase
 
@@ -11,13 +12,11 @@ class HardwareWithScript(QuafelHardwareBase):
     """
 
     def __init__(self, hardware_profile: HardwareProfile, username, password, totp):
-        """
-        
-        """
+        """ """
 
         self.hardware_profile = hardware_profile
 
-        # The scripts are defined under: 
+        # The scripts are defined under:
         # ./scripts/<script_type>/run.bash
         # ./scripts/<script_type>/setup.bash
 

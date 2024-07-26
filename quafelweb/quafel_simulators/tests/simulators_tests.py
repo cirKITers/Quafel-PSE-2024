@@ -1,6 +1,7 @@
 """
 Tests for the simulators module
 """
+
 from pathlib import Path
 
 from quafel_simulators.simulators import QuafelSimulators
@@ -36,7 +37,9 @@ class TestSimulators(TestCase):
 
         # write the file content
         with open("simulators.json", "w", encoding="utf-8") as file:
-            file.write('[{"name": "sim1", "version": "1.0"}, {"name": "sim2", "version": "2.0"}]')
+            file.write(
+                '[{"name": "sim1", "version": "1.0"}, {"name": "sim2", "version": "2.0"}]'
+            )
 
         # Check if the simulators are read
         assert len(QuafelSimulators().get_simulators()) == 2
@@ -52,15 +55,19 @@ class TestSimulators(TestCase):
 
         # write the file content
         with open("simulators.json", "w", encoding="utf-8") as file:
-            file.write('[{"name": "sim1", "version": "1.0"}, {"name": "sim2", "version": "2.0"}]')
+            file.write(
+                '[{"name": "sim1", "version": "1.0"}, {"name": "sim2", "version": "2.0"}]'
+            )
 
         first_read = QuafelSimulators().get_simulators()
 
         # change the file content
         with open("simulators.json", "w", encoding="utf-8") as file:
-            file.write('[{"name": "sim1", "version": "1.0"}, '
-                       '{"name": "sim2", "version": "2.0"}, '
-                       '{"name": "sim3", "version": "3.0"}]')
+            file.write(
+                '[{"name": "sim1", "version": "1.0"}, '
+                '{"name": "sim2", "version": "2.0"}, '
+                '{"name": "sim3", "version": "3.0"}]'
+            )
 
         last_read = QuafelSimulators().get_simulators()
 

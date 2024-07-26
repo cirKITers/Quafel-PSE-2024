@@ -129,10 +129,18 @@
       responsive: true,
       scales: {
         x: {
-          title: graph_data.x_axis
+          display: true,
+          title: {
+            display: true,
+            text: graph_data.x_axis,
+          }
         },
         y: {
-          title: graph_data.y_axis,
+          display: true,
+          title: {
+            display: true,
+            text: graph_data.y_axis,
+          },
           type: graph_data.scale_type,
         }
       },

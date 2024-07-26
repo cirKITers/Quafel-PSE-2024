@@ -48,7 +48,8 @@ def build_quafel_script_setup(simulation_request: QuafelSimulationRequest) -> st
 
 
 def build_quafel_script_submit(
-        simulation_request: QuafelSimulationRequest, output_hardware: QuafelOutputHardware) -> str:
+    simulation_request: QuafelSimulationRequest, output_hardware: QuafelOutputHardware
+) -> str:
     """
     Build the quafel script
     """
@@ -58,14 +59,19 @@ def build_quafel_script_submit(
     configuration = build_quafel_yml_configuration(simulation_request)
     simulation_id = simulation_request.get_id()
 
-    script = script.replace("CONFIGURATION=\"\"", "CONFIGURATION=\'" + configuration + "\'")
-    script = script.replace("OUTPUT_LOCATION=\"\"", "OUTPUT_LOCATION=\'" + output_hardware.get_output_location() + "\'")
-    script = script.replace("SIMULATION_ID=\"\"", "SIMULATION_ID=\'" + simulation_id + "\'")
+    script = script.replace('CONFIGURATION=""', "CONFIGURATION='" + configuration + "'")
+    script = script.replace(
+        'OUTPUT_LOCATION=""',
+        "OUTPUT_LOCATION='" + output_hardware.get_output_location() + "'",
+    )
+    script = script.replace('SIMULATION_ID=""', "SIMULATION_ID='" + simulation_id + "'")
 
     return script
 
 
-def build_quafel_script_pull_output(output_hardware: QuafelOutputHardware, submit_id: str) -> str:
+def build_quafel_script_pull_output(
+    output_hardware: QuafelOutputHardware, submit_id: str
+) -> str:
     """
     Build the quafel script
     """
@@ -79,11 +85,22 @@ def build_quafel_script_pull_output(output_hardware: QuafelOutputHardware, submi
         with open(path, mode="r", encoding="utf-8") as file:
             script = file.read()
 
-    script = script.replace("REMOTE_HOST=\"\"", "REMOTE_HOST=\'" + output_hardware.get_host() + "\'")
-    script = script.replace("REMOTE_PORT=\"\"", "REMOTE_PORT=" + str(output_hardware.get_port()))
-    script = script.replace("REMOTE_USERNAME=\"\"", "REMOTE_USERNAME=\'" + output_hardware.get_username() + "\'")
-    script = script.replace("REMOTE_PASSWORD=\"\"", "REMOTE_PASSWORD=\'" + output_hardware.get_password() + "\'")
-    script = script.replace("OUTPUT_LOCATION=\"\"", "OUTPUT_LOCATION=\'" + output_hardware.get_output_location() + "\'")
-    script = script.replace("SIMULATION_ID=\"\"", "SIMULATION_ID=\'" + submit_id + "\'")
+    script = script.replace(
+        'REMOTE_HOST=""', "REMOTE_HOST='" + output_hardware.get_host() + "'"
+    )
+    script = script.replace(
+        'REMOTE_PORT=""', "REMOTE_PORT=" + str(output_hardware.get_port())
+    )
+    script = script.replace(
+        'REMOTE_USERNAME=""', "REMOTE_USERNAME='" + output_hardware.get_username() + "'"
+    )
+    script = script.replace(
+        'REMOTE_PASSWORD=""', "REMOTE_PASSWORD='" + output_hardware.get_password() + "'"
+    )
+    script = script.replace(
+        'OUTPUT_LOCATION=""',
+        "OUTPUT_LOCATION='" + output_hardware.get_output_location() + "'",
+    )
+    script = script.replace('SIMULATION_ID=""', "SIMULATION_ID='" + submit_id + "'")
 
     return script

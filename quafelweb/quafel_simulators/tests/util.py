@@ -4,6 +4,7 @@ The tests need some interfaces implemented to test the simulators.
 Also, the docker needs to be running for the tests to pass, because hardware.profiles and the output server are 
 required for the tests to pass.
 """
+
 import os
 import unittest
 from pathlib import Path
@@ -38,12 +39,16 @@ class TestClassHardware(QuafelHardwareBase):
 
     def get_setup_script(self) -> str:
         # read the setup script from the file
-        with open("../script/test_script_setup.bash", "r", encoding="utf-8") as test_script_setup_file:
+        with open(
+            "../script/test_script_setup.bash", "r", encoding="utf-8"
+        ) as test_script_setup_file:
             return test_script_setup_file.read()
 
     def get_run_script(self) -> str:
         # read the run script from the file
-        with open("../script/test_script_run.bash", "r", encoding="utf-8") as test_script_run_file:
+        with open(
+            "../script/test_script_run.bash", "r", encoding="utf-8"
+        ) as test_script_run_file:
             return test_script_run_file.read()
 
 
@@ -102,6 +107,7 @@ class TestClassSimulationRequest2(TestClassSimulationRequest):
     """
     Test simulation request 2
     """
+
     def get_max_qubits(self) -> int:
         return 2
 

@@ -1,6 +1,7 @@
 """
 Tests for the output module.
 """
+
 from pathlib import Path
 
 from quafel_simulators.output import QuafelOutputHardware
@@ -31,7 +32,13 @@ class TestOutput(TestCase):
         assert Path("output.json").exists()
 
         read = read_dict("output.json")
-        assert read == {"output_location": "", "host": "", "port": 22, "username": "", "password": ""}
+        assert read == {
+            "output_location": "",
+            "host": "",
+            "port": 22,
+            "username": "",
+            "password": "",
+        }
 
     def test_read_output_hardware_configuration_file(self):
         """
@@ -39,13 +46,16 @@ class TestOutput(TestCase):
         """
 
         # write the file content
-        write_json_file("output.json", {
-            "output_location": "test",
-            "host": "localhost",
-            "port": 2223,
-            "username": "user",
-            "password": "password"
-        })
+        write_json_file(
+            "output.json",
+            {
+                "output_location": "test",
+                "host": "localhost",
+                "port": 2223,
+                "username": "user",
+                "password": "password",
+            },
+        )
 
         output_hardware = QuafelOutputHardware()
         assert output_hardware.update()

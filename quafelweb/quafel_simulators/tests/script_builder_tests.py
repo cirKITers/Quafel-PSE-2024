@@ -6,8 +6,12 @@ import yaml
 
 from quafel_simulators.output import QuafelOutputHardware
 from quafel_simulators.tests.util import TestCase, TestClassSimulationRequest
-from quafel_simulators.util.script_builder import build_quafel_yml_configuration, build_quafel_script_submit, \
-    build_quafel_script_setup, build_quafel_script_pull_output
+from quafel_simulators.util.script_builder import (
+    build_quafel_yml_configuration,
+    build_quafel_script_submit,
+    build_quafel_script_setup,
+    build_quafel_script_pull_output,
+)
 
 
 class TestScriptBuilder(TestCase):
@@ -34,7 +38,9 @@ class TestScriptBuilder(TestCase):
         Test the building of the quafel script
         """
 
-        build_script = build_quafel_script_submit(TestClassSimulationRequest(), QuafelOutputHardware())
+        build_script = build_quafel_script_submit(
+            TestClassSimulationRequest(), QuafelOutputHardware()
+        )
         print(build_script)
 
     def test_build_quafel_script_setup(self):
@@ -45,7 +51,7 @@ class TestScriptBuilder(TestCase):
         build_script = build_quafel_script_setup(TestClassSimulationRequest())
         print(build_script)
 
-        assert str.find(build_script, "\'") == -1
+        assert str.find(build_script, "'") == -1
 
     def test_build_quafel_script_pull_output(self):
         """

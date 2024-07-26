@@ -9,16 +9,31 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('simulation_data', '0001_initial'),
+        ("simulation_data", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SimulationRequest',
+            name="SimulationRequest",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user', models.CharField(max_length=40)),
-                ('requested_runs', models.ForeignKey(max_length=1000, on_delete=django.db.models.deletion.CASCADE, to='simulation_data.simulationrun')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("user", models.CharField(max_length=40)),
+                (
+                    "requested_runs",
+                    models.ForeignKey(
+                        max_length=1000,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="simulation_data.simulationrun",
+                    ),
+                ),
             ],
         ),
     ]

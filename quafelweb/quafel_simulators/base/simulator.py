@@ -3,6 +3,7 @@ Base class for a simulator object.
 This class also is the registry of all simulators known to the system.
 The simulators known to the system are stored in a json-like dictionary.
 """
+
 from abc import abstractmethod
 
 

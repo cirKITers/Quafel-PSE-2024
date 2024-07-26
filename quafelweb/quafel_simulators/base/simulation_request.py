@@ -2,7 +2,6 @@
 Here the simulation request is defined to request a simulation from specific a hardware profile and data.
 """
 
-
 from abc import abstractmethod
 from enum import Enum
 
@@ -14,6 +13,7 @@ class IncrementType(Enum):
     """
     The increment types for the simulation request
     """
+
     LINEAR = "linear"
     EXPONENTIAL = "exp2"
 
@@ -31,6 +31,7 @@ class IncrementType(Enum):
             return IncrementType.EXPONENTIAL
         else:
             return None
+
 
 class QuafelSimulationRequest:
     """
@@ -128,15 +129,17 @@ class QuafelSimulationRequest:
         """
         Get a unique identifier for the simulation request
         """
-        return (f"{self.get_hardware().get_id()}_"
-                f"{self.get_simulator().get_name()}_"
-                f"{self.get_simulator().get_version()}_"
-                f"{self.get_min_qubits()}_"
-                f"{self.get_max_qubits()}_"
-                f"{self.get_qubits_increment()}_"
-                f"{self.get_min_depth()}_"
-                f"{self.get_max_depth()}_"
-                f"{self.get_depth_increment()}_"
-                f"{self.get_min_shots()}_"
-                f"{self.get_max_shots()}_"
-                f"{self.get_shots_increment()}")
+        return (
+            f"{self.get_hardware().get_id()}_"
+            f"{self.get_simulator().get_name()}_"
+            f"{self.get_simulator().get_version()}_"
+            f"{self.get_min_qubits()}_"
+            f"{self.get_max_qubits()}_"
+            f"{self.get_qubits_increment()}_"
+            f"{self.get_min_depth()}_"
+            f"{self.get_max_depth()}_"
+            f"{self.get_depth_increment()}_"
+            f"{self.get_min_shots()}_"
+            f"{self.get_max_shots()}_"
+            f"{self.get_shots_increment()}"
+        )

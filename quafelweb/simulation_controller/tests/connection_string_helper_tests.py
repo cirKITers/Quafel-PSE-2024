@@ -4,7 +4,9 @@ Test the disassembling of a connection string
 
 import unittest
 
-from quafelweb.simulation_controller.util.connection_string_helper import disassemble_connection_string
+from quafelweb.simulation_controller.util.connection_string_helper import (
+    disassemble_connection_string,
+)
 
 
 class TestConnectionStringHelper(unittest.TestCase):

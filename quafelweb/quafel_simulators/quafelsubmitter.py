@@ -14,6 +14,7 @@ class QuafelSubmissionState(Enum):
     """
     State of the request submitted
     """
+
     READY = 0  # Ready to return the output
     RUNNING = 1  # Running at the moment
     ERROR = -1  # Error occurred
@@ -40,7 +41,9 @@ class QuafelSubmitter:
         # Change this to a custom object of quafel_output_hardware to disable the configuration file
         self.quafel_output_hardware: QuafelOutputHardware = QuafelOutputHardware()
 
-        self._requests: dict[str, QuafelSubmissionState] = {}  # dict of requests and their states (id: state)
+        self._requests: dict[str, QuafelSubmissionState] = (
+            {}
+        )  # dict of requests and their states (id: state)
         self._requests_lock = Lock()  # Lock for the requests
 
     def _add_request(self, simulation_request: QuafelSimulationRequest):
@@ -57,7 +60,9 @@ class QuafelSubmitter:
         with self._requests_lock:
             return simulation_request.get_id() in self._requests
 
-    def _set_state(self, simulation_request: QuafelSimulationRequest, state: QuafelSubmissionState):
+    def _set_state(
+        self, simulation_request: QuafelSimulationRequest, state: QuafelSubmissionState
+    ):
         """
         Set the state of the request
         """
@@ -76,7 +81,9 @@ class QuafelSubmitter:
         Submit a simulation request
         """
 
-        hardware_connection = SubmitConnection(simulation_request, self.quafel_output_hardware)
+        hardware_connection = SubmitConnection(
+            simulation_request, self.quafel_output_hardware
+        )
         self._add_request(simulation_request)
 
         if not hardware_connection.connect():
@@ -117,7 +124,9 @@ class QuafelSubmitter:
 
         return True
 
-    def get_state(self, simulation_request: QuafelSimulationRequest) -> QuafelSubmissionState | None:
+    def get_state(
+        self, simulation_request: QuafelSimulationRequest
+    ) -> QuafelSubmissionState | None:
         """
         Get the state of the request
         :return: The state of the request or None if the request does not exist
@@ -144,7 +153,9 @@ class QuafelSubmitter:
         if not self.quafel_output_hardware.update():
             raise RuntimeError("The output hardware is not configured")
 
-        output_connection = OutputConnection(self.quafel_output_hardware, simulation_request.get_id())
+        output_connection = OutputConnection(
+            self.quafel_output_hardware, simulation_request.get_id()
+        )
         output = output_connection.get_output()
 
         self._remove_request(simulation_request)
