@@ -93,7 +93,9 @@ class SimulationRequestView:
 
   @AccountView.require_login
   def submit_request(request):
-    ...
+    
+    print(request.POST)
+    return "Hello World"
 
 
   @AccountView.require_login

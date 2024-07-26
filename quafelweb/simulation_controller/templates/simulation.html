@@ -138,6 +138,6 @@
       </div>
       {% endfor %}
     </div>
-    <button id="simulation_conf_submit" type="submit" method="get">Compute</button>
+    <button id="simulation_conf_submit" type="submit" method="POST" action="{% url "submit" %}">Compute</button>
 </div>
 {% endblock %}
