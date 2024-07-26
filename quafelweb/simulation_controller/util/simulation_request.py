@@ -12,10 +12,9 @@ def _exp_range(min: int, max: int, increment: int, increment_type: IncrementType
     Compute the range of values.
     """
     if increment_type == IncrementType.LINEAR:
-        return list(range(min, max, increment))
+        return list(range(min, max + 1, increment))
     else:
-        return [min * (increment ** i) for i in range(0, max)]
-
+        return [2 ** i for i in range(min, max + 1, increment)]
 
 class SimulationRequestRange:
     """
@@ -53,7 +52,7 @@ class SimulationRequestRange:
         Check if the range is valid.
         """
 
-        if self.qubits_min < 1:
+        if self.qubits_min < 0:
             raise ValueError("Qubits min must be greater than 0.")
 
         if self.qubits_max < self.qubits_min:
@@ -62,7 +61,7 @@ class SimulationRequestRange:
         if self.qubits_increment < 1:
             raise ValueError("Qubits increment must be greater than 0.")
 
-        if self.shots_min < 1:
+        if self.shots_min < 0:
             raise ValueError("Shots min must be greater than 0.")
 
         if self.shots_max < self.shots_min:
@@ -71,7 +70,7 @@ class SimulationRequestRange:
         if self.shots_increment < 1:
             raise ValueError("Shots increment must be greater than 0.")
 
-        if self.depth_min < 1:
+        if self.depth_min < 0:
             raise ValueError("Depth min must be greater than 0.")
 
         if self.depth_max < self.depth_min:
@@ -80,6 +79,15 @@ class SimulationRequestRange:
         if self.depth_increment < 1:
             raise ValueError("Depth increment must be greater than 0.")
 
+    def expanded(self):
+        """
+        Return a new range with the values expanded by one on the edges.
+        """
+        return SimulationRequestRange(
+            self.qubits_min - self.qubits_increment, self.qubits_max + self.qubits_increment, self.qubits_increment, self.qubits_increment_type,
+            self.shots_min - self.shots_increment, self.shots_max + self.shots_increment, self.shots_increment, self.shots_increment_type,
+            self.depth_min - self.depth_increment, self.depth_max + self.depth_increment, self.depth_increment, self.depth_increment_type)
+
     def split(self, run: SimulationRun):
         """
         Split the range in two ranges. 
@@ -87,22 +95,61 @@ class SimulationRequestRange:
         """
 
         try:
+            # Check if it is on the edge
             split1 = SimulationRequestRange(
                 self.qubits_min, run.qubits - 1, self.qubits_increment, self.qubits_increment_type,
-                self.shots_min, run.shots - 1, self.shots_increment, self.shots_increment_type,
-                self.depth_min, run.depth - 1, self.depth_increment, self.depth_increment_type
+                self.shots_min, run.shots, self.shots_increment, self.shots_increment_type,
+                self.depth_min, run.depth, self.depth_increment, self.depth_increment_type
             )
         except ValueError:
             split1 = None
 
         try:
+            # Check if it is on the edge
             split2 = SimulationRequestRange(
-                run.qubits + 1, self.qubits_max, self.qubits_increment, self.qubits_increment_type,
-                run.shots + 1, self.shots_max, self.shots_increment, self.shots_increment_type,
-                run.depth + 1, self.depth_max, self.depth_increment, self.depth_increment_type
+                self.qubits_min, run.qubits, self.qubits_increment, self.qubits_increment_type,
+                self.shots_min, run.shots - 1, self.shots_increment, self.shots_increment_type,
+                self.depth_min, run.depth, self.depth_increment, self.depth_increment_type
             )
         except ValueError:
             split2 = None
+
+        try:
+            # Check if it is on the edge
+            split3 = SimulationRequestRange(
+                self.qubits_min, run.qubits, self.qubits_increment, self.qubits_increment_type,
+                self.shots_min, run.shots, self.shots_increment, self.shots_increment_type,
+                self.depth_min, run.depth - 1, self.depth_increment, self.depth_increment_type
+            )
+        except ValueError:
+            split3 = None
+
+        try:
+            split4 = SimulationRequestRange(
+                run.qubits + 1, self.qubits_max, self.qubits_increment, self.qubits_increment_type,
+                run.shots, self.shots_max, self.shots_increment, self.shots_increment_type,
+                run.depth, self.depth_max, self.depth_increment, self.depth_increment_type
+            )
+        except ValueError:
+            split4 = None
+
+        try:
+            split5 = SimulationRequestRange(
+                run.qubits, self.qubits_max, self.qubits_increment, self.qubits_increment_type,
+                run.shots + 1, self.shots_max, self.shots_increment, self.shots_increment_type,
+                run.depth, self.depth_max, self.depth_increment, self.depth_increment_type
+            )
+        except ValueError:
+            split5 = None
+
+        try:
+            split6 = SimulationRequestRange(
+                run.qubits, self.qubits_max, self.qubits_increment, self.qubits_increment_type,
+                run.shots, self.shots_max, self.shots_increment, self.shots_increment_type,
+                run.depth + 1, self.depth_max, self.depth_increment, self.depth_increment_type
+            )
+        except ValueError:
+            split6 = None
         
         split_to_return = []
 
@@ -110,6 +157,14 @@ class SimulationRequestRange:
             split_to_return.append(split1)
         if split2 is not None:
             split_to_return.append(split2)
+        if split3 is not None:
+            split_to_return.append(split3)
+        if split4 is not None:
+            split_to_return.append(split4)
+        if split5 is not None:
+            split_to_return.append(split5)
+        if split6 is not None:
+            split_to_return.append(split6)
 
         return split_to_return
 
@@ -121,6 +176,7 @@ class SimulationRequestRange:
         for q in _exp_range(self.qubits_min, self.qubits_max, self.qubits_increment, self.qubits_increment_type):
             for s in _exp_range(self.shots_min, self.shots_max, self.shots_increment, self.shots_increment_type):
                 for d in _exp_range(self.depth_min, self.depth_max, self.depth_increment, self.depth_increment_type):
+                    print(f"Checking {q} {s} {d}")
                     if run.qubits == q and run.shots == s and run.depth == d:
                         return True
         return False
@@ -134,8 +190,8 @@ class SimulationRequest(QuafelSimulationRequest):
                  simulation_range: SimulationRequestRange,
                  hardware: HardwareProfile, 
                  simulator: SimulatorProfile,
-                 password: str,
                  username: str,
+                 password: str,
                  top: str):
         self.simulation_range = simulation_range
         self.hardware = hardware

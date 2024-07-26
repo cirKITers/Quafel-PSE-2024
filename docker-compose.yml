@@ -11,21 +11,21 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  hardware_profile_1:
+  hardware.profile:
     build:
       dockerfile: dockerfile/HardwareProfile.Dockerfile
     ports:
       - "2222:22"
     depends_on:
-      - output_server
+      - output.server
 
-  output_server:
+  output.server:
     build:
       dockerfile: dockerfile/OutputServer.Dockerfile
     ports:
       - "2223:22"
 
-  webapp_server:
+  webapp.server:
     build:
       dockerfile: dockerfile/Webapp.Dockerfile
     ports:
@@ -33,8 +33,8 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
-      - hardware_profile_1
-      - output_server
+      - hardware.profile
+      - output.server
 
 volumes:
   postgres_data:

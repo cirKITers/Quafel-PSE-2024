@@ -1,7 +1,7 @@
 """
 Here are util classes that are used in the tests.
 The tests need some interfaces implemented to test the simulators.
-Also, the docker needs to be running for the tests to pass, because hardware_profiles and the output server are 
+Also, the docker needs to be running for the tests to pass, because hardware.profiles and the output server are 
 required for the tests to pass.
 """
 import os

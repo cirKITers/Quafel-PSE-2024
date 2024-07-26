@@ -20,6 +20,18 @@ class IncrementType(Enum):
     def __str__(self):
         return self.value
 
+    def __eq__(self, other):
+        return self.value == other.value
+
+    @staticmethod
+    def get(name):
+        if name == str(IncrementType.LINEAR):
+            return IncrementType.LINEAR
+        elif name == str(IncrementType.EXPONENTIAL):
+            return IncrementType.EXPONENTIAL
+        else:
+            return None
+
 class QuafelSimulationRequest:
     """
     The simulation request class

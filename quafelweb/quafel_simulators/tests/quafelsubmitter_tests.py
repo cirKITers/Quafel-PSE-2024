@@ -20,7 +20,7 @@ def write_output_file_submission():
 
     write_json_file("output.json", {
         "output_location": "~",
-        "host": "output_server",
+        "host": "output.server",
         "port": 22,
         "username": "user",
         "password": "password"
