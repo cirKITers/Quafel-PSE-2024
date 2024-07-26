@@ -127,7 +127,7 @@
         {% endfor %}
       </div>
     </div>
-    <div class="link_button">Finished</div>
+    <b>Finished</b>
   </div>
   <div id="env_container">
     {% for env in envs %}
@@ -135,7 +135,7 @@
         <input type="checkbox" name={{ env.3 }} {% if env.4 %}checked{% endif %}></button>
         <p>{{env.0.name}}</p>
         <p>{{env.1.name}}</p>
-        <p  >{{env.2}}/{{max_amount}}</p>
+        <p class="simulation_progress">{{env.2}}/{{max_amount}}</p>
       </div>
       {% endfor %}
     </div>
@@ -207,15 +207,15 @@
                 </div>
                 <div>
                   <div>
-                    <input name="NAME::{{hardware.name}}">
+                    <input name="NAME::{{hardware.uuid}}">
                     <span>Username</span>
                   </div>
                   <div>
-                    <input type="password" name="PASSWORD::{{hardware.name}}">
+                    <input type="password" name="PASSWORD::{{hardware.uuid}}">
                     <span>Password</span>
                   </div>
                   {% if hardware.needs_totp %}
-                  <input name="TOTP::{{hardware.name}}">
+                  <input name="TOTP::{{hardware.uuid}}">
                   {% endif %}
                 </div>
               </div>

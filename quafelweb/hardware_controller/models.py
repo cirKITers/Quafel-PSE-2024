@@ -14,7 +14,7 @@ class HardwareProfile(models.Model):
   # example "clust-gpu" or "clust-cpu" or "test"
   protocol = models.CharField(max_length=100)
 
-  ip_addr = models.GenericIPAddressField(default='240.0.0.0')
+  ip_addr = models.CharField(default='')
 
   port_addr = models.IntegerField(default=0)
 

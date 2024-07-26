@@ -8,29 +8,7 @@
 {% block content %}
 <form method="post" class="page_panel" action="submit/">
   {% csrf_token %}
-  <input required name="hardware_id" type="hidden" value="{{ hardware.uuid }}"></input>
-  <div>
-    <input required name="hardware_name"  value="{{ hardware.name }}">
-    <span>Name</span>
-  </div>
-  <div>
-    <textarea required name="hardware_description">{{ hardware.description }}</textarea>
-    <span>Description</span>
-  </div>
-  <div>
-    <input required name="connection"  value="{{ hardware.ip_addr }}">
-    <span>Connection</span>
-  </div>
-  
-  <div id="button_array">
-    <a href="{% url "hardware" %}" class="link_button">Back</a>
-    <button type="submit" name="hardware_id" value={{hardware.uuid}}>Save</button>
-    <button type="submit" name="hardware_id" id="delete_button" value={{hardware.uuid}}>Delete</button>
-  </div>
-</form>
-<form method="post" class="page_panel" action="submit/">
-  {% csrf_token %}
-  <input required name="hardware_id" type="hidden" value="{{ hardware.uuid }}"></input>
+  <input name="hardware_id" type="hidden" value="{{ hardware.uuid }}"></input>
   <div>
     <input required name="hardware_name"  value="{{ hardware.name }}">
     <span>Name</span>
