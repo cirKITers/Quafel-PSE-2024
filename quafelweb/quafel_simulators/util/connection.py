@@ -265,6 +265,7 @@ class OutputConnection:
         build_pull_script = build_quafel_script_pull_output(
             self._output_hardware, self._submit_id
         )
+        print(build_pull_script)
         completed_process = subprocess.run(
             ["bash", "-c", build_pull_script], check=False
         )
