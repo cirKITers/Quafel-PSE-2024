@@ -11,7 +11,7 @@ class HardwareProfile(models.Model):
 
   description = models.CharField(max_length=1000)
 
-  # example "clust-gpu://192.168.0.95:22"
+  # example "clust-gpu" or "clust-cpu" or "test"
   protocol = models.CharField(max_length=100)
 
   ip_addr = models.GenericIPAddressField(default='240.0.0.0')
@@ -19,7 +19,3 @@ class HardwareProfile(models.Model):
   port_addr = models.IntegerField(default=0)
 
   archived = models.BooleanField(default=False)
-
-
-
-
