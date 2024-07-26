@@ -7,6 +7,7 @@
 {% endblock%}
 
 {% block content %}
+<form id="form_content">
 <div class="page_panel">
   
   <!-- Qubits -->
@@ -138,6 +139,7 @@
       </div>
       {% endfor %}
     </div>
-    <button id="simulation_conf_submit" type="submit" method="POST" action="{% url "submit" %}">Compute</button>
+    <button id="simulation_conf_submit" type="submit" formmethod="POST" formaction="{% url "submit" %}">Compute</button>
 </div>
+<form>
 {% endblock %}

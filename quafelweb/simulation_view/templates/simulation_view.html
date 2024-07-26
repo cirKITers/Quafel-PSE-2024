@@ -7,6 +7,7 @@
 {%endblock%}
 
 {% block content %}
+<form id="sim_conf_menu">
 <input type="hidden" name="simulator_filter" value="{{ request.GET.simulator_filter }}">
 <input type="hidden" name="hardware_filter" value="{{ request.GET.hardware_filter }}">
 
@@ -20,7 +21,7 @@
 <input type="hidden" name="shots_max" value="{{ shots_max }}">
 <!-- Configuration -->
 <input type="hidden" name="selected_conf" value="{{ request.GET.selected_conf }}">
-<div id="sim_confs">
+
   <div class='sim_conf' {% if request.GET.selected_conf|default:"qubits" == "qubits"%} id='selected_conf' {%endif%}>
     <button type="submit" class="hidden_select_button" name="selected_conf" value="qubits"></button>
     <p>Qubits</p>
@@ -107,8 +108,8 @@
         {% endif %}
       {% endfor %}
     </div>
-  </div>
 </div>
+</form>
 <div id="graph_container">
   <canvas id="graph_canvast"></canvas>
 </div>

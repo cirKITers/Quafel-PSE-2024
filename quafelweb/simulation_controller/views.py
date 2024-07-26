@@ -5,7 +5,7 @@ import math
 from operator import mul
 import random
 from typing import TypedDict
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from account_controller.views import AccountView
 from hardware_controller.models import HardwareProfile
@@ -48,7 +48,7 @@ class SimulationRequestView:
     
     envs = list()
     for hp, sp in itertools.product(HardwareProfile.objects.all(), SimulatorProfile.objects.all()):
-      name = hp.name+sp.name 
+      name = f"ENV::{hp.uuid}::{sp.name}" 
                
       finished_runs = SimulationRun.objects.filter(hardware=hp.uuid, simulator=sp.name, **conf_filter).count()
       selected = bool(request.GET.get(name, False)) if not "check_all" in request.GET else True
@@ -95,7 +95,7 @@ class SimulationRequestView:
   def submit_request(request):
     
     print(request.POST)
-    return "Hello World"
+    return HttpResponse(request, "Hello World")
 
 
   @AccountView.require_login
