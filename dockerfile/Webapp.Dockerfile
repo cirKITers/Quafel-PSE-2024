@@ -3,6 +3,7 @@ FROM ubuntu:latest
 
 # Install OpenSSH server and sudo
 RUN apt-get update && apt-get install -y openssh-server sudo
+RUN apt-get install -y sshpass
 
 # Create the SSH directory and set permissions
 RUN mkdir /var/run/sshd

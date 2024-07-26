@@ -3,6 +3,7 @@ import json
 import math
 import random
 
+from astroid import IfExp
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
@@ -128,7 +129,7 @@ class SimulationRequestView:
                 if not any(data.startswith(tag) for tag in ["NAME", "PASSWORD", "TOTP"]):
                     continue
                 tag, uuid = data.split("::", 1)
-                hp = HardwareProfile.objects.get(name=uuid)
+                hp = HardwareProfile.objects.get(uuid=uuid)
                 auth_data[hp] = {**auth_data.get(hp, dict()), tag: value}
 
             range = SimulationRequestRange(
@@ -148,7 +149,12 @@ class SimulationRequestView:
 
                 for r in ranges_for_submission:
                     simulation_request = SimulationRequest(r, hardware_profile, simulator_profile, username, password, totp)
-                    QuafelSubmitter().submit(simulation_request)
+                    if QuafelSubmitter().submit(simulation_request):
+                        # TODO: Write points to the database with the state finished=False
+                        pass
+                    else:
+                        raise Exception("Submission already queued")
+                    
 
         return HttpResponse(request, "Hello World")
 

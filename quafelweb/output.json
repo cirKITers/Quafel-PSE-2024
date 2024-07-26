@@ -1,1 +1,7 @@
-{"output_location": "~", "host": "output.server", "port": 22, "username": "user", "password": "password"}
+{
+  "output_location": "~", 
+  "host": "output.server", 
+  "port": 22, 
+  "username": "user", 
+  "password": "password"
+}
