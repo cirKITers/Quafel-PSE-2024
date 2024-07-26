@@ -22,7 +22,7 @@ git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 git clone https://github.com/cirKITers/Quafel.git Quafel
 
 # install and setup the quafel repository
-cd Quafel
+cd Quafel || exit 1
 poetry env use ~/.pyenv/versions/3.9.19/bin/python3
 poetry install --without dev
 

@@ -3,7 +3,7 @@ data_generation:
   depth_type: linear
   frameworks:
     - cirq_fw
-  haar_samples_per_qubit: 1
+  haar_samples_per_qubit: 60
   max_depth: 1
   max_qubits: 1
   max_shots: 1
@@ -12,7 +12,7 @@ data_generation:
   min_shots: 1
   qubits_increment: 1
   qubits_type: linear
-  samples_per_parameter: 1
+  samples_per_parameter: 20
   seed: 1113
   shots_increment: 1
   shots_type: linear

@@ -1,7 +1,10 @@
 import random
+
 from django.core.management.base import BaseCommand
+
 from hardware_controller.models import HardwareProfile  # Import your model
 from simulation_data.models import SimulationRun, SimulatorProfile
+
 
 class Command(BaseCommand):
     help = 'Populates the database with example model entries'

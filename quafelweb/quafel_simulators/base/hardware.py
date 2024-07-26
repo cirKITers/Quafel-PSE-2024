@@ -5,10 +5,16 @@ The quafel hardware base is for the runner to get the hardware information to co
 from abc import abstractmethod
 
 
-class HardwareBase:
+class QuafelHardwareBase:
     """
     The base class for the hardware profile
     """
+
+    @abstractmethod
+    def get_id(self) -> str:
+        """
+        Get the ID of the hardware
+        """
 
     @abstractmethod
     def get_host(self) -> str:
@@ -35,9 +41,10 @@ class HardwareBase:
         """
 
     @abstractmethod
-    def needs_totp(self) -> bool:
+    def get_totp(self) -> str | None:
         """
-        Whether the hardware needs a TOTP
+        Get the TOTP of the hardware
+        Returns None if the hardware does not need a TOTP, the TOTP if it does
         """
 
     @abstractmethod

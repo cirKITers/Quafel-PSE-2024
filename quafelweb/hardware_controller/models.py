@@ -1,5 +1,7 @@
-from django.db import models
 import uuid
+
+from django.db import models
+
 
 class HardwareProfile(models.Model):
 
@@ -9,10 +11,10 @@ class HardwareProfile(models.Model):
 
   description = models.CharField(max_length=500)
 
-  # example "clust-gpu://192.168.0.95:22"
+  # example "clust-gpu" or "clust-cpu" or "test"
   protocol = models.CharField(max_length=100)
 
-  ip_addr = models.CharField(default='')
+  ip_addr = models.GenericIPAddressField(default='240.0.0.0')
 
   port_addr = models.IntegerField(default=0)
 
@@ -22,3 +24,4 @@ class HardwareProfile(models.Model):
 
   def __str__(self):
     return self.name + " " + self.description + " " + self.protocol + " " + self.ip_addr + " " + str(self.port_addr) + " " + str(self.archived)
+

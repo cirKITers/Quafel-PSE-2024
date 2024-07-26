@@ -14,7 +14,7 @@
   </div>
   <div id='hardware_container'>
     {%for hardware in hardware_profiles %}
-      <form class='hardware_entry'  action="configure/" method="get">
+      <form class='hardware_entry'  action="configure/"  method="get">
         <p>{{ hardware.name }}</p>
         <button class="icon_button" name="hardware_id" value={{hardware.uuid}}><span class="material-symbols-outlined">edit</span></button> 
       </form>
@@ -23,7 +23,7 @@
     {% endfor %}
   </div>
 </div>
-<form class='page_panel'  action='add/' method="post">
+<div class='page_panel'>
   {% csrf_token %}
   <div id="hardware_name">
     <input name="name">
@@ -37,6 +37,6 @@
     <input name="connection">
     <span>Connection</span>
   </div>
-  <button id="add_hardware_button" type='submit'>Submit</button>
-</form>
+  <button id="add_hardware_button" type='submit' action='add/' method="post">Submit</button>
+</div>
 {% endblock %}

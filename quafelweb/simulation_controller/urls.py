@@ -1,4 +1,5 @@
 from django.urls import path
+
 import simulation_controller.views as views
 
 urlpatterns = [

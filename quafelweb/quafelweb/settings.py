@@ -28,10 +28,6 @@ if dotenv_file.is_file():
 else:
     raise RuntimeError("The .env_secret file is not present, get the .env_secret file from an admin")
 
-# Build path for the source outside the django-project
-EXTERNAL_DIR = os.path.join(BASE_DIR, '..', '..')
-if EXTERNAL_DIR not in sys.path:
-    sys.path.append(EXTERNAL_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -42,7 +38,7 @@ SECRET_KEY = 'django-insecure-g715+$i5t@rzbi)-ktamejq27%@g*os=-i3s67c$5hofs6x-aj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ 'localhost' ]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -53,8 +49,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'quafelweb',
+
     # libs
     'authlib',
+    'quafel_simulators',
 
     # apps
     'account_controller',
@@ -98,7 +97,7 @@ DATABASES = {
         "NAME": "database",
         "USER": "postgres",
         "PASSWORD": "postgresql",
-        "HOST": "127.0.0.1",
+        "HOST": "postgres",
         "PORT": "5432",
     }
 }
