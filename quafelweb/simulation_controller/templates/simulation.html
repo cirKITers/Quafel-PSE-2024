@@ -96,38 +96,38 @@
       </div>
     </div>
   </div>
-  <button id="query_button">Update</button>
 </div>
 <div class="page_panel">
   <div id="filter_menu">
-    <button id="simulation_conf_submit" type="submit" method="get" name="check_all">All</button>
+    <button id="simulation_conf_submit" type="submit" name="check_all">All</button>
     <div class="dropdown">
       <div class="dropbtn">{{ request.GET.hardware_filter|default:"Hardware"}}</div>
       <div class="dropdown-content">
+        <input name="hardware_filter" type="hidden" value="{{request.GET.hardware_filter}}">
         {% if request.GET.hardware_filter %}
-          <button name="hardware_filter" type="submit" value="">All</button>
+        <button name="hardware_filter" type="submit" value="">All</button>
         {% endif %}
         {% for hardware in hardware_profiles %}
-          {% if request.GET.hardware_filter != hardware.name%}
-            <button name="hardware_filter" type="submit" value="{{hardware.name}}">{{hardware.name}}</button>
-          {% endif %}
+        {% if request.GET.hardware_filter != hardware.name%}
+        <button name="hardware_filter" type="submit" value="{{hardware.name}}">{{hardware.name}}</button>
+        {% endif %}
         {% endfor %}
       </div>
     </div>
     <div class="dropdown">
       <div class="dropbtn">{{ request.GET.simulator_filter|default:"Simulator"}}</div>
       <div class="dropdown-content">
+        <input name="simulator_filter" type="hidden" value="{{request.GET.simulator_filter}}">
         {% if request.GET.simulator_filter %}
-          <button name="simulator_filter" type="submit" value="">All</button>
+        <button name="simulator_filter" type="submit" value="">All</button>
         {% endif %}
         {% for simulator in simulator_profiles %}
           {% if request.GET.simulator_filter != simulator.name%}
-            <button name="simulator_filter" type="submit" value="{{simulator.name}}">{{simulator.name}}</button>
+          <button name="simulator_filter" type="submit" value="{{simulator.name}}">{{simulator.name}}</button>
           {% endif %}
         {% endfor %}
       </div>
     </div>
-    <b>Finished</b>
   </div>
   <div id="env_container">
     {% for env in envs %}
@@ -135,7 +135,6 @@
         <input type="checkbox" name={{ env.3 }} {% if env.4 %}checked{% endif %}></button>
         <p>{{env.0.name}}</p>
         <p>{{env.1.name}}</p>
-        <p class="simulation_progress">{{env.2}}/{{max_amount}}</p>
       </div>
       {% endfor %}
     </div>
@@ -215,7 +214,10 @@
                     <span>Password</span>
                   </div>
                   {% if hardware.needs_totp %}
-                  <input name="TOTP::{{hardware.uuid}}">
+                  <div>
+                    <input name="TOTP::{{hardware.uuid}}">
+                    <span>TOTP</span>
+                  </div>
                   {% endif %}
                 </div>
               </div>

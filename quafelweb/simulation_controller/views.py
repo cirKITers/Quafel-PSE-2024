@@ -18,10 +18,9 @@ class SimulationRequestView:
 
 
   @AccountView.require_login
-  def default(request):
+  def selection(request):
 
     context = dict()
-    # Create all possible envs
 
     for conf in ["qubits", "depth", "shots"]:
       conf_range = set(SimulationRun.objects.values_list(conf, flat=True)) or { 0 }
@@ -37,7 +36,8 @@ class SimulationRequestView:
         context[conf + "_values"] = list(range(min_v, max_v + 1, increment))
       else:
         context[conf + "_values"] = [int(increment ** i) for i in range(int(math.log(min_v, increment)), int(math.log(max_v, increment) + 1))]  
-      print(context[conf + "_values"])
+
+
 
     conf_filter = {
       "qubits__in" : context["qubits_values"],
@@ -45,6 +45,7 @@ class SimulationRequestView:
       "shots__in" : context["shots_values"],
     }
     
+    # get selected envs
     envs = list()
     for hp, sp in itertools.product(HardwareProfile.objects.all(), SimulatorProfile.objects.all()):
       if hfilter := request.GET.get("hardware_filter"):
@@ -56,10 +57,17 @@ class SimulationRequestView:
       name = f"ENV::{hp.uuid}::{sp.name}" 
                
       finished_runs = SimulationRun.objects.filter(hardware=hp.uuid, simulator=sp.name, **conf_filter).count()
-      selected = bool(request.GET.get(name, False)) if not "check_all" in request.GET else True
+      selected = bool(request.GET.get(name, False))
 
-      envs.append((hp, sp, finished_runs, name, selected))
+      envs.append([hp, sp, finished_runs, name, selected])
     
+    # (un)check all functionality 
+    if "check_all" in request.GET:
+      value = not all(env[4] for env in envs)
+      for env in envs:
+        env[4] = value
+
+
     # Sort after hardware then simulator
     envs.sort(key=lambda x: x[1].name)
     envs.sort(key=lambda x: x[0].name) 

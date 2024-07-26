@@ -16,7 +16,6 @@
     {%for hardware in hardware_profiles %}
       <form class='hardware_entry'  action="configure/" method="get">
         <p>{{ hardware.name }}</p>
-        <p>{{ hardware.uuid }}</p>
         <button class="icon_button" name="hardware_id" value={{hardware.uuid}}><span class="material-symbols-outlined">edit</span></button> 
       </form>
     {% empty %}
@@ -26,15 +25,15 @@
 </div>
 <form class='page_panel'  action='add/' method="post">
   {% csrf_token %}
-  <div id="add_hardware_name">
+  <div id="hardware_name">
     <input name="name">
     <span>Name</span>
   </div>
-  <div id="add_hardware_description">
+  <div id="hardware_description">
     <textarea name="description"></textarea>
     <span>Description</span>
   </div>
-  <div id="add_hardware_connection">
+  <div id="hardware_connection">
     <input name="connection">
     <span>Connection</span>
   </div>

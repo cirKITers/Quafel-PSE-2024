@@ -37,26 +37,26 @@
 }
 
 
-#add_hardware_name,
-#add_hardware_description,
-#add_hardware_connection {
+#hardware_name,
+#hardware_description,
+#hardware_connection {
   margin-bottom: 2em;
 }
 
-#add_hardware_description div input,
-#add_hardware_description div textarea {
+#hardware_description div input,
+#hardware_description div textarea {
   width: 100%;
   height: 4em;
 }
 
 
-#add_hardware_description textarea{
+#hardware_description textarea{
   height: 15em;
   resize: none;
   overflow: auto;
 }
 
-#add_hardware_button {
+#hardware_button {
   width: 100%;
 }
 
@@ -74,4 +74,8 @@
 #button_array button,
 #button_array a {
   width: 10em;
+}
+
+#hardware_totp {
+  margin: 2em 0;  
 }

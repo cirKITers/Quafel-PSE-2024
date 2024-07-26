@@ -1,7 +1,9 @@
 from django.shortcuts import redirect, render
 from account_controller.views import AccountView
 from hardware_controller.models import HardwareProfile
-# Create your views here.
+from simulation_data.models import SimulationRun
+
+import re as regex
 
 class HardwareView:
 
@@ -23,15 +25,17 @@ class HardwareView:
   
   @AccountView.require_login
   def add_profile(request):
-    
-    if request.method == "POST":
-      name = request.POST["name"]
-      description = request.POST["description"]
-      connection = request.POST["connection"] # slurm://192.168.0.34:82
+    id = request.POST.get("hardware_id") 
+    name = request.POST.get("hardware_name") 
+    description = request.POST.get("hardware_description")
+    connection = request.POST.get("hardware_connection")
 
-      protocol, ip, port = connection.replace("//", "").split(":", 2)
+    addr_match = r"^([a-zA-Z]+)://(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d{1,5})$"
 
-      HardwareProfile(name=name, description=description, protocol=protocol, ip_addr=ip, port_addr=port).save()
+    if id and name and description and regex.match(addr_match, connection):
+      
+      protocol, ip_addr, port_addr  = connection.replace("//", "").split(":", 2)
+      HardwareProfile(name=name, description=description, protocol=protocol, ip_addr=ip_addr, port_addr=port_addr).save()
 
     return redirect("hardware")
 
@@ -40,8 +44,9 @@ class HardwareView:
   @AccountView.require_login
   def delete_profile(request):
      
-    if request.method == "POST":
-      id = request.POST["hardware_id"]
+    if id := request.POST.get("hardware_id"):
+
+      SimulationRun.objects.filter(hardware=id).delete()
       HardwareProfile.objects.filter(uuid=id).delete()
 
     return redirect("hardware")
@@ -50,36 +55,48 @@ class HardwareView:
   def configure_profile(request):
     
     
-    if request.method == "GET":
-      id = request.GET["hardware_id"]
+    if id := request.GET.get("hardware_id"):
 
       profile = HardwareProfile.objects.filter(uuid=id)
 
       if not profile.exists():
-        raise RuntimeError("Invalid hardware profile requested") # TODO
-
+        redirect("hardware")  
 
       context = { 'hardware' : profile.get()  }
 
-    return render(request, 'configuration.html', context=context)
+      return render(request, 'configuration.html', context=context)
 
+    return redirect("hardware")
   
   @AccountView.require_login
-  def change_profile(request):
-    if request.method == "POST":
-      id = request.POST["hardware_id"]
-      name = request.POST["hardware_name"]
-      description = request.POST["hardware_description"]
-    
+  def submit_change(request):
+    id = request.POST.get("hardware_id") 
+    name = request.POST.get("hardware_name") 
+    description = request.POST.get("hardware_description")
+    connection = request.POST.get("hardware_connection")
+
+    addr_match = r"^([a-zA-Z]+)://(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d{1,5})$"
+
+    if id and name and description and regex.match(addr_match, connection):
+      
+      protocol, ip_addr, port_addr  = connection.replace("//", "").split(":", 2)
+
       
       profile = HardwareProfile.objects.filter(uuid=id)
+
+      needs_totp = request.POST.get("hardware_totp") == "on"
 
       if not profile.exists():
         raise RuntimeError("Invalid hardware profile requested") # TODO
       
       profile.update(
         name = name,
-        description = description
+        description = description,
+        protocol = protocol,
+        ip_addr=ip_addr,
+        port_addr=port_addr,
+        needs_totp = needs_totp
       )
+    print(needs_totp)
       
     return redirect("hardware")
