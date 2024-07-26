@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_quafel_web
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgresql
+      POSTGRES_DB: database
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  hardware_profile_1:
+    build:
+      dockerfile: dockerfile/HardwareProfile.Dockerfile
+    ports:
+      - "2222:22"
+    depends_on:
+      - output_server
+
+  output_server:
+    build:
+      dockerfile: dockerfile/OutputServer.Dockerfile
+    ports:
+      - "2223:22"
+
+  webapp_server:
+    build:
+      dockerfile: dockerfile/Webapp.Dockerfile
+    ports:
+      - "2224:22"
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - hardware_profile_1
+      - output_server
+
+volumes:
+  postgres_data:

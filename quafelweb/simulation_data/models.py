@@ -1,8 +1,9 @@
 '''
 Defines the models used to store SimulationRuns in an database
 '''
-from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.db import models
+
 from hardware_controller.models import HardwareProfile
 
 
@@ -28,13 +29,13 @@ class SimulationRun(models.Model):
   shots = models.IntegerField()
 
   qubits = models.IntegerField()
-  
+
   depth = models.IntegerField()
 
   # STATUS
 
   finished = models.BooleanField(default=False)
-  
+
   expressibility = models.FloatField()
   
   entangling_capability = models.FloatField()

@@ -4,9 +4,21 @@ Here the simulation request is defined to request a simulation from specific a h
 
 
 from abc import abstractmethod
-from quafel_simulators.base.hardware import HardwareBase
+from enum import Enum
+
+from quafel_simulators.base.hardware import QuafelHardwareBase
 from quafel_simulators.base.simulator import QuafelSimulatorBase
 
+
+class IncrementType(Enum):
+    """
+    The increment types for the simulation request
+    """
+    LINEAR = "linear"
+    EXPONENTIAL = "exp2"
+
+    def __str__(self):
+        return self.value
 
 class QuafelSimulationRequest:
     """
@@ -14,7 +26,7 @@ class QuafelSimulationRequest:
     """
 
     @abstractmethod
-    def get_hardware(self) -> HardwareBase:
+    def get_hardware(self) -> QuafelHardwareBase:
         """
         Get the hardware profile of the simulation request
         """
@@ -43,6 +55,13 @@ class QuafelSimulationRequest:
         Get the increment of qubits
         """
 
+    def get_qubits_increment_type(self) -> IncrementType:
+        """
+        Get the increment type of qubits
+        The default is LINEAR
+        """
+        return IncrementType.LINEAR
+
     @abstractmethod
     def get_min_depth(self) -> int:
         """
@@ -60,6 +79,13 @@ class QuafelSimulationRequest:
         """
         Get the increment of depth
         """
+
+    def get_depth_increment_type(self) -> IncrementType:
+        """
+        Get the increment type of depth
+        The default is LINEAR
+        """
+        return IncrementType.LINEAR
 
     @abstractmethod
     def get_min_shots(self) -> int:
@@ -79,18 +105,18 @@ class QuafelSimulationRequest:
         Get the increment of shots
         """
 
-    @abstractmethod
-    def get_totp(self) -> None | str:
+    def get_shots_increment_type(self) -> IncrementType:
         """
-        Get the TOTP
+        Get the increment type of shots
+        The default is LINEAR
         """
+        return IncrementType.LINEAR
 
     def get_id(self) -> str:
         """
         Get a unique identifier for the simulation request
         """
-        return (f"{self.get_hardware().get_host()}_"
-                f"{self.get_hardware().get_port()}_"
+        return (f"{self.get_hardware().get_id()}_"
                 f"{self.get_simulator().get_name()}_"
                 f"{self.get_simulator().get_version()}_"
                 f"{self.get_min_qubits()}_"

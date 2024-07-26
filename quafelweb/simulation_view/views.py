@@ -1,10 +1,8 @@
+
 from django.shortcuts import render
 
-from simulation_data.simulation import SimulationEnv, HardwareProfile
 from simulation_data.models import SimulatorProfile, SimulationRun
-import itertools
-
-
+from simulation_data.simulation import SimulationEnv, HardwareProfile
 
 
 class SimulationView:

@@ -1,5 +1,7 @@
 from dataclasses import dataclass
+
 from simulation_data.models import HardwareProfile, SimulatorProfile
+
 
 @dataclass
 class SimulationEnv:

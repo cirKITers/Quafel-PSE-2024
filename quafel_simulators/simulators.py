@@ -5,7 +5,7 @@ Here are the simulators defined that are pulled from a configuration file.
 
 import json
 from pathlib import Path
-from threading import Lock, Thread
+
 from quafel_simulators.base.simulator import QuafelSimulatorBase
 
 
@@ -20,6 +20,8 @@ class QuafelSimulator(QuafelSimulatorBase):
     def __init__(self, name: str, version: str):
         """
         Initialize the simulator
+        :param name: The name of the simulator
+        :param version: The version of the simulator
         """
         self.name = name
         self.version = version
@@ -41,24 +43,45 @@ class QuafelSimulators:
     """
     The simulators that are inside the simulators.json file
     """
-    configuration_file_path: str = "simulators.json"  # path to the configuration file
-    _simulators: list[QuafelSimulatorBase] = []  # list of simulators known to the system
-    _simulators_lock = Lock()  # lock for the simulators list
 
-    def update_simulators(self):
+    __quafel_simulators_instance = None
+
+    def __new__(cls, *args, **kwargs):
+        """
+        Return the singleton instance
+        """
+        if cls.__quafel_simulators_instance is None:
+            cls.__quafel_simulators_instance = super(QuafelSimulators, cls).__new__(cls)
+        return cls.__quafel_simulators_instance
+
+    def __init__(self):
+        self.configuration_file_path: str = "simulators.json"  # path to the configuration file
+
+        self._last_change = None  # last time the configuration file was changed
+        self._simulators: list[QuafelSimulatorBase] = []  # list of simulators known to the system
+
+    def _configuration_changed(self) -> bool:
+        # Check if the file exists
+        if (not Path(self.configuration_file_path).exists()) or (not Path(self.configuration_file_path).is_file()):
+            with open(self.configuration_file_path, "w", encoding="utf-8") as file:
+                file.write("[]")
+                return True
+
+        last_change = Path(self.configuration_file_path).stat().st_mtime
+        if last_change != self._last_change:
+            self._last_change = last_change
+            return True
+
+        return False
+
+    def _update_simulators(self):
         """
         Update the simulators known to the system
         """
 
-        # Check if the file exists
-        if (not Path(self.configuration_file_path).exists()) or (not Path(self.configuration_file_path).is_file()):
-            with open(self.configuration_file_path, "w") as file:
-                file.write("[]")
-                return
-
         # Read the simulators from the configuration file
         json_simulators = None
-        with open(self.configuration_file_path, "r") as file:
+        with open(self.configuration_file_path, "r", encoding="utf-8") as file:
             try:
                 json_simulators = json.load(file)
             except json.JSONDecodeError:
@@ -70,62 +93,15 @@ class QuafelSimulators:
             sims.append(QuafelSimulator(simulator["name"], simulator["version"]))
 
         # Write the simulators to the list
-        with self._simulators_lock:
-            self._simulators = sims
+        self._simulators = sims
 
     def get_simulators(self) -> list[QuafelSimulatorBase]:
         """
         Get the simulators known to the system
         """
-        with self._simulators_lock:
-            return self._simulators.copy()
 
+        # Update the simulators if the configuration file has changed
+        if self._configuration_changed():
+            self._update_simulators()
 
-# TODO: delete this class and just return the simulators by reading the configuration file
-class QuafelSimulatorsUpdater:
-    """
-    The runner class
-    """
-    thread: Thread = None  # thread for the updater
-    running: bool = False  # whether the updater is running
-    running_lock = Lock()  # lock for the running variable
-
-    def start_updater(self):
-        """
-        Start the updater
-        """
-        with self.running_lock:
-            if self.running:
-                return
-
-            self.running = True
-
-        # Start the update loop
-        self.thread = Thread(target=self.update_loop)
-        self.thread.start()
-
-    def stop_updater(self):
-        """
-        Stop the updater
-        """
-        with self.running_lock:
-            if (not self.running) or (self.thread is None):
-                return
-
-            self.running = False
-
-    def update_loop(self):
-        """
-        The update loop
-        """
-        while True:
-            with self.running_lock:
-                if not self.running:
-                    break
-
-            simulators.update_simulators()
-            # TODO: implement the update loop.
-
-
-# The simulators singleton
-simulators = QuafelSimulators()
+        return self._simulators
