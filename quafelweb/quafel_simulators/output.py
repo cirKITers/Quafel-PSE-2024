@@ -12,10 +12,15 @@ class QuafelOutputHardware(QuafelHardwareBase):
     """
     The output hardware to get the output from
     """
-    def __init__(self):
-        self.configuration_file_path: str = "output.json"  # path to the configuration file
 
-        self._output_location: str = ""  # location where all outputs are stored (not the id of the output)
+    def __init__(self):
+        self.configuration_file_path: str = (
+            "output.json"  # path to the configuration file
+        )
+
+        self._output_location: str = (
+            ""  # location where all outputs are stored (not the id of the output)
+        )
         self._host: str = ""  # host of the output server
         self._port: int = 22  # port of the output server
         self._username: str = ""  # username to connect to the output server
@@ -61,19 +66,24 @@ class QuafelOutputHardware(QuafelHardwareBase):
         read = read_dict(self.configuration_file_path)
 
         if len(read) == 0:
-            write_json_file(self.configuration_file_path, {
-                "output_location": "",
-                "host": "",
-                "port": 22,
-                "username": "",
-                "password": "",
-            })
+            write_json_file(
+                self.configuration_file_path,
+                {
+                    "output_location": "",
+                    "host": "",
+                    "port": 22,
+                    "username": "",
+                    "password": "",
+                },
+            )
 
-        if (("output_location" not in read) or
-                ("host" not in read) or
-                ("port" not in read) or
-                ("username" not in read) or
-                ("password" not in read)):
+        if (
+            ("output_location" not in read)
+            or ("host" not in read)
+            or ("port" not in read)
+            or ("username" not in read)
+            or ("password" not in read)
+        ):
             return False
 
         self._output_location = read["output_location"]

@@ -8,7 +8,11 @@ from time import sleep
 
 from quafel_simulators.output import QuafelOutputHardware
 from quafel_simulators.quafelsubmitter import QuafelSubmissionState, QuafelSubmitter
-from quafel_simulators.tests.util import TestClassSimulationRequest, TestCase, TestClassSimulationRequest2
+from quafel_simulators.tests.util import (
+    TestClassSimulationRequest,
+    TestCase,
+    TestClassSimulationRequest2,
+)
 from quafel_simulators.util.connection import SubmitConnection
 from quafel_simulators.util.json_handler import write_json_file
 
@@ -18,13 +22,16 @@ def write_output_file_submission():
     Write the output file for the submission
     """
 
-    write_json_file("output.json", {
-        "output_location": "~",
-        "host": "output.server",
-        "port": 22,
-        "username": "user",
-        "password": "password"
-    })
+    write_json_file(
+        "output.json",
+        {
+            "output_location": "~",
+            "host": "output.server",
+            "port": 22,
+            "username": "user",
+            "password": "password",
+        },
+    )
 
 
 def write_output_file_pull_output():
@@ -32,13 +39,16 @@ def write_output_file_pull_output():
     Write the output file for the pull output
     """
 
-    write_json_file("output.json", {
-        "output_location": "~",
-        "host": "localhost",
-        "port": 2223,
-        "username": "user",
-        "password": "password"
-    })
+    write_json_file(
+        "output.json",
+        {
+            "output_location": "~",
+            "host": "localhost",
+            "port": 2223,
+            "username": "user",
+            "password": "password",
+        },
+    )
 
 
 class TestSubmitter(TestCase):
@@ -58,7 +68,9 @@ class TestSubmitter(TestCase):
         logging.getLogger("connection.disconnect").setLevel(logging.DEBUG)
         logging.getLogger("connection.setup_script").setLevel(logging.DEBUG)
         logging.getLogger("connection.initiate").setLevel(logging.DEBUG)
-        hardware_connection = SubmitConnection(TestClassSimulationRequest(), QuafelOutputHardware())
+        hardware_connection = SubmitConnection(
+            TestClassSimulationRequest(), QuafelOutputHardware()
+        )
 
         assert hardware_connection.connect()
 
@@ -84,10 +96,13 @@ class TestSubmitter(TestCase):
 
         counter = 120
         for i in range(counter):
-            if submitter.get_state(TestClassSimulationRequest()) == QuafelSubmissionState.READY:
+            if (
+                submitter.get_state(TestClassSimulationRequest())
+                == QuafelSubmissionState.READY
+            ):
                 break
             if i == counter - 1:
-                assert False # The simulation did not finish in time
+                assert False  # The simulation did not finish in time
 
             print("waiting for simulation to finish")
             sleep(1.0)
@@ -120,11 +135,13 @@ class TestSubmitter(TestCase):
 
         counter = 600
         for i in range(counter):
-            if (submitter.get_state(request_1) == QuafelSubmissionState.READY and
-                    submitter.get_state(request_2) == QuafelSubmissionState.READY):
+            if (
+                submitter.get_state(request_1) == QuafelSubmissionState.READY
+                and submitter.get_state(request_2) == QuafelSubmissionState.READY
+            ):
                 break
             if i == counter - 1:
-                assert False # The simulation did not finish in time
+                assert False  # The simulation did not finish in time
 
             print("waiting for simulations to finish")
             sleep(1.0)

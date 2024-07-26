@@ -17,8 +17,11 @@ from paramiko.ssh_exception import SSHException
 from quafel_simulators.base.hardware import QuafelHardwareBase
 from quafel_simulators.base.simulation_request import QuafelSimulationRequest
 from quafel_simulators.output import QuafelOutputHardware
-from quafel_simulators.util.script_builder import build_quafel_script_setup, build_quafel_script_submit, \
-    build_quafel_script_pull_output
+from quafel_simulators.util.script_builder import (
+    build_quafel_script_setup,
+    build_quafel_script_submit,
+    build_quafel_script_pull_output,
+)
 
 
 class Connection:
@@ -26,6 +29,7 @@ class Connection:
     Connection to a hardware_base
     Uses SSH
     """
+
     def __init__(self, hardware_base: QuafelHardwareBase):
         """
         Initialize the connection
@@ -109,9 +113,13 @@ class Connection:
         while channel.active:
             sleep(0.01)
             if channel.recv_ready():
-                logging.getLogger(log_channel).debug(msg=channel.recv(100000000).decode("utf-8"))
+                logging.getLogger(log_channel).debug(
+                    msg=channel.recv(100000000).decode("utf-8")
+                )
             if channel.recv_stderr_ready():
-                logging.getLogger(log_channel).debug(msg=channel.recv_stderr(100000000).decode("utf-8"))
+                logging.getLogger(log_channel).debug(
+                    msg=channel.recv_stderr(100000000).decode("utf-8")
+                )
             if channel.exit_status_ready():
                 break
 
@@ -141,7 +149,11 @@ class SubmitConnection(Connection):
     _simulation_request: QuafelSimulationRequest | None = None
     _output_hardware: QuafelOutputHardware | None = None
 
-    def __init__(self, request_base: QuafelSimulationRequest, output_hardware: QuafelOutputHardware):
+    def __init__(
+        self,
+        request_base: QuafelSimulationRequest,
+        output_hardware: QuafelOutputHardware,
+    ):
         """
         Initialize the connection
         """
@@ -154,16 +166,20 @@ class SubmitConnection(Connection):
         Set the setup flag
         :return: True if the set of the setup script was successful
         """
-        if ((self._ssh_client is None) or
-                (self._hardware_base is None) or
-                (self._simulation_request is None)):
+        if (
+            (self._ssh_client is None)
+            or (self._hardware_base is None)
+            or (self._simulation_request is None)
+        ):
             return False
 
         self._ssh_client.exec_command("touch setup_script")
 
         # Write the setup script to the file
         setup_script = build_quafel_script_setup(self._simulation_request)
-        self._ssh_client.exec_command(f"cat << EOT > setup_script\n{setup_script}\nEOT\n")
+        self._ssh_client.exec_command(
+            f"cat << EOT > setup_script\n{setup_script}\nEOT\n"
+        )
 
         return True
 
@@ -183,26 +199,33 @@ class SubmitConnection(Connection):
         Run the simulation request
         :return: True if the submission was successful
         """
-        if ((self._simulation_request is None) or
-                (self._hardware_base is None) or
-                (self._simulation_request.get_simulator() is None) or
-                (self._output_hardware is None)):
+        if (
+            (self._simulation_request is None)
+            or (self._hardware_base is None)
+            or (self._simulation_request.get_simulator() is None)
+            or (self._output_hardware is None)
+        ):
             return False
 
         if not self._output_hardware.update():
             raise RuntimeError("The output hardware is not configured")
 
         self._ssh_client.set_log_channel("connection.run")
-        return self.run(build_quafel_script_submit(self._simulation_request, self._output_hardware), "connection.run")
+        return self.run(
+            build_quafel_script_submit(self._simulation_request, self._output_hardware),
+            "connection.run",
+        )
 
     def initiate(self, force: bool = False) -> bool:
         """
         Initiate the hardware profile
         (setup if needed)
         """
-        if ((self._simulation_request is None) or
-                (self._ssh_client is None) or
-                (self._hardware_base is None)):
+        if (
+            (self._simulation_request is None)
+            or (self._ssh_client is None)
+            or (self._hardware_base is None)
+        ):
             return False
 
         self._ssh_client.set_log_channel("connection.initiate")
@@ -239,8 +262,12 @@ class OutputConnection:
         Move it to the relative path "outputs/<submit_id>"
         """
 
-        build_pull_script = build_quafel_script_pull_output(self._output_hardware, self._submit_id)
-        completed_process = subprocess.run(["bash", "-c", build_pull_script], check=False)
+        build_pull_script = build_quafel_script_pull_output(
+            self._output_hardware, self._submit_id
+        )
+        completed_process = subprocess.run(
+            ["bash", "-c", build_pull_script], check=False
+        )
 
         print(completed_process.stdout)
 
@@ -261,7 +288,9 @@ class OutputConnection:
 
         # get the name of the directory
         # there should be only one subdirectory
-        completed_process = subprocess.run(["bash", "-c", f"ls {output_path}"], capture_output=True, check=False)
+        completed_process = subprocess.run(
+            ["bash", "-c", f"ls {output_path}"], capture_output=True, check=False
+        )
         subdir = completed_process.stdout.decode("utf-8").strip()
 
         if completed_process.returncode != 0 or subdir == "":
@@ -281,7 +310,9 @@ class OutputConnection:
             file.close()
 
         # Delete the output_location
-        completed_process = subprocess.run(["bash", "-c", f"rm -rf {output_path}"], check=False)
+        completed_process = subprocess.run(
+            ["bash", "-c", f"rm -rf {output_path}"], check=False
+        )
         if completed_process.returncode != 0:
             return None
 

@@ -2,7 +2,6 @@
 Here are the simulators defined that are pulled from a configuration file.
 """
 
-
 import json
 from pathlib import Path
 
@@ -55,14 +54,20 @@ class QuafelSimulators:
         return cls.__quafel_simulators_instance
 
     def __init__(self):
-        self.configuration_file_path: str = "simulators.json"  # path to the configuration file
+        self.configuration_file_path: str = (
+            "simulators.json"  # path to the configuration file
+        )
 
         self._last_change = None  # last time the configuration file was changed
-        self._simulators: list[QuafelSimulatorBase] = []  # list of simulators known to the system
+        self._simulators: list[QuafelSimulatorBase] = (
+            []
+        )  # list of simulators known to the system
 
     def _configuration_changed(self) -> bool:
         # Check if the file exists
-        if (not Path(self.configuration_file_path).exists()) or (not Path(self.configuration_file_path).is_file()):
+        if (not Path(self.configuration_file_path).exists()) or (
+            not Path(self.configuration_file_path).is_file()
+        ):
             with open(self.configuration_file_path, "w", encoding="utf-8") as file:
                 file.write("[]")
                 return True

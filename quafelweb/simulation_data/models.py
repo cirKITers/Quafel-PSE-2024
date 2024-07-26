@@ -11,52 +11,60 @@ from quafel_simulators.base.simulator import QuafelSimulatorBase
 
 class SimulatorProfile(models.Model, QuafelSimulatorBase):
 
-  def get_name(self) -> str:
-      return self.name
+    def get_name(self) -> str:
+        return self.name
 
-  def get_version(self) -> str:
-      return "latest"
+    def get_version(self) -> str:
+        return "latest"
 
-  name = models.CharField(max_length=50, primary_key=True, unique=True)
+    name = models.CharField(max_length=50, primary_key=True, unique=True)
 
 
 class SimulationRun(models.Model):
 
-  id = models.IntegerField(primary_key=True)
-  
-  # ENV
+    id = models.IntegerField(primary_key=True)
 
-  hardware = models.ForeignKey(HardwareProfile, on_delete=models.CASCADE)
+    # ENV
 
-  simulator = models.ForeignKey(SimulatorProfile, on_delete=models.CASCADE)
+    hardware = models.ForeignKey(HardwareProfile, on_delete=models.CASCADE)
 
-  user = models.CharField(max_length=100)
+    simulator = models.ForeignKey(SimulatorProfile, on_delete=models.CASCADE)
 
-  # CONF
+    user = models.CharField(max_length=100)
 
-  shots = models.IntegerField()
+    # CONF
 
-  qubits = models.IntegerField()
+    shots = models.IntegerField()
 
-  depth = models.IntegerField()
+    qubits = models.IntegerField()
 
-  # STATUS
+    depth = models.IntegerField()
 
-  finished = models.BooleanField(default=False)
+    # STATUS
 
-  expressibility = models.FloatField()
-  
-  entangling_capability = models.FloatField()
+    finished = models.BooleanField(default=False)
 
-  durations = ArrayField(models.FloatField(), 100)
+    expressibility = models.FloatField()
 
-  duration_avg = models.FloatField(default=0.0)
-  
-  def __str__(self):
-    return (self.hardware.name + " " + 
-            self.simulator.name + " " + 
-            self.user + " " + 
-            str(self.shots) + " " + 
-            str(self.qubits) + " " + 
-            str(self.depth) + " " + 
-            str(self.finished))
+    entangling_capability = models.FloatField()
+
+    durations = ArrayField(models.FloatField(), 100)
+
+    duration_avg = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return (
+            self.hardware.name
+            + " "
+            + self.simulator.name
+            + " "
+            + self.user
+            + " "
+            + str(self.shots)
+            + " "
+            + str(self.qubits)
+            + " "
+            + str(self.depth)
+            + " "
+            + str(self.finished)
+        )

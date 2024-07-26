@@ -5,7 +5,11 @@ Unit tests for the util module responsible for handling json files
 from pathlib import Path
 
 from quafel_simulators.tests.util import TestCase
-from quafel_simulators.util.json_handler import read_dict, write_json_file, read_json_file
+from quafel_simulators.util.json_handler import (
+    read_dict,
+    write_json_file,
+    read_json_file,
+)
 
 
 class TestJsonHandler(TestCase):

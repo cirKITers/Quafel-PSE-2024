@@ -25,7 +25,9 @@ class TestConnections(TestCase):
         logging.getLogger("connection.connect").setLevel(logging.DEBUG)
         logging.getLogger("connection.disconnect").setLevel(logging.DEBUG)
 
-        hardware_connection = SubmitConnection(TestClassSimulationRequest(), QuafelOutputHardware())
+        hardware_connection = SubmitConnection(
+            TestClassSimulationRequest(), QuafelOutputHardware()
+        )
 
         assert hardware_connection.connect()
 

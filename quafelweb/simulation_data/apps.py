@@ -9,5 +9,6 @@ class SimulationConfigConfig(AppConfig):
     """
     Configuration for the simulation submit app.
     """
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'simulation_data'
+
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "simulation_data"

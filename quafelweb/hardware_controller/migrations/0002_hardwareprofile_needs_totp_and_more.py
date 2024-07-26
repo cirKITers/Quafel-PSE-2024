@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hardware_controller', '0001_initial'),
+        ("hardware_controller", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='hardwareprofile',
-            name='needs_totp',
+            model_name="hardwareprofile",
+            name="needs_totp",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='hardwareprofile',
-            name='description',
+            model_name="hardwareprofile",
+            name="description",
             field=models.CharField(max_length=500),
         ),
     ]

@@ -11,6 +11,9 @@ class SimulationRequest(models.Model):
     """
     Defines a SimulationRequest
     """
-    requested_runs = models.ForeignKey(SimulationRun, on_delete=models.CASCADE, max_length=1000)  # yeah idk
+
+    requested_runs = models.ForeignKey(
+        SimulationRun, on_delete=models.CASCADE, max_length=1000
+    )  # yeah idk
 
     user = models.CharField(max_length=40)
