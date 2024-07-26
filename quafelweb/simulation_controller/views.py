@@ -44,10 +44,15 @@ class SimulationRequestView:
       "depth__in" : context["depth_values"],
       "shots__in" : context["shots_values"],
     }
-
     
     envs = list()
     for hp, sp in itertools.product(HardwareProfile.objects.all(), SimulatorProfile.objects.all()):
+      if hfilter := request.GET.get("hardware_filter"):
+        if hfilter != hp.name: continue
+
+      if sfilter := request.GET.get("simulator_filter"):
+        if sfilter != sp.name: continue
+      
       name = f"ENV::{hp.uuid}::{sp.name}" 
                
       finished_runs = SimulationRun.objects.filter(hardware=hp.uuid, simulator=sp.name, **conf_filter).count()
@@ -73,36 +78,34 @@ class SimulationRequestView:
 
 
   @AccountView.require_login
-  def select_environments(request):
-    data = json.loads(request.body)
-    
-    hwps = set(data.get('hwps'))
-    hwps_requirements = []
-    for hwp in hwps:
-      hwp_entry = {}
-      # TODO: Check if password or ttop is required
-
-      if random.choice([True, False]):
-        hwp_entry['password_required'] = True
-
-      if random.choice([True, False]):
-        hwp_entry['totp_required'] = True
-
-      # hwp_entry != {}
-      if hwp_entry:
-        hwp_entry['hwp'] = hwp
-        hwps_requirements.append(hwp_entry)
-      else:
-        continue
-        
-    return JsonResponse({'hwps_requirements': hwps_requirements})
-
-
-  @AccountView.require_login
   def submit_request(request):
+
     
-    print(request.POST)
-    return HttpResponse(request, "Hello World")
+    if request.method == "POST":
+      qubits_min = request.POST["qubits_min"]
+      qubits_max = request.POST["qubits_max"]
+      qubits_interval = request.POST["qubits_increment"]
+      qubits_interval_type = request.POST["qubits_increment_type"]
+
+      ...
+
+
+      selected_envs = [tag.split("::", 2)[1:3] for tag in request.POST if tag.startswith("ENV")]
+      selected_envs = [(HardwareProfile.objects.get(uuid=uuid), SimulatorProfile.objects.get(name=name)) for uuid, name in selected_envs]
+
+
+      auth_data = dict()
+      for data, value in request.POST.items():
+        if not any(data.startswith(tag) for tag in ["NAME", "PASSWORD", "TOTP"]):
+          continue
+        tag, hp_uuid = data.split("::", 1)
+        hp = HardwareProfile.objects.get(uuid=hp_uuid)
+        auth_data[hp] = { **auth_data.get(hp, dict()), tag : value } 
+      
+      print(auth_data)
+
+
+    return HttpResponse(dict(request.POST))
 
 
   @AccountView.require_login

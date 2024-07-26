@@ -50,8 +50,8 @@ class HardwareView:
   def configure_profile(request):
     
     
-    if request.method == "POST":
-      id = request.POST["hardware_id"]
+    if request.method == "GET":
+      id = request.GET["hardware_id"]
 
       profile = HardwareProfile.objects.filter(uuid=id)
 
@@ -66,11 +66,10 @@ class HardwareView:
   
   @AccountView.require_login
   def change_profile(request):
-    
-    if request.method == "GET":
-      id = request.GET["hardware_id"]
-      name = request.GET["hardware_name"]
-      description = request.GET["hardware_description"]
+    if request.method == "POST":
+      id = request.POST["hardware_id"]
+      name = request.POST["hardware_name"]
+      description = request.POST["hardware_description"]
     
       
       profile = HardwareProfile.objects.filter(uuid=id)
