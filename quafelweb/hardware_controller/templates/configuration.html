@@ -8,46 +8,28 @@
 {% block content %}
 <form method="post" class="page_panel" action="submit/">
   {% csrf_token %}
-  <input required name="hardware_id" type="hidden" value="{{ hardware.uuid }}"></input>
-  <div>
-    <input required name="hardware_name"  value="{{ hardware.name }}">
+  <input name="hardware_id" type="hidden" value="{{ hardware.uuid }}"></input>
+  <div id="hardware_name">
+    <input required name="hardware_name" value="{{ hardware.name }}">
     <span>Name</span>
   </div>
-  <div>
+  <div id="hardware_description">
     <textarea required name="hardware_description">{{ hardware.description }}</textarea>
     <span>Description</span>
   </div>
-  <div>
-    <input required name="connection"  value="{{ hardware.ip_addr }}">
+  <div id="hardware_connection">
+    <input required name="hardware_connection" value="{{ hardware.protocol }}://{{ hardware.ip_addr }}:{{hardware.port_addr}}">
     <span>Connection</span>
+  </div>
+  <div id="hardware_totp">
+    <label for="hardware_totp"><b>Requires TOTP</b></label>
+    <input type="checkbox" name="hardware_totp" {% if hardware.needs_totp %}checked{%endif%}>
   </div>
   
   <div id="button_array">
     <a href="{% url "hardware" %}" class="link_button">Back</a>
     <button type="submit" name="hardware_id" value={{hardware.uuid}}>Save</button>
-    <button type="submit" name="hardware_id" id="delete_button" value={{hardware.uuid}}>Delete</button>
-  </div>
-</form>
-<form method="post" class="page_panel" action="submit/">
-  {% csrf_token %}
-  <input required name="hardware_id" type="hidden" value="{{ hardware.uuid }}"></input>
-  <div>
-    <input required name="hardware_name"  value="{{ hardware.name }}">
-    <span>Name</span>
-  </div>
-  <div>
-    <textarea required name="hardware_description">{{ hardware.description }}</textarea>
-    <span>Description</span>
-  </div>
-  <div>
-    <input required name="connection"  value="{{ hardware.ip_addr }}">
-    <span>Connection</span>
-  </div>
-  
-  <div id="button_array">
-    <a href="{% url "hardware" %}" class="link_button">Back</a>
-    <button type="submit" name="hardware_id" value={{hardware.uuid}}>Save</button>
-    <button type="submit" name="hardware_id" id="delete_button" value={{hardware.uuid}}>Delete</button>
+    <button type="submit" name="hardware_id" id="delete_button" value={{hardware.uuid}} formaction="{% url "delete_hardware" %}" formmethod="post">Delete</button>
   </div>
 
 </form>
