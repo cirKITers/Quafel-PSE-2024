@@ -1,0 +1,155 @@
+#env_container{
+  overflow: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.conf_selection {
+  align-items: baseline;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 2em;
+  border: 2px solid black;
+  padding: 0em 2em;
+  box-sizing: border-box;
+}
+
+.conf_selection input,
+.conf_selection select {
+  width: 15em;
+  margin-bottom: 2em;
+}
+
+.selection_group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#query_button {
+  width: 100%;
+  align-self: flex-end;
+}
+
+
+#filter_menu,
+.env_entry {
+  display: grid;
+  grid-template-columns: 10% 35% 35% 20%;
+  align-items: center;  
+}
+
+#filter_menu > .link_button:hover{
+  text-align: center;
+  text-decoration: none;
+}
+
+
+#filter_menu > div,
+#filter_menu > button,
+.env_entry > div{
+  width: 100%;
+  height: 100%;
+}
+
+
+/* Confirmation page */
+
+#confirmation_page {
+  position: absolute;
+  top: -1em;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#confirmation_veil {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+}
+
+#confirmation_content {
+  position: relative;
+  left: 15%;
+  width: 70%;
+  height: 90%;
+  border: 1px black solid;
+  background-color: white;
+  padding: 2em;
+  box-sizing: border-box;
+}
+#confirmation_content > * {
+  text-align: center;
+}
+#confirmation_content > * {
+  text-align: center;
+}
+
+#conf_content {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 85%;
+  width: 100%;
+  height: 85%;
+}
+
+
+#conf_overview {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  text-align: left;
+  height: 100%;
+}
+
+#conf_environments_container {
+  display: grid;
+  grid-template-rows: auto;
+  overflow: auto;
+  width: 40em;
+  height: 100%;
+}
+
+.env_conf_entry {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  text-align: left;
+}
+
+#conf_upper_part > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  padding: 1em .5em;
+} 
+
+#conf_upper_part > h3 {
+  text-align: center;
+}
+
+
+
+#conf_hardware_container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}
+
+.hardware_entry {
+  display: flex;
+  flex-direction: column;
+  margin: 0 2em 1em 2em;
+}
+
+.hardware_entry > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  text-align: left;
+  gap: 1em;
+} 

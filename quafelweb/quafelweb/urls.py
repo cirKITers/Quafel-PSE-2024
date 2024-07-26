@@ -16,11 +16,8 @@ Including another URLconf
 """
 from django.urls import path, include
 from django.views.generic.base import RedirectView
-
 urlpatterns = [
-  
-    path('', RedirectView.as_view(url='view', permanent=False), name='index'),
-    path('view/', include('simulation_view.urls')),
+    path('', include('simulation_view.urls'), name='index'),
     path('account/', include('account_controller.urls')),
     path('simulation/', include('simulation_controller.urls')),
     path('hardware/', include('hardware_controller.urls'))
