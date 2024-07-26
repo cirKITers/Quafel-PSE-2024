@@ -1,7 +1,8 @@
 from hardware_controller.models import HardwareProfile
 from quafel_simulators.base.hardware import QuafelHardwareBase
-from quafel_simulators.base.simulation_request import QuafelSimulationRequest, IncrementType
+from quafel_simulators.base.simulation_request import IncrementType
 from quafel_simulators.base.simulator import QuafelSimulatorBase
+from quafel_simulators.quafelsubmitter import QuafelSimulationRequest
 from simulation_controller.util.scripted_hardware_connection import HardwareWithScript
 from simulation_data.models import SimulationRun, SimulatorProfile
 

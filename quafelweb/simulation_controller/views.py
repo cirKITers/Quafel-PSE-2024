@@ -1,17 +1,14 @@
-import functools
 import itertools
 import json
 import math
-from operator import mul
 import random
-from typing import TypedDict
+
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
+
 from account_controller.views import AccountView
 from hardware_controller.models import HardwareProfile
 from simulation_data.models import SimulatorProfile, SimulationRun
-from simulation_data.simulation import SimulationEnv
-
 
 
 class SimulationRequestView:

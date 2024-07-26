@@ -1,6 +1,7 @@
 """
 Defines the models used to store SimulationRuns in an database
 """
+
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 

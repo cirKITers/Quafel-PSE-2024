@@ -50,7 +50,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1  
 
 # Copy the Django project and the quafel_simulators
-COPY quafel_simulators/ quafel_simulators/
+#+COPY quafel_simulators/ quafel_simulators/
 COPY quafelweb/ quafelweb/
 COPY .env_secret .env_secret
 
