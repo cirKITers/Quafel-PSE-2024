@@ -31,5 +31,10 @@ This will start all docker-containers, migrate the database and start the web ap
 
 ### Additional information
 - The web application can be accessed at `http://localhost:8000/`
-- The simulated hardware-profile is available via ssh at `localhost:2222` 
-with the credentials `user:password`
+- The simulated hardware-profile is available via ssh at `localhost:2222` with the credentials `user:password`
+- The simulated output-server is available via ssh at `localhost:2223` with the credentials `user:password`
+
+
+### Test the website
+If the docker-containers are running, the simulated hardware-profile can be used. The connection-string for it is `test://hardware.profile:22`.
+
