@@ -86,18 +86,27 @@ class QuafelSubmitter:
         )
         self._add_request(simulation_request)
 
+        print("Connect to hardware", simulation_request.get_hardware().get_id())
         if not hardware_connection.connect():
             self._set_state(simulation_request, QuafelSubmissionState.ERROR)
+            return
 
+        print("Initiating request", simulation_request.get_id())
         if not hardware_connection.initiate():
             self._set_state(simulation_request, QuafelSubmissionState.ERROR)
+            return
 
+        print("Submitting request", simulation_request.get_id())
         if not hardware_connection.submit():
             self._set_state(simulation_request, QuafelSubmissionState.ERROR)
+            return
 
+        print("Disconnecting from hardware", simulation_request.get_hardware().get_id())
         if not hardware_connection.disconnect():
             self._set_state(simulation_request, QuafelSubmissionState.ERROR)
+            return
 
+        print("Request submitted and ready to be pulled", simulation_request.get_id())
         self._set_state(simulation_request, QuafelSubmissionState.READY)
 
     def submit(self, simulation_request: QuafelSimulationRequest) -> bool:

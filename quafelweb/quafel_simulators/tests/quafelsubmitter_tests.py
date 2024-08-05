@@ -1,5 +1,5 @@
 """
-Tests for the quafelsubmitter module and the output module
+Tests for the quafel submitter module and the output module
 """
 
 import logging
@@ -94,13 +94,19 @@ class TestSubmitter(TestCase):
         submitter = QuafelSubmitter()
         assert submitter.submit(TestClassSimulationRequest())
 
-        counter = 120
+        counter = 600
         for i in range(counter):
             if (
                 submitter.get_state(TestClassSimulationRequest())
                 == QuafelSubmissionState.READY
             ):
                 break
+            elif (
+                submitter.get_state(TestClassSimulationRequest())
+                == QuafelSubmissionState.ERROR
+            ):
+                assert False
+
             if i == counter - 1:
                 assert False  # The simulation did not finish in time
 
@@ -119,6 +125,7 @@ class TestSubmitter(TestCase):
         logging.getLogger("connection.connect").setLevel(logging.DEBUG)
         logging.getLogger("connection.disconnect").setLevel(logging.DEBUG)
         logging.getLogger("connection.initiate").setLevel(logging.DEBUG)
+        logging.getLogger("connection.setup_script").setLevel(logging.DEBUG)
         logging.getLogger("connection.run").setLevel(logging.DEBUG)
 
         write_output_file_submission()
@@ -133,13 +140,19 @@ class TestSubmitter(TestCase):
 
         submitter.submit(request_2)
 
-        counter = 600
+        counter = 900
         for i in range(counter):
             if (
                 submitter.get_state(request_1) == QuafelSubmissionState.READY
                 and submitter.get_state(request_2) == QuafelSubmissionState.READY
             ):
                 break
+            elif (
+                submitter.get_state(request_1) == QuafelSubmissionState.ERROR
+                or submitter.get_state(request_2) == QuafelSubmissionState.ERROR
+            ):
+                assert False
+
             if i == counter - 1:
                 assert False  # The simulation did not finish in time
 

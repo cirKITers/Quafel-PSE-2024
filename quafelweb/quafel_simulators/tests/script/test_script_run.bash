@@ -12,7 +12,9 @@ copy_quafel() {
 }
 
 write_configuration() {
+  cd "$HOME/$SIMULATION_ID" || return 1
   echo "$CONFIGURATION" > "conf/base/parameters/data_generation.yml"
+  cd "$HOME/Quafel" || return 1
 }
 
 run_kedro_pipelines() {
