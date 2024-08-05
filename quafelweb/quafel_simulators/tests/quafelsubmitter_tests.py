@@ -101,7 +101,7 @@ class TestSubmitter(TestCase):
                 == QuafelSubmissionState.READY
             ):
                 break
-            elif (
+            if (
                 submitter.get_state(TestClassSimulationRequest())
                 == QuafelSubmissionState.ERROR
             ):
@@ -147,7 +147,7 @@ class TestSubmitter(TestCase):
                 and submitter.get_state(request_2) == QuafelSubmissionState.READY
             ):
                 break
-            elif (
+            if (
                 submitter.get_state(request_1) == QuafelSubmissionState.ERROR
                 or submitter.get_state(request_2) == QuafelSubmissionState.ERROR
             ):

@@ -25,12 +25,14 @@ class IncrementType(Enum):
 
     @staticmethod
     def get(name):
+        """
+        Get the increment type from the name
+        """
         if name == str(IncrementType.LINEAR):
             return IncrementType.LINEAR
-        elif name == str(IncrementType.EXPONENTIAL):
+        if name == str(IncrementType.EXPONENTIAL):
             return IncrementType.EXPONENTIAL
-        else:
-            return None
+        return None
 
 
 class QuafelSimulationRequest:
