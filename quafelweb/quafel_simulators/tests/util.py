@@ -120,12 +120,14 @@ class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # The test_dir is one directory above the current sandbox directory
         cls.test_dir = Path.joinpath(Path(__file__).parent, "sandbox")
-        # Change the current sandbox directory to the test_dir
+        if not cls.test_dir.exists():
+            cls.test_dir.mkdir(parents=True)
         os.chdir(cls.test_dir)
 
     @classmethod
     def tearDownClass(cls):
-        # Change back to the original sandbox directory
         os.chdir(Path(__file__).parent)
+
+    if __name__ == "__main__":
+        unittest.main()

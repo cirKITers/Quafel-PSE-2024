@@ -194,6 +194,31 @@ class SubmitConnection(Connection):
         _, stdout, _ = self._ssh_client.exec_command("ls")
         return "setup_script" in stdout.read().decode("utf-8")
 
+    def _set_setup_finished(self):
+        """
+        Set the setup flag
+        """
+        self._ssh_client.exec_command("touch setup_finished")
+
+    def _setup_script_finished(self) -> bool:
+        """
+        Get the setup flag
+        """
+        if self._ssh_client is None:
+            return False
+
+        self._ssh_client.set_log_channel("connection.setup_script")
+        _, stdout, _ = self._ssh_client.exec_command("ls")
+        return "setup_finished" in stdout.read().decode("utf-8")
+
+    def _wait_for_setup(self):
+        """
+        Wait for the setup-script to finish. 
+        """
+        
+        while not self._setup_script_finished():
+            sleep(10)
+
     def submit(self) -> bool:
         """
         Run the simulation request
@@ -220,6 +245,7 @@ class SubmitConnection(Connection):
         """
         Initiate the hardware profile
         (setup if needed)
+        (or wait for the hardware to be set up)
         """
         if (
             (self._simulation_request is None)
@@ -231,10 +257,12 @@ class SubmitConnection(Connection):
         self._ssh_client.set_log_channel("connection.initiate")
         if (not self._setup_script_is_set()) or force:
             self._set_setup_script()
-            return self.run(
-                command="bash setup_script\n",
-                log_channel="connection.setup_script",
-            )
+            if self.run(command="bash setup_script\n", log_channel="connection.setup_script"):
+                self._set_setup_finished()
+            else:
+                return False
+        else:
+            self._wait_for_setup()
 
         return True
 
