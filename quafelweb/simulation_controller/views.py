@@ -10,6 +10,7 @@ from account_controller.views import AccountView
 from hardware_controller.models import HardwareProfile
 from quafel_simulators.base.simulation_request import IncrementType
 from quafel_simulators.quafelsubmitter import QuafelSubmitter
+from simulation_controller.util.output_handler import handle_output
 from simulation_controller.util.simulation_request import (
     SimulationRequestRange,
     SimulationRequest,
@@ -222,9 +223,9 @@ class SimulationRequestView:
                     simulation_request = SimulationRequest(
                         r, hardware_profile, simulator_profile, username, password, totp
                     )
-                    QuafelSubmitter().submit(simulation_request)
+                    QuafelSubmitter().submit(simulation_request, handle_output)
 
-        return HttpResponse(request, "Hello World")
+        return HttpResponse(request)
 
 
 @AccountView.require_login

@@ -27,16 +27,24 @@ class QuafelSubmitter:
     """
 
     __quafel_submitter_instance = None
+    __initialized = False
+    __lock = Lock()
 
     def __new__(cls, *args, **kwargs):
         """
         Return the singleton instance
         """
         if cls.__quafel_submitter_instance is None:
-            cls.__quafel_submitter_instance = super(QuafelSubmitter, cls).__new__(cls)
+            with cls.__lock:
+                if cls.__quafel_submitter_instance is None:
+                    cls.__quafel_submitter_instance = super(QuafelSubmitter, cls).__new__(cls)
         return cls.__quafel_submitter_instance
 
     def __init__(self):
+        if self.__initialized:
+            return
+        self.__initialized = True
+        
         # The output hardware
         # Change this to a custom object of quafel_output_hardware to disable the configuration file
         self.quafel_output_hardware: QuafelOutputHardware = QuafelOutputHardware()
