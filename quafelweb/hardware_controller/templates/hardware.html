@@ -13,10 +13,10 @@
     <button type="submit" action="/hardware"><span class="material-symbols-outlined">search</span></button>
   </div>
   <div id='hardware_container'>
-    {%for hardware in hardware_profiles %}
+    {%for hardware in profiles %}
       <form class='hardware_entry'  action="configure/" method="get">
         <p>{{ hardware.name }}</p>
-        <button class="icon_button" name="hardware_id" value={{hardware.uuid}}><span class="material-symbols-outlined">edit</span></button> 
+        <button class="icon_button" name="id" value={{hardware.uuid}}><span class="material-symbols-outlined">edit</span></button> 
       </form>
     {% empty %}
       <p id="no_profiles">No hardware profiles found</p>

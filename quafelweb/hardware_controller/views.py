@@ -11,6 +11,9 @@ import re as regex
 
 class HardwareView:
 
+    
+    HARDWARE_ADDR_REGEX = r"^(.*?)://(.*?)(?::(\d+))?$"
+
     # /hardware
 
     @AccountView.require_login
@@ -21,30 +24,33 @@ class HardwareView:
         if search := request.GET.get("search"):
             profiles = [profile for profile in profiles if search in profile.name]
 
-        context = {"hardware_profiles": profiles}
+        context = {"profiles": profiles}
         return render(request, "hardware.html", context=context)
 
     # /hardware/add with post
 
     @AccountView.require_login
     def add_profile(request):
-        id = request.POST.get("hardware_id")
-        name = request.POST.get("hardware_name")
-        description = request.POST.get("hardware_description")
-        connection = request.POST.get("hardware_connection")
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        connection = request.POST.get("connection") or ""
 
-        addr_match = r"^([a-zA-Z]+)://(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d{1,5})$"
 
-        if id and name and description and regex.match(addr_match, connection):
+        conn_match = regex.match(HardwareView.HARDWARE_ADDR_REGEX, connection)
 
-            protocol, ip_addr, port_addr = connection.replace("//", "").split(":", 2)
-            HardwareProfile(
+        protocol, ip_addr, port_addr = conn_match.groups()
+        
+        if name and description and protocol and ip_addr:
+
+            hp = HardwareProfile(
                 name=name,
                 description=description,
                 protocol=protocol,
                 ip_addr=ip_addr,
-                port_addr=port_addr,
-            ).save()
+                port_addr = port_addr or 22
+            )
+
+            hp.save()
 
         return redirect("hardware")
 
@@ -53,7 +59,7 @@ class HardwareView:
     @AccountView.require_login
     def delete_profile(request):
 
-        if id := request.POST.get("hardware_id"):
+        if id := request.POST.get("id"):
 
             SimulationRun.objects.filter(hardware=id).delete()
             HardwareProfile.objects.filter(uuid=id).delete()
@@ -63,7 +69,7 @@ class HardwareView:
     @AccountView.require_login
     def configure_profile(request):
 
-        if id := request.GET.get("hardware_id"):
+        if id := request.GET.get("id"):
 
             profile = HardwareProfile.objects.filter(uuid=id)
 
@@ -78,20 +84,20 @@ class HardwareView:
 
     @AccountView.require_login
     def submit_change(request):
-        id = request.POST.get("hardware_id")
-        name = request.POST.get("hardware_name")
-        description = request.POST.get("hardware_description")
-        connection = request.POST.get("hardware_connection")
+        id = request.POST.get("id")
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        connection = request.POST.get("connection") or ""
+        needs_totp = request.POST.get("totp") == "on"
 
-        addr_match = r"^([a-zA-Z]+)://(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d{1,5})$"
+        conn_match = regex.match(HardwareView.HARDWARE_ADDR_REGEX, connection)
 
-        if id and name and description and regex.match(addr_match, connection):
-
-            protocol, ip_addr, port_addr = connection.replace("//", "").split(":", 2)
+        protocol, ip_addr, port_addr = conn_match.groups()
+        
+        if id and name and description and protocol and ip_addr:
 
             profile = HardwareProfile.objects.filter(uuid=id)
 
-            needs_totp = request.POST.get("hardware_totp") == "on"
 
             if not profile.exists():
                 raise RuntimeError("Invalid hardware profile requested")  # TODO
@@ -101,7 +107,7 @@ class HardwareView:
                 description=description,
                 protocol=protocol,
                 ip_addr=ip_addr,
-                port_addr=port_addr,
+                port_addr=port_addr or 22,
                 needs_totp=needs_totp,
             )
 
