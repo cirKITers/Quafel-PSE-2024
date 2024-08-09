@@ -23,7 +23,7 @@ if [ ! -d "$INPUT_LOCATION" ]; then
 fi
 
 # Pull the output from the remote server to the local machine
-if sshpass -p "$REMOTE_PASSWORD" scp -r -P "$REMOTE_PORT" "$REMOTE_USERNAME@$REMOTE_HOST:$OUTPUT_LOCATION/$SIMULATION_ID" "$INPUT_LOCATION/$SIMULATION_ID"; then
+if sshpass -p "$REMOTE_PASSWORD" scp -o StrictHostKeyChecking=no -r -P "$REMOTE_PORT" "$REMOTE_USERNAME@$REMOTE_HOST:$OUTPUT_LOCATION/$SIMULATION_ID" "$INPUT_LOCATION/$SIMULATION_ID"; then
     echo "Successfully pulled output to $INPUT_LOCATION/$SIMULATION_ID."
 else
     echo "Failed to pull output from the remote server."
@@ -31,7 +31,7 @@ else
 fi
 
 # Delete the output from the remote server
-if sshpass -p "$REMOTE_PASSWORD" ssh -p "$REMOTE_PORT" "$REMOTE_USERNAME@$REMOTE_HOST" "rm -rf $OUTPUT_LOCATION/$SIMULATION_ID"; then
+if sshpass -p "$REMOTE_PASSWORD" ssh -o StrictHostKeyChecking=no -p "$REMOTE_PORT" "$REMOTE_USERNAME@$REMOTE_HOST" "rm -rf $OUTPUT_LOCATION/$SIMULATION_ID"; then
     echo "Successfully deleted remote output."
 else
     echo "Failed to delete remote output."
