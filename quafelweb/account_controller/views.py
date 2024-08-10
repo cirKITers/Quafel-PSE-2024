@@ -42,7 +42,7 @@ class AccountView:
         if search := request.GET.get("search"):
             accounts = [acc for acc in accounts if search in acc.identifier]
 
-        return render(request, "account.html", context={"accounts": accounts})
+        return render(request, "account.html", context={"accounts": accounts, "acc_count": accounts.count()})
 
     @staticmethod
     @require_login
