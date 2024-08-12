@@ -112,6 +112,15 @@ class TestClassSimulationRequest2(TestClassSimulationRequest):
         return 2
 
 
+class TestClassSimulationRequest3(TestClassSimulationRequest):
+    """
+    Test simulation request 3
+    """
+
+    def get_max_shots(self) -> int:
+        return 5
+
+
 class TestCase(unittest.TestCase):
     """
     Base class for the tests

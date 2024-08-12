@@ -1,7 +1,7 @@
 """
 Here is the submission class that is used to submit a simulation request to the hardware.
 """
-
+from collections.abc import Callable
 from enum import Enum
 from threading import Lock, Thread
 
@@ -27,16 +27,24 @@ class QuafelSubmitter:
     """
 
     __quafel_submitter_instance = None
+    __initialized = False
+    __lock = Lock()
 
     def __new__(cls, *args, **kwargs):
         """
         Return the singleton instance
         """
         if cls.__quafel_submitter_instance is None:
-            cls.__quafel_submitter_instance = super(QuafelSubmitter, cls).__new__(cls)
+            with cls.__lock:
+                if cls.__quafel_submitter_instance is None:
+                    cls.__quafel_submitter_instance = super(QuafelSubmitter, cls).__new__(cls)
         return cls.__quafel_submitter_instance
 
     def __init__(self):
+        if self.__initialized:
+            return
+        self.__initialized = True
+        
         # The output hardware
         # Change this to a custom object of quafel_output_hardware to disable the configuration file
         self.quafel_output_hardware: QuafelOutputHardware = QuafelOutputHardware()
@@ -76,7 +84,7 @@ class QuafelSubmitter:
         with self._requests_lock:
             del self._requests[simulation_request.get_id()]
 
-    def _submit(self, simulation_request: QuafelSimulationRequest):
+    def _submit(self, simulation_request: QuafelSimulationRequest, handle: Callable[[QuafelSimulationRequest], None] = None):
         """
         Submit a simulation request
         """
@@ -106,12 +114,17 @@ class QuafelSubmitter:
             self._set_state(simulation_request, QuafelSubmissionState.ERROR)
             return
 
-        print("Request submitted and ready to be pulled", simulation_request.get_id())
+        print("Simulation done and ready to be pulled", simulation_request.get_id())
         self._set_state(simulation_request, QuafelSubmissionState.READY)
+        
+        if handle is not None:
+            handle(simulation_request)
 
-    def submit(self, simulation_request: QuafelSimulationRequest) -> bool:
+    def submit(self, simulation_request: QuafelSimulationRequest, handle: Callable[[QuafelSimulationRequest], None] = None) -> bool:
         """
         Submit a simulation request
+        :param simulation_request: The simulation request to submit
+        :param handle: The function to call when the request is ready to return the output (gets the id of the request)
         """
 
         if not self.quafel_output_hardware.update():
@@ -126,7 +139,7 @@ class QuafelSubmitter:
 
         # Create thread to submit the request
         # The thread will call _submit
-        thread: Thread = Thread(target=self._submit, args=[simulation_request])
+        thread: Thread = Thread(target=self._submit, args=[simulation_request, handle])
         thread.start()
 
         return True
