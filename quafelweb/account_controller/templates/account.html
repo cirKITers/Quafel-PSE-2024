@@ -8,7 +8,7 @@
 {% block content %}
 <div class="page_panel">
   <form action="/account" method="get" id='account_search'>
-    <input type="text" name='search' value={{request.GET.search}}>
+    <input type="text" name='search' value="{{request.GET.search}}">
     <span>Search</span>
     <button type="submit"><span class="material-symbols-outlined">search</span></button>
   </form>
@@ -17,7 +17,9 @@
     <form action="delete/"  class='account_entry' method='post'>
       {% csrf_token %}
       <p>{{ account.identifier }}</p>
-      <button class='icon_button' name="admin_ident" value={{account.identifier}}><span class="material-symbols-outlined">delete</span></button>
+      {% if request.session.admin_ident != account.identifier %}
+      <button class='icon_button' name="admin_ident" value="{{account.identifier}}"><span class="material-symbols-outlined">delete</span></button>
+      {% endif %}
     </form>  
     {% endfor %}
   </div>

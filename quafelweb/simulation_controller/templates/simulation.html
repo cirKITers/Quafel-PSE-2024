@@ -16,17 +16,17 @@
     <h4>Qubits</h4>
     <div class="selection_group">
       <div>
-        <input name="qubits_min" type='number' value={{qubits_min}}>
+        <input name="qubits_min" type='number' value="{{qubits_min}}">
         <span>From</span>
       </div>
       <div>
-        <input name="qubits_max" type='number' value={{qubits_max}}>
+        <input name="qubits_max" type='number' value="{{qubits_max}}">
         <span>To</span>
       </div>
     </div>
     <div class="selection_group">
       <div>
-        <input name="qubits_increment" type='number' value={{qubits_increment}}>
+        <input name="qubits_increment" type='number' value="{{qubits_increment}}">
         <span>Increment</span>
       </div>
       <div>
@@ -45,17 +45,17 @@
     <h4>Depth</h4>
     <div class="selection_group">
       <div>
-        <input name="depth_min" type='number' value={{depth_min}}>
+        <input name="depth_min" type='number' value="{{depth_min}}">
         <span>From</span>
       </div>
       <div>
-        <input name="depth_max" type='number' value={{depth_max}}>
+        <input name="depth_max" type='number' value="{{depth_max}}">
         <span>To</span>
       </div>
     </div>
     <div class="selection_group">
       <div>
-        <input name="depth_increment" type='number' value={{depth_increment}}>
+        <input name="depth_increment" type='number' value="{{depth_increment}}">
         <span for="depth_increment">Increment</span>
       </div>
       <div>
@@ -74,17 +74,17 @@
     <h4>Shots</h4>
     <div class="selection_group">
       <div>
-        <input name="shots_min" type='number' value={{shots_min}}>
+        <input name="shots_min" type='number' value="{{shots_min}}">
         <span>From</span>
       </div>
       <div>
-        <input name="shots_max" type='number' value={{shots_max}}>
+        <input name="shots_max" type='number' value="{{shots_max}}">
         <span>To</span>
       </div>
     </div>
     <div class="selection_group">
       <div>
-        <input name="shots_increment" type='number' value={{shots_increment}}></input>
+        <input name="shots_increment" type='number' value="{{shots_increment}}"></input>
         <span>Increment</span>
       </div>
       <div>
@@ -132,7 +132,7 @@
   <div id="env_container">
     {% for env in envs %}
       <div class="env_entry">
-        <input type="checkbox" name={{ env.3 }} {% if env.4 %}checked{% endif %}></button>
+        <input type="checkbox" name="{{ env.3 }}" {% if env.4 %}checked{% endif %}></button>
         <p>{{env.0.name}}</p>
         <p>{{env.1.name}}</p>
       </div>
