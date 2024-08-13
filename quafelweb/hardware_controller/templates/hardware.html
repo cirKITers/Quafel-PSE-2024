@@ -26,15 +26,15 @@
 <form class='page_panel'  action='add/' method="post">
   {% csrf_token %}
   <div id="hardware_name">
-    <input name="name">
+    <input name="name" value="{{request.POST.name}}" required>
     <span>Name</span>
   </div>
   <div id="hardware_description">
-    <textarea name="description"></textarea>
+    <textarea name="description">{{request.POST.description}}</textarea>
     <span>Description</span>
   </div>
   <div id="hardware_connection">
-    <input name="connection">
+    <input name="connection" value="{{request.POST.connection}}" required>
     <span>Connection</span>
   </div>
   <button id="add_hardware_button" type='submit'>Submit</button>

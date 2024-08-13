@@ -24,3 +24,7 @@
 #info_head span {
   font-size: 5em;
 }
+
+#info_message {
+  text-align: center;
+}
