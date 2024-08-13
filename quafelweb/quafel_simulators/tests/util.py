@@ -1,7 +1,7 @@
 """
 Here are util classes that are used in the tests.
-The tests need some interfaces implemented to test the simulators.
-Also, the docker needs to be running for the tests to pass, because hardware.profiles and the output server are 
+The tests need some interfaces implemented to tests the simulators.
+Also, the docker needs to be running for the tests to pass, because hardware.profiles and the output server are
 required for the tests to pass.
 """
 
@@ -61,7 +61,7 @@ class TestClassSimulator(QuafelSimulatorBase):
         return "cirq_fw"
 
     def get_version(self) -> str:
-        return "test"
+        return "tests"
 
 
 class TestClassSimulationRequest(QuafelSimulationRequest):
@@ -124,7 +124,7 @@ class TestClassSimulationRequest3(TestClassSimulationRequest):
 class TestCase(unittest.TestCase):
     """
     Base class for the tests
-    This class changes the sandbox directory to the test directory
+    This class changes the sandbox directory to the tests directory
     """
 
     @classmethod

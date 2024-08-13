@@ -59,8 +59,8 @@ class TestSubmitter(TestCase):
     Test the submitter module
     """
 
-    # Run This test if other test cases are not running
-    @unittest.skip("This test does take a long time to run.")
+    # Run This tests if other tests cases are not running
+    @unittest.skip("This tests does take a long time to run.")
     def test_forced_initiate(self):
         """
         Test the forced initiation of the hardware
@@ -81,7 +81,7 @@ class TestSubmitter(TestCase):
 
         assert hardware_connection.disconnect()
 
-    @unittest.skip("Just run the simultaneous submissions test")
+    @unittest.skip("Just run the simultaneous submissions tests")
     def test_submitter_class(self):
         """
         Test the submitter class
@@ -186,7 +186,7 @@ class TestSubmitter(TestCase):
         submitter = QuafelSubmitter()
 
         def handle(r: QuafelSimulationRequest):
-            sleep(2.0)  # Wait for the test to read the state of the request
+            sleep(2.0)  # Wait for the tests to read the state of the request
             write_output_file_pull_output()
             assert submitter.get_state(r) == QuafelSubmissionState.READY
             assert submitter.quafel_output_hardware.update()
@@ -195,7 +195,7 @@ class TestSubmitter(TestCase):
             o = connection.get_output()
 
             if o is None:
-                submitter.quafel_output_hardware = None  # To make assertion in test thread
+                submitter.quafel_output_hardware = None  # To make assertion in tests thread
 
             assert o is not None
 

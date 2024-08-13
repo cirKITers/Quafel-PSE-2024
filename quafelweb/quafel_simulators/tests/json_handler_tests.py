@@ -23,10 +23,10 @@ class TestJsonHandler(TestCase):
         """
 
         # assure the file is not existent
-        Path("test.json").unlink(missing_ok=True)
+        Path("tests.json").unlink(missing_ok=True)
 
         # read the dict
-        read = read_dict("test.json")
+        read = read_dict("tests.json")
 
         # check if the dict is empty
         assert read == {}
@@ -37,13 +37,13 @@ class TestJsonHandler(TestCase):
         """
 
         # write the dict
-        write_json_file("test.json", {"test": "test"})
+        write_json_file("tests.json", {"tests": "tests"})
 
         # read the dict
-        read = read_json_file("test.json")
+        read = read_json_file("tests.json")
 
         # check if the dict is correct
-        assert read == {"test": "test"}
+        assert read == {"tests": "tests"}
 
     def test_write_and_read_list(self):
         """
@@ -51,10 +51,10 @@ class TestJsonHandler(TestCase):
         """
 
         # write the list
-        write_json_file("test.json", ["test", "test"])
+        write_json_file("tests.json", ["tests", "tests"])
 
         # read the list
-        read = read_json_file("test.json")
+        read = read_json_file("tests.json")
 
         # check if the list is correct
-        assert read == ["test", "test"]
+        assert read == ["tests", "tests"]

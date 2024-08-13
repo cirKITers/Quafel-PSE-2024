@@ -49,7 +49,7 @@ class TestOutput(TestCase):
         write_json_file(
             "output.json",
             {
-                "output_location": "test",
+                "output_location": "tests",
                 "host": "localhost",
                 "port": 2223,
                 "username": "user",
@@ -60,7 +60,7 @@ class TestOutput(TestCase):
         output_hardware = QuafelOutputHardware()
         assert output_hardware.update()
 
-        assert output_hardware.get_output_location() == "test"
+        assert output_hardware.get_output_location() == "tests"
         assert output_hardware.get_host() == "localhost"
         assert output_hardware.get_port() == 2223
         assert output_hardware.get_username() == "user"

@@ -11,7 +11,7 @@ class HardwareProfile(models.Model):
 
     description = models.CharField(max_length=500)
 
-    # example "clust-gpu" or "clust-cpu" or "test"
+    # example "clust-gpu" or "clust-cpu" or "tests"
     protocol = models.CharField(max_length=100)
 
     ip_addr = models.CharField(default="240.0.0.0")

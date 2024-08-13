@@ -60,7 +60,7 @@ class Command(BaseCommand):
                         sim_run = SimulationRun(
                             hardware_profile=random_hwp,
                             simulator_name=random_smp,
-                            user="test",
+                            user="tests",
                             shots=s,
                             qbits=q,
                             depth=d,
