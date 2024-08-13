@@ -48,7 +48,8 @@ class AccountView:
     @require_login
     def add_admin(request) -> HttpResponse:
 
-        if ident := request.POST.get("admin_ident"):
+        ident = request.POST.get("admin_ident")
+        if ident and not AdminAccount.objects.filter(identifier=ident).exists():
             AdminAccount(identifier=ident).save()
 
         return redirect(reverse("account"))
@@ -58,7 +59,6 @@ class AccountView:
     def remove_admin(request) -> HttpResponse:
         
         ident = request.POST.get("admin_ident")
-        print(AdminAccount.objects.all(), ident)
         if ident and ident != AccountView.get_identifier(request):
             AdminAccount.objects.get(identifier=ident).delete()
 

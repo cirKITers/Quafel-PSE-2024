@@ -6,6 +6,7 @@ urlpatterns = [
     path("", views.HardwareView.manage_profiles, name="hardware"),
     path("add/", views.HardwareView.add_profile),
     path("delete/", views.HardwareView.delete_profile, name="delete_hardware"),
-    path("configure/", views.HardwareView.configure_profile),
+    path("delete_confirm/", views.HardwareView.delete_runs, name="delete_confirm"),
+    path("configure/", views.HardwareView.configure_profile, name="configure_hardware"),
     path("configure/submit/", views.HardwareView.submit_change),
 ]
