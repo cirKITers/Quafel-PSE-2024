@@ -68,6 +68,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "simulation_controller.file_checker.FileCheckerMiddleware"
 ]
 
 ROOT_URLCONF = "quafelweb.urls"
