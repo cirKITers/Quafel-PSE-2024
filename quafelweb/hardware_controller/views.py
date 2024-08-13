@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.urls import reverse
 
 from account_controller.views import AccountView
 from hardware_controller.models import HardwareProfile
@@ -67,7 +68,7 @@ class HardwareView:
 
         hp.save()
 
-        return redirect("hardware")
+        return redirect(reverse("hardware"))
 
 
     # /hardware/remove with post
@@ -77,7 +78,7 @@ class HardwareView:
 
         id = request.POST.get("id")
 
-        if not id: return redirect("hardware")
+        if not id: return redirect(reverse("hardware"))
 
         simulation_runs = SimulationRun.objects.filter(hardware=id)
         
@@ -91,18 +92,18 @@ class HardwareView:
 
         HardwareProfile.objects.filter(uuid=id).delete()
 
-        return redirect("hardware")
+        return redirect(reverse("hardware"))
 
     @AccountView.require_login
     def delete_runs(request):
         
         id = request.POST.get("id")
-        if not id: return redirect("hardware")
+        if not id: return redirect(reverse("hardware"))
 
         SimulationRun.objects.filter(hardware=id).delete()
         HardwareProfile.objects.filter(uuid=id).delete()
 
-        return redirect("hardware")
+        return redirect(reverse("hardware"))
 
 
     @AccountView.require_login
@@ -112,14 +113,10 @@ class HardwareView:
 
             profile = HardwareProfile.objects.filter(uuid=id)
 
-            if not profile.exists():
-                redirect("hardware")
+            if profile.exists():
+                return render(request, "configuration.html", context={"hardware": profile.get()})
 
-            context = {"hardware": profile.get()}
-
-            return render(request, "configuration.html", context=context)
-
-        return redirect("hardware")
+        return redirect(reverse("hardware"))
 
     @AccountView.require_login
     def submit_change(request):
@@ -133,12 +130,12 @@ class HardwareView:
 
 
         if not id: # This is a malicious actor 
-            return redirect("hardware")
+            return redirect(reverse("hardware"))
         
         
         profile = HardwareProfile.objects.filter(uuid=id)
         if not profile.exists(): # also malicious
-            return redirect("hardware")
+            return redirect(reverse("hardware"))
 
         error_message = None
         if not name:
@@ -165,4 +162,4 @@ class HardwareView:
             needs_totp=needs_totp,
         )
 
-        return redirect("hardware")
+        return redirect(reverse("hardware"))
