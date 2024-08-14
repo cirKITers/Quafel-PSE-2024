@@ -2,7 +2,7 @@ from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 from account_controller.views import AccountView
 
-class TestUrls(SimpleTestCase):
+class AccountTestUrls(SimpleTestCase):
     def test_add_url_is_resolved(self):
         url = reverse('add')
         print(resolve(url))

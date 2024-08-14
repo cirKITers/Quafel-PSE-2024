@@ -4,8 +4,8 @@ from account_controller import views
 
 urlpatterns = [
     path("", views.AccountView.manage_accounts, name="account"),
-    path("add/", views.AccountView.add_admin),
-    path("delete/", views.AccountView.remove_admin),
+    path("add/", views.AccountView.add_admin, name="add"),
+    path("delete/", views.AccountView.remove_admin, name="delete"),
     path("login/", views.AccountView.authenticate, name="login"),
     path("logout/", views.AccountView.logout, name="logout"),
     path("auth/", views.AccountView.authenticate_callback, name="auth_callback"),

@@ -57,7 +57,7 @@ class AccountView:
     @staticmethod
     @require_login
     def remove_admin(request) -> HttpResponse:
-        
+
         ident = request.POST.get("admin_ident")
         if ident and ident != AccountView.get_identifier(request):
             AdminAccount.objects.get(identifier=ident).delete()
