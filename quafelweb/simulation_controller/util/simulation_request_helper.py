@@ -27,13 +27,13 @@ def get_missing_runs_as_ranges(
     )
 
     # create a list of ranges to submit for the hardware and simulator
-    missing_ranges: list[SimulationRequestRange] = [range.expanded()]
+    missing_ranges: list[SimulationRequestRange] = [range.expanded()]   # Why range.expanded()?
 
     # The range contains all points that have to exist.
     # Now we check for each existing point if it is in one of the ranges
     # and split the range with the point if necessary.
     for run in existing_runs:
-        for r in missing_ranges.copy():
+        for r in missing_ranges.copy(): # r is range
             if r.run_in_range(run):
                 missing_ranges.remove(r)
                 to_append_list = r.split(run)

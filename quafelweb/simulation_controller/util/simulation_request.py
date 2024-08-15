@@ -117,8 +117,11 @@ class SimulationRequestRange:
         """
         Split the range in two ranges.
         "Above" and "under" the simulation-runs values.
+        You have to imagine it as a 3D cube. The run is a point in this cube. 
+        the cube is split in 6 parts. Two large parts x*y*[0:n-1] and x*y*[n+1:z) and 4 small parts which split the z=n plane.
         """
 
+        # First lower big cube 
         try:
             # Check if it is on the edge
             split1 = SimulationRequestRange(
@@ -127,30 +130,31 @@ class SimulationRequestRange:
                 self.qubits_increment,
                 self.qubits_increment_type,
                 self.shots_min,
-                run.shots,
+                self.shots_max,
                 self.shots_increment,
                 self.shots_increment_type,
                 self.depth_min,
-                run.depth,
+                self.depth_max,
                 self.depth_increment,
                 self.depth_increment_type,
             )
         except ValueError:
             split1 = None
 
+        # Second upper big cube
         try:
             # Check if it is on the edge
             split2 = SimulationRequestRange(
-                self.qubits_min,
-                run.qubits,
+                run.qubits + 1,
+                self.qubits_max,
                 self.qubits_increment,
                 self.qubits_increment_type,
                 self.shots_min,
-                run.shots - 1,
+                self.shots_max,
                 self.shots_increment,
                 self.shots_increment_type,
                 self.depth_min,
-                run.depth,
+                self.depth_max,
                 self.depth_increment,
                 self.depth_increment_type,
             )
@@ -160,7 +164,7 @@ class SimulationRequestRange:
         try:
             # Check if it is on the edge
             split3 = SimulationRequestRange(
-                self.qubits_min,
+                run.qubits,
                 run.qubits,
                 self.qubits_increment,
                 self.qubits_increment_type,
@@ -178,16 +182,16 @@ class SimulationRequestRange:
 
         try:
             split4 = SimulationRequestRange(
-                run.qubits + 1,
-                self.qubits_max,
+                run.qubits,
+                run.qubits,
                 self.qubits_increment,
                 self.qubits_increment_type,
-                run.shots,
+                run.shots + 1,
                 self.shots_max,
                 self.shots_increment,
                 self.shots_increment_type,
+                self.depth_min,
                 run.depth,
-                self.depth_max,
                 self.depth_increment,
                 self.depth_increment_type,
             )
@@ -197,11 +201,11 @@ class SimulationRequestRange:
         try:
             split5 = SimulationRequestRange(
                 run.qubits,
-                self.qubits_max,
+                run.qubits,
                 self.qubits_increment,
                 self.qubits_increment_type,
-                run.shots + 1,
-                self.shots_max,
+                self.shots_min,
+                run.shots - 1,
                 self.shots_increment,
                 self.shots_increment_type,
                 run.depth,
@@ -215,7 +219,7 @@ class SimulationRequestRange:
         try:
             split6 = SimulationRequestRange(
                 run.qubits,
-                self.qubits_max,
+                run.qubits,
                 self.qubits_increment,
                 self.qubits_increment_type,
                 run.shots,
@@ -273,6 +277,9 @@ class SimulationRequestRange:
                     if run.qubits == q and run.shots == s and run.depth == d:
                         return True
         return False
+    
+    def __str__(self):
+        return f"Qubits: {self.qubits_min}-{self.qubits_max}({self.qubits_increment_type} {self.qubits_increment})\nShots: {self.shots_min}-{self.shots_max}({self.shots_increment_type} {self.shots_increment})\nDepth: {self.depth_min}-{self.depth_max}({self.depth_increment_type} {self.depth_increment})"
 
 
 class SimulationRequest(QuafelSimulationRequest):
