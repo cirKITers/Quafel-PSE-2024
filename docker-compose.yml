@@ -31,6 +31,9 @@ services:
     ports:
       - "2224:22"
       - "8000:8000"
+    volumes:
+    # enables django hot-reloading
+      - ./quafelweb:/app/quafelweb
     depends_on:
       - postgres
       - hardware.profile

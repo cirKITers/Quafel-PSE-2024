@@ -9,11 +9,12 @@ from simulation_data.models import SimulationRun, SimulatorProfile
 class Command(BaseCommand):
     help = "Populates the database with example model entries"
 
-    HardwareProfile.objects.all().delete()
-    SimulatorProfile.objects.all().delete()
-    SimulationRun.objects.all().delete()
 
     def handle(self, *args, **kwargs):
+        HardwareProfile.objects.all().delete()
+        SimulatorProfile.objects.all().delete()
+        SimulationRun.objects.all().delete()
+        
         hwp_example = HardwareProfile(
             name="HWP1",
             description="Dies ist ein Beispiel HWP",
@@ -30,6 +31,7 @@ class Command(BaseCommand):
             ip_addr="101.0.0.0",
             port_addr="2",
             archived=False,
+            needs_totp=True,
         )
         hwp_example.save()
         hwp_example = HardwareProfile(
@@ -39,38 +41,40 @@ class Command(BaseCommand):
             ip_addr="102.0.0.0",
             port_addr="3",
             archived=False,
+            needs_totp=True,
         )
         hwp_example.save()
 
-        smp_profile = SimulatorProfile(name="pennylane_fw", version="1.0")
+        smp_profile = SimulatorProfile(name="pennylane_fw")
         smp_profile.save()
-        smp_profile = SimulatorProfile(name="pennylane_fw", version="1.3")
+        smp_profile = SimulatorProfile(name="qiskit_fw")
         smp_profile.save()
-        smp_profile = SimulatorProfile(name="qiskit_fw", version="2.0")
-        smp_profile.save()
-        smp_profile = SimulatorProfile(name="qibo_fw", version="1.3")
+        smp_profile = SimulatorProfile(name="qibo_fw")
         smp_profile.save()
 
+        id = 0
         for q in range(1, 10):
             for d in range(1, 10):
                 for s in range(6, 10):
-                    for e in range(20, 31, 10):
-                        random_hwp = HardwareProfile.objects.order_by("?").first()
-                        random_smp = SimulatorProfile.objects.order_by("?").first()
-                        sim_run = SimulationRun(
-                            hardware_profile=random_hwp,
-                            simulator_name=random_smp,
-                            user="tests",
-                            shots=s,
-                            qbits=q,
-                            depth=d,
-                            evals=e,
-                            finished=True,
-                            expressability=random.randint(12345678, 987654321),
-                            entangelment_cap=random.randint(12345678, 987654321),
-                            durations=random.randint(12345678, 1147483640),
-                        )
-                        sim_run.save()
+
+                    random_hwp = HardwareProfile.objects.order_by("?").first()
+                    random_smp = SimulatorProfile.objects.order_by("?").first()
+                    sim_run = SimulationRun(
+                        id=id,
+                        hardware=random_hwp,
+                        simulator=random_smp,
+                        user="tests",
+                        shots=s,
+                        qubits=q,
+                        depth=d,
+                        finished=True,
+                        expressibility=random.uniform(1234, 11440),
+                        entangling_capability=random.uniform(1234, 11440),
+                        durations=[random.uniform(1234, 11440) for _ in range(100)],
+                        duration_avg=random.uniform(1234, 11440),
+                    )
+                    sim_run.save()
+                    id += 1
 
         self.stdout.write(
             self.style.SUCCESS(

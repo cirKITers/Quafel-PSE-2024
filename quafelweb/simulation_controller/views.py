@@ -189,8 +189,8 @@ class SimulationRequestView:
                     data.startswith(tag) for tag in ["NAME", "PASSWORD", "TOTP"]
                 ):
                     continue
-                tag, name = data.split("::", 1)
-                hp = HardwareProfile.objects.get(name=name)
+                tag, uuid = data.split("::", 1)
+                hp = HardwareProfile.objects.get(uuid=uuid)
                 auth_data[hp] = {**auth_data.get(hp, dict()), tag: value}
 
             range = SimulationRequestRange(

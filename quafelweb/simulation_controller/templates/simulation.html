@@ -206,11 +206,11 @@
                 </div>
                 <div>
                   <div>
-                    <input name="NAME::{{hardware.name}}">
+                    <input name="NAME::{{hardware.uuid}}">
                     <span>Username</span>
                   </div>
                   <div>
-                    <input type="password" name="PASSWORD::{{hardware.name}}">
+                    <input type="password" name="PASSWORD::{{hardware.uuid}}">
                     <span>Password</span>
                   </div>
                   {% if hardware.needs_totp %}
