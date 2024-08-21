@@ -10,8 +10,8 @@ class AccountTestViews(TestCase):
         self.client = Client()
 
         self.account_url = reverse('account')
-        self.add_url = reverse('add')
-        self.delete_url = reverse('delete')
+        self.add_url = reverse('add_account')
+        self.delete_url = reverse('delete_account')
 
         self.account1 = AdminAccount.objects.create(identifier='admin1')
     def test_manage_accounts_GET(self):
@@ -57,6 +57,17 @@ class AccountTestViews(TestCase):
         self.assertEquals(new_count, initial_count - 1)
 
     def test_remove_accounts_POST_no_data(self):
+
+        initial_count = AdminAccount.objects.count()
+
+        response = self.client.post(self.delete_url)
+
+        new_count = AdminAccount.objects.count()
+
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(new_count, initial_count)
+
+    def test_accounts_is_logged_in(self):
 
         initial_count = AdminAccount.objects.count()
 
