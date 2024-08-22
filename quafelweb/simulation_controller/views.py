@@ -16,7 +16,7 @@ from simulation_controller.util.simulation_request import (
     SimulationRequest,
 )
 from simulation_controller.util.simulation_request_helper import (
-    get_missing_runs_as_ranges,
+    get_missing_runs_as_ranges, write_unfinished_runs_in_database,
 )
 from simulation_data.models import SimulatorProfile, SimulationRun
 
@@ -223,6 +223,7 @@ class SimulationRequestView:
                     simulation_request = SimulationRequest(
                         r, hardware_profile, simulator_profile, username, password, totp
                     )
+                    write_unfinished_runs_in_database(simulation_request)
                     QuafelSubmitter().submit(simulation_request, handle_output)
 
         return HttpResponse(request)
