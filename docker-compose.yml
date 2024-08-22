@@ -39,5 +39,14 @@ services:
       - hardware.profile
       - output.server
 
+  test:
+    build:
+      context: .
+      dockerfile: dockerfile/Test.Dockerfile
+    depends_on:
+      - hardware.profile
+      - output.server
+      - webapp.server
+
 volumes:
   postgres_data:
