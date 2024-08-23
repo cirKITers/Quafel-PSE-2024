@@ -10,7 +10,7 @@ from quafelweb.settings import (
     OPENID_CLIENT_ID,
     OPENID_CLIENT_IDENT,
 )
-from account_controller.models import AdminAccount
+from .models import AdminAccount
 
 OAUTH = OAuth()
 OAUTH.register(

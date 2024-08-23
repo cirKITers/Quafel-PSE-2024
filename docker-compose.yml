@@ -43,10 +43,14 @@ services:
     build:
       context: .
       dockerfile: dockerfile/Test.Dockerfile
+    environment:
+      DJANGO_SETTINGS_MODULE: "quafelweb.settings"
+      PYTHONPATH: "/app"
     depends_on:
-      - hardware.profile
-      - output.server
-      - webapp.server
+      - postgres
+    command: ["poetry", "run", "python", "manage.py", "test"]
+    volumes:
+      - .:/app
 
 volumes:
   postgres_data:

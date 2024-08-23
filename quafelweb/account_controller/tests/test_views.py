@@ -14,6 +14,7 @@ class AccountTestViews(TestCase):
         self.delete_url = reverse('delete_account')
 
         self.account1 = AdminAccount.objects.create(identifier='admin1')
+
     def test_manage_accounts_GET(self):
 
         response = self.client.get(reverse(self.account_url))

@@ -1,25 +1,25 @@
-# Use same base image as for this project
+# Basis-Image verwenden (Python)
 FROM python:3.12
 
-#set the working directory
 WORKDIR /app
 
-# install poetry
-RUN pip install poetry
+# Installiere Python und andere notwendige Pakete
+RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV PATH="/root/.local/bin:$PATH"
 
-# copy project data and isntall dependencies
+# Copy the poetry configuration and lock file
 COPY pyproject.toml poetry.lock ./
+
+# Install the dependencies
 RUN poetry install
 
-# copy code into image
-COPY . .
+COPY . /app/
 
-# set env variables
+# Umgebung variablen setzen
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV PYTHONPATH=/app
 
-# install test-dependencies
-RUN poetry add --dev pytest
-
-# execute tests
-CMD ["poetry", "run", "pytest"]
+WORKDIR quafelweb
+# Standardbefehl: Django Tests ausführen
+CMD ["poetry", "run", "python", "manage.py", "test"]
