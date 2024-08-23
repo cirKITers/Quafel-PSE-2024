@@ -37,8 +37,8 @@ class TestConnections(TestCase):
     def test_connecting_and_disconnecting_with_totp(self):
         """
         Test the connection and disconnection to the hardware with a totp
-        This test tries to connect to the bwUniCluster2.0
-        If you do not have credentials, you can skip this test
+        This tests tries to connect to the bwUniCluster2.0
+        If you do not have credentials, you can skip this tests
         """
 
         logging.basicConfig()

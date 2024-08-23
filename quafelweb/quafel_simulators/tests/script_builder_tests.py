@@ -58,5 +58,5 @@ class TestScriptBuilder(TestCase):
         Test the building of the pull output script
         """
 
-        build_script = build_quafel_script_pull_output(QuafelOutputHardware(), "test")
+        build_script = build_quafel_script_pull_output(QuafelOutputHardware(), "tests")
         print(build_script)

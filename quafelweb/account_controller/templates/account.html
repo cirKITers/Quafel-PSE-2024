@@ -20,7 +20,7 @@
       {% if request.session.admin_ident != account.identifier %}
       <button class='icon_button' name="admin_ident" value="{{account.identifier}}"><span class="material-symbols-outlined">delete</span></button>
       {% endif %}
-    </form>  
+    </form>
     {% endfor %}
   </div>
   <form action="add/" method="post" id='new_account_div'>

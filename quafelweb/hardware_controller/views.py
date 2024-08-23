@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.urls import reverse
 
 from account_controller.views import AccountView
 from hardware_controller.models import HardwareProfile
@@ -27,44 +28,83 @@ class HardwareView:
         context = {"profiles": profiles}
         return render(request, "hardware.html", context=context)
 
-    # /hardware/add with post
+
 
     @AccountView.require_login
     def add_profile(request):
+
         name = request.POST.get("name")
-        description = request.POST.get("description")
+        description = request.POST.get("description") or ""
+
+
         connection = request.POST.get("connection") or ""
-
-
         conn_match = regex.match(HardwareView.HARDWARE_ADDR_REGEX, connection)
+        
+        error_message = None
+        if not name:
+            error_message = "The specified name was empty"
+        elif HardwareProfile.objects.filter(name=name).exists():
+            error_message = "The specified name is already in use"
+        elif not conn_match:
+            error_message = "A connection has to be in the following format <protocol>://<remote>:<port>"
+                
+        if error_message: 
+            return render(request, "info.html", context={
+                "info_type": "error",
+                "header": "Invalid Request",
+                "message": error_message,
+                "url_link" : "hardware"
+            })
 
         protocol, ip_addr, port_addr = conn_match.groups()
         
-        if name and description and protocol and ip_addr:
+        hp = HardwareProfile(
+            name=name,
+            description=description,
+            protocol=protocol,
+            ip_addr=ip_addr,
+            port_addr = port_addr or 22
+        )
 
-            hp = HardwareProfile(
-                name=name,
-                description=description,
-                protocol=protocol,
-                ip_addr=ip_addr,
-                port_addr = port_addr or 22
-            )
+        hp.save()
 
-            hp.save()
+        return redirect(reverse("hardware"))
 
-        return redirect("hardware")
 
     # /hardware/remove with post
 
     @AccountView.require_login
     def delete_profile(request):
 
-        if id := request.POST.get("id"):
+        id = request.POST.get("id")
 
-            SimulationRun.objects.filter(hardware=id).delete()
-            HardwareProfile.objects.filter(uuid=id).delete()
+        if not id: return redirect(reverse("hardware"))
 
-        return redirect("hardware")
+        simulation_runs = SimulationRun.objects.filter(hardware=id)
+        
+        if len(simulation_runs) != 0:
+            return render(request, "info.html", context={
+                "info_type": "info",
+                "header": "Deleting Simulation Data",
+                "message": f"Through this action {len(simulation_runs)} simulation runs will be deleted",
+                "url_link" : "delete_confirm"
+            })
+
+        HardwareProfile.objects.filter(uuid=id).delete()
+
+        return redirect(reverse("hardware"))
+
+    @AccountView.require_login
+    def delete_runs(request):
+        
+        id = request.POST.get("id")
+        if not id: return redirect(reverse("hardware"))
+
+        SimulationRun.objects.filter(hardware=id).delete()
+        HardwareProfile.objects.filter(uuid=id).delete()
+
+        return redirect(reverse("hardware"))
+
 
     @AccountView.require_login
     def configure_profile(request):
@@ -73,42 +113,53 @@ class HardwareView:
 
             profile = HardwareProfile.objects.filter(uuid=id)
 
-            if not profile.exists():
-                redirect("hardware")
+            if profile.exists():
+                return render(request, "configuration.html", context={"hardware": profile.get()})
 
-            context = {"hardware": profile.get()}
-
-            return render(request, "configuration.html", context=context)
-
-        return redirect("hardware")
+        return redirect(reverse("hardware"))
 
     @AccountView.require_login
     def submit_change(request):
         id = request.POST.get("id")
         name = request.POST.get("name")
-        description = request.POST.get("description")
+        description = request.POST.get("description") or ""
         connection = request.POST.get("connection") or ""
         needs_totp = request.POST.get("totp") == "on"
 
         conn_match = regex.match(HardwareView.HARDWARE_ADDR_REGEX, connection)
 
-        protocol, ip_addr, port_addr = conn_match.groups()
+
+        if not id: # This is a malicious actor 
+            return redirect(reverse("hardware"))
         
-        if id and name and description and protocol and ip_addr:
+        
+        profile = HardwareProfile.objects.filter(uuid=id)
+        if not profile.exists(): # also malicious
+            return redirect(reverse("hardware"))
 
-            profile = HardwareProfile.objects.filter(uuid=id)
+        error_message = None
+        if not name:
+            error_message = "The specified name was empty"
+        elif not conn_match:
+            error_message = "A connection has to be in the following format <protocol>://<remote>(:<port>)"
+                
+        if error_message: 
+            return render(request, "info.html", context={
+                "info_type": "error",
+                "header": "Invalid Request",
+                "message": error_message,
+                "url_link" : "configure_hardware"
+            })
+        
+        protocol, ip_addr, port_addr = conn_match.groups()
 
+        profile.update(
+            name=name,
+            description=description,
+            protocol=protocol,
+            ip_addr=ip_addr,
+            port_addr=port_addr or 22,
+            needs_totp=needs_totp,
+        )
 
-            if not profile.exists():
-                raise RuntimeError("Invalid hardware profile requested")  # TODO
-
-            profile.update(
-                name=name,
-                description=description,
-                protocol=protocol,
-                ip_addr=ip_addr,
-                port_addr=port_addr or 22,
-                needs_totp=needs_totp,
-            )
-
-        return redirect("hardware")
+        return redirect(reverse("hardware"))
