@@ -133,7 +133,7 @@ class HardwareViewTests(TestCase):
     def test_submit_change_POST_invalid_data(self):
         response = self.client.post(self.submit_change_url, {
             'id': self.hardware1.uuid,
-            'name': '',  # Invalid because name is empty
+            'name': '',
             'connection': 'http://192.168.0.3:8080'
         })
 
