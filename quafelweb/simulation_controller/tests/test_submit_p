@@ -29,12 +29,12 @@ simulation_request_range = SimulationRequestRange(qubits_min, qubits_max, qubits
 simulation_request_range.save()
 
 
-hwp = HardwareProfile(uuid=uuid.uuid4(),name="BWUniCluster GPU Cluster",description="BWUniCluster GPU Cluster",protocol="GPU-Cluster",ip_addr="bwunicluster.scc.kit.edu",port_addr=22,archived=False,needs_totp=True)
+hwp = HardwareProfile(uuid=uuid.uuid4(),name="BWUniCluster-CPU-Cluster",description="BWUniCluster CPU Cluster",protocol="CPU-Cluster",ip_addr="bwunicluster.scc.kit.edu",port_addr=22,archived=False,needs_totp=True)
 hwp.save()
 
 smp = SimulatorProfile(name="pennylane_fw")
 smp.save()
 
 # Instantiate the SimulationRequest class
-simulation_request = SimulationRequest(simulation_range=simulation_request_range, hardware=hwp, simulator=smp, username="zn8422", password="!xKLiZf^g7BbAF", top="017205")
+simulation_request = SimulationRequest(simulation_range=simulation_request_range, hardware=hwp, simulator=smp, username="", password="", top="")
 QuafelSubmitter().submit(simulation_request, handle_output)

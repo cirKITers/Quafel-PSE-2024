@@ -15,10 +15,15 @@ write_configuration() {
   echo "$CONFIGURATION" > "conf/base/parameters/data_generation.yml"
 }
 
+# Change sbatch parameters as needed
 run_kedro_pipelines() {
   poetry env use ~/.pyenv/versions/3.9.19/bin/python3 &&
   poetry run bash -c "cd $HOME/$SIMULATION_ID && kedro run --pipeline prepare" &&
-  poetry run bash -c 'cd $HOME/$SIMULATION_ID && sbatch --job-name=quafel --ntasks=300 --time=40:00:00 --partition=gpu_4 --mem=80000MB --wrap="kedro run --pipeline measure --runner ParallelRunner --async"' &&
+  JOB_ID=$(poetry run bash -c 'cd $HOME/$SIMULATION_ID && sbatch --job-name=quafel --ntasks=30 --time=40:00:00 --partition=multiple --mem=80000MB --wrap="poetry run kedro run --pipeline measure --runner quafel.runner.Parallel"' | awk '{print $4}') &&
+  echo "Submitted job with ID $JOB_ID" &&
+  while squeue -j "$JOB_ID" > /dev/null 2>&1; do
+    sleep 30
+  done &&
   poetry run bash -c "cd $HOME/$SIMULATION_ID && kedro run --pipeline combine"
 }
 
