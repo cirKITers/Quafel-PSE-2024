@@ -26,10 +26,10 @@ class TestClassHardware(QuafelHardwareBase):
         return "testid"
 
     def get_host(self) -> str:
-        return "localhost"
+        return "hardware.profile"
 
     def get_port(self) -> int:
-        return 2222
+        return 22
 
     def get_username(self) -> str:
         return "user"

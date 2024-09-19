@@ -6,8 +6,6 @@ import logging
 import unittest
 from time import sleep
 
-from django.db.transaction import Atomic
-
 from quafel_simulators.base.simulation_request import QuafelSimulationRequest
 from quafel_simulators.output import QuafelOutputHardware
 from quafel_simulators.quafelsubmitter import QuafelSubmissionState, QuafelSubmitter
@@ -46,8 +44,8 @@ def write_output_file_pull_output():
         "output.json",
         {
             "output_location": "~",
-            "host": "localhost",
-            "port": 2223,
+            "host": "output.server",
+            "port": 22,
             "username": "user",
             "password": "password",
         },
