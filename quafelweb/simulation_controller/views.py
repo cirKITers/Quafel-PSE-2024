@@ -16,15 +16,14 @@ from simulation_controller.util.simulation_request import (
     SimulationRequest,
 )
 from simulation_controller.util.simulation_request_helper import (
-    get_missing_runs_as_ranges,
+    get_missing_runs_as_ranges, write_unfinished_runs_in_database,
 )
 from simulation_data.models import SimulatorProfile, SimulationRun
 
 
 class SimulationRequestView:
 
-    @AccountView.require_login
-    def selection(request):
+    def create_context(request) -> dict:
         context = dict()
         # Create all possible envs
 
@@ -32,18 +31,18 @@ class SimulationRequestView:
             conf_range = set(SimulationRun.objects.values_list(conf, flat=True)) or {0}
 
             context[conf + "_min"] = min_v = int(
-                request.GET.get(conf + "_min") or min(conf_range)
+                request.POST.get(conf + "_min") or min(conf_range)
             )
             context[conf + "_max"] = max_v = int(
-                request.GET.get(conf + "_max") or max(conf_range)
+                request.POST.get(conf + "_max") or max(conf_range)
             )
 
             context[conf + "_increment"] = increment = max(
-                int(request.GET.get(conf + "_increment") or 1), 1
+                int(request.POST.get(conf + "_increment") or 1), 1
             )
 
             context[conf + "_increment_type"] = inc_type = (
-                request.GET.get(conf + "_increment_type") or "linear"
+                request.POST.get(conf + "_increment_type") or "linear"
             )
 
             if inc_type == "linear" or increment == 1:
@@ -57,38 +56,63 @@ class SimulationRequestView:
                     )
                 ]
 
-        conf_filter = {
-            "qubits__in": context["qubits_values"],
-            "depth__in": context["depth_values"],
-            "shots__in": context["shots_values"],
-        }
+        return context
+    
+    @AccountView.require_login
+    def confirmation(request):
+        context = SimulationRequestView.create_context(request)
 
-        if inc_type == "linear" or increment == 1:
-            context[conf + "_values"] = list(range(min_v, max_v + 1, increment))
-        else:
-            context[conf + "_values"] = [
-                int(increment**i)
-                for i in range(
-                    int(math.log(min_v, increment)), int(math.log(max_v, increment) + 1)
-                )
-            ]
+        conf_filter = dict(
+            qubits__in=context["qubits_values"],
+            depth__in=context["depth_values"],
+            shots__in=context["shots_values"],
+        )
 
-        conf_filter = {
-            "qubits__in": context["qubits_values"],
-            "depth__in": context["depth_values"],
-            "shots__in": context["shots_values"],
-        }
+        envs = [
+            tag.split("::", 2)[1:3] for tag in request.POST if tag.startswith("ENV")
+        ]
+
+        context["selected_hardware"] = [
+            HardwareProfile.objects.get(uuid=uuid)    
+            for uuid in set(env[0] for env in envs)
+        ]
+
+        context["selected_envs"] = [
+            (
+                HardwareProfile.objects.get(uuid=uuid),
+                SimulatorProfile.objects.get(name=sname),
+                SimulationRun.objects.filter(hardware=uuid, simulator=sname, **conf_filter).count()
+            )
+            for uuid, sname in envs
+        ]
+        
+        context["max_amount"] = math.prod(
+            len(context[name + "_values"]) for name in ["qubits", "depth", "shots"]
+        )
+
+        return render(request, "confirmation.html", context)
+
+    
+    @AccountView.require_login
+    def configuration(request):
+        context = SimulationRequestView.create_context(request)
+
+        conf_filter = dict(
+            qubits__in=context["qubits_values"],
+            depth__in=context["depth_values"],
+            shots__in=context["shots_values"],
+        )
 
         # get selected envs
         envs = list()
         for hp, sp in itertools.product(
             HardwareProfile.objects.all(), SimulatorProfile.objects.all()
         ):
-            if hfilter := request.GET.get("hardware_filter"):
+            if hfilter := request.POST.get("hardware_filter"):
                 if hfilter != hp.name:
                     continue
 
-            if sfilter := request.GET.get("simulator_filter"):
+            if sfilter := request.POST.get("simulator_filter"):
                 if sfilter != sp.name:
                     continue
 
@@ -97,56 +121,30 @@ class SimulationRequestView:
             finished_runs = SimulationRun.objects.filter(
                 hardware=hp.uuid, simulator=sp.name, **conf_filter
             ).count()
-            selected = bool(request.GET.get(name, False))
+
+            selected = bool(request.POST.get(name, False))
 
             envs.append([hp, sp, finished_runs, name, selected])
-
+        
+        
         # (un)check all functionality
-        if "check_all" in request.GET:
+        if "check_all" in request.POST:
             value = not all(env[4] for env in envs)
             for env in envs:
                 env[4] = value
 
+        
         # Sort after hardware then simulator
         envs.sort(key=lambda x: x[1].name)
         envs.sort(key=lambda x: x[0].name)
 
         context["envs"] = envs
-        context["max_amount"] = math.prod(
-            len(context[name + "_values"]) for name in ["qubits", "depth", "shots"]
-        )
-
         context["hardware_profiles"] = HardwareProfile.objects.all()
         context["simulator_profiles"] = SimulatorProfile.objects.all()
 
-        context["selected_hardware"] = set(env[0] for env in envs if env[4])
+        return render(request, "simulation.html", context)
 
-        return render(request, "simulation.html", context=context)
 
-    @AccountView.require_login
-    def select_environments(request):
-        data = json.loads(request.body)
-
-        hwps = set(data.get("hwps"))
-        hwps_requirements = []
-        for hwp in hwps:
-            hwp_entry = {}
-            # TODO: Check if password or ttop is required
-
-            if random.choice([True, False]):
-                hwp_entry["password_required"] = True
-
-            if random.choice([True, False]):
-                hwp_entry["totp_required"] = True
-
-            # hwp_entry != {}
-            if hwp_entry:
-                hwp_entry["hwp"] = hwp
-                hwps_requirements.append(hwp_entry)
-            else:
-                continue
-
-        return JsonResponse({"hwps_requirements": hwps_requirements})
 
     @AccountView.require_login
     def submit_request(request):
@@ -223,6 +221,7 @@ class SimulationRequestView:
                     simulation_request = SimulationRequest(
                         r, hardware_profile, simulator_profile, username, password, totp
                     )
+                    write_unfinished_runs_in_database(simulation_request)
                     QuafelSubmitter().submit(simulation_request, handle_output)
 
         return HttpResponse(request)
