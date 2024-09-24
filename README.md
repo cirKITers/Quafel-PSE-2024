@@ -38,3 +38,16 @@ This will start all docker-containers, migrate the database and start the web ap
 ### Test the website
 If the docker-containers are running, the simulated hardware-profile can be used. The connection-string for it is `test://hardware.profile:22`.
 
+
+### Loading data
+To register an admin for the first time replace <admin-email> with the right email in quafelweb/simulation_data/fixtures/login_data.json.
+Then execute the following command in the webapp docker container to register this email in the data base.
+````bash
+poetry run python manage.py loaddata login_data
+````
+
+
+To load example data execute
+````bash
+poetry run python manage.py loaddata example_data
+````
