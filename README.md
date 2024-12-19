@@ -40,7 +40,7 @@ If the docker-containers are running, the simulated hardware-profile can be used
 
 
 ### Loading data
-You can use this bash script to load an initial login email (`after docker compose up`):
+You can use this bash script to load an initial login email (after `docker compose up`):
 ````bash
 ./add_email.sh <your-shibboleth-email>
 ````
