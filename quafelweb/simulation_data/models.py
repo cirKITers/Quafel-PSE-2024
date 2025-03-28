@@ -4,6 +4,7 @@ Defines the models used to store SimulationRuns in an database
 
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.template.defaultfilters import default
 
 from hardware_controller.models import HardwareProfile
 from quafel_simulators.base.simulator import QuafelSimulatorBase
@@ -30,7 +31,7 @@ class SimulationRun(models.Model):
 
     simulator = models.ForeignKey(SimulatorProfile, on_delete=models.CASCADE)
 
-    user = models.CharField(max_length=100)
+    user = models.CharField(max_length=100, default="")
 
     # CONF
 
@@ -44,9 +45,9 @@ class SimulationRun(models.Model):
 
     finished = models.BooleanField(default=False)
 
-    expressibility = models.FloatField()
+    expressibility = models.FloatField(default=0.0)
 
-    entangling_capability = models.FloatField()
+    entangling_capability = models.FloatField(default=0.0)
 
     durations = ArrayField(models.FloatField(), 100)
 

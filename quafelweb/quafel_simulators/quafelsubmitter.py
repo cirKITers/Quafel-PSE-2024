@@ -8,6 +8,7 @@ from threading import Lock, Thread
 from quafel_simulators.base.simulation_request import QuafelSimulationRequest
 from quafel_simulators.output import QuafelOutputHardware
 from quafel_simulators.util.connection import SubmitConnection, OutputConnection
+from simulation_controller.util.simulation_request import SimulationRequest
 
 
 class QuafelSubmissionState(Enum):
@@ -120,7 +121,7 @@ class QuafelSubmitter:
         if handle is not None:
             handle(simulation_request)
 
-    def submit(self, simulation_request: QuafelSimulationRequest, handle: Callable[[QuafelSimulationRequest], None] = None) -> bool:
+    def submit(self, simulation_request: QuafelSimulationRequest, handle: Callable[[SimulationRequest], None] = None) -> bool:
         """
         Submit a simulation request
         :param simulation_request: The simulation request to submit

@@ -4,9 +4,11 @@ In this module functions are defined to pull and handle the output of the simula
 
 from quafel_simulators.base.simulation_request import QuafelSimulationRequest
 from quafel_simulators.quafelsubmitter import QuafelSubmitter, QuafelSubmissionState
+from simulation_controller.util.simulation_request import SimulationRequest
+from simulation_controller.util.simulation_request_helper import fill_runs_from_csv
 
 
-def handle_output(request: QuafelSimulationRequest) -> None:
+def handle_output(request: SimulationRequest) -> None:
     """
     Handle the output of the simulation
     (pull and write to database)
@@ -29,4 +31,4 @@ def handle_output(request: QuafelSimulationRequest) -> None:
 
 
     # Write the output to the database
-    print("write points") 
+    fill_runs_from_csv(request, output)

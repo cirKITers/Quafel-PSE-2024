@@ -1,0 +1,106 @@
+{% extends "core.html" %}
+
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'simulation.css' %}">
+{% endblock%}
+
+{% block content %}
+<form id="form_content" method="post">
+  
+  {% for key, value in request.POST.items %}
+    <input type="hidden" name="{{key}}" value="{{value}}">
+  {% endfor %}
+  <div class="page_panel">
+    <div id="confirmation_content">
+      <h2>Overview</h2>  
+      <div id="conf_content">
+
+        <div id="conf_overview">
+          <div id="conf_upper_part">
+            <div>
+              <div></div>
+              <div><b>Start</b></div>
+              <div><b>End</b></div>
+              <div><b>Increment</b></div>
+              <div><b>Type</b></div>
+              <div><b>Total</b></div>
+            </div>
+            <div>
+              <div><b>Qubits</b></div>
+              <div>{{qubits_min}}</div>
+              <div>{{qubits_max}}</div>
+              <div>{{qubits_increment}}</div>
+              <div>{{qubits_increment_type}}</div>
+              
+              <div>{{qubits_values|length}}</div>
+            </div>
+            <div>
+              <div><b>Depth</b></div>
+              <div>{{depth_min}}</div>
+              <div>{{depth_max}}</div>
+              <div>{{depth_increment}}</div>
+              <div>{{depth_increment_type}}</div>
+              
+              <div>{{depth_values|length}}</div>
+            </div>
+            <div>
+              <div><b>Shots</b></div>
+              <div>{{shots_min}}</div>
+              <div>{{shots_max}}</div>
+              <div>{{shots_increment}}</div>
+              <div>{{shots_increment_type}}</div>
+              
+              <div>{{shots_values|length}}</div>
+            </div>
+            <h3>Runs per environment: {{max_amount}}</h3>
+          </div>
+          <div id="conf_environments_container">
+            {% for env in selected_envs %}
+              <div class="env_conf_entry">
+                <p>{{env.0.name}}</p>
+                <p>{{env.1.name}}</p>
+                <p  >{{env.2}}/{{max_amount}}</p>
+              </div>
+            {% endfor %}
+          </div>
+          <button formaction="{% url "simulation_configuration" %}">Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page_panel">
+    <div id="hardware_info">
+        <h3>Hardware authentication</h3>
+        <div id="conf_hardware_container">
+        {% for hardware in selected_hardware %}
+            <div class="hardware_entry">
+              <div>
+                <p><b>{{hardware.name}}</b> {{hardware.ip_addr}}</p>
+              </div>
+              <div>
+                <div>
+                  <input name="NAME::{{hardware.name}}">
+                  <span>Username</span>
+                </div>
+                <div>
+                  <input type="password" name="PASSWORD::{{hardware.name}}">
+                  <span>Password</span>
+                </div>
+                {% if hardware.needs_totp %}
+                <div>
+                  <input name="TOTP::{{hardware.uuid}}">
+                  <span>TOTP</span>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+          </div>
+      </div>
+      <button id="confirmation_button" formaction="{% url "submit" %}">Submit</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

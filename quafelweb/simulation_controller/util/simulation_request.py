@@ -7,7 +7,7 @@ from simulation_controller.util.scripted_hardware_connection import HardwareWith
 from simulation_data.models import SimulationRun, SimulatorProfile
 
 
-def _exp_range(
+def exp_range(
     min: int, max: int, increment: int, increment_type: IncrementType
 ) -> list[int]:
     """
@@ -252,19 +252,19 @@ class SimulationRequestRange:
         Returns true if the run is in the range.
         """
 
-        for q in _exp_range(
+        for q in exp_range(
             self.qubits_min,
             self.qubits_max,
             self.qubits_increment,
             self.qubits_increment_type,
         ):
-            for s in _exp_range(
+            for s in exp_range(
                 self.shots_min,
                 self.shots_max,
                 self.shots_increment,
                 self.shots_increment_type,
             ):
-                for d in _exp_range(
+                for d in exp_range(
                     self.depth_min,
                     self.depth_max,
                     self.depth_increment,

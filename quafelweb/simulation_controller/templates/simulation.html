@@ -7,230 +7,137 @@
 {% endblock%}
 
 {% block content %}
-<form id="form_content">
-<div class="page_panel">
-  
-  <!-- Qubits -->
-  <div class='conf_selection'>
-
-    <h4>Qubits</h4>
-    <div class="selection_group">
-      <div>
-        <input name="qubits_min" type='number' value="{{qubits_min}}">
-        <span>From</span>
+<form id="form_content" method="POST">
+  <div class="page_panel">
+    <!-- Qubits -->
+    <div class='conf_selection'>
+      <h4>Qubits</h4>
+      <div class="selection_group">
+        <div>
+          <input name="qubits_min" type='number' value={{qubits_min}}>
+          <span>From</span>
+        </div>
+        <div>
+          <input name="qubits_max" type='number' value={{qubits_max}}>
+          <span>To</span>
+        </div>
       </div>
-      <div>
-        <input name="qubits_max" type='number' value="{{qubits_max}}">
-        <span>To</span>
+      <div class="selection_group">
+        <div>
+          <input name="qubits_increment" type='number' value={{qubits_increment}}>
+          <span>Increment</span>
+        </div>
+        <div>
+          <select name="qubits_increment_type" type='select'>
+            <option value="linear" {% if qubits_increment_type == "linear" %}selected{% endif%}>Linear</option>
+            <option value="logarithmic" {% if qubits_increment_type == "logarithmic" %}selected{% endif%}>Logarithmic</option>
+          </select>
+          <span>Increment type</span>
+        </div>
       </div>
     </div>
-    <div class="selection_group">
-      <div>
-        <input name="qubits_increment" type='number' value="{{qubits_increment}}">
-        <span>Increment</span>
+
+    <!-- Depth -->
+
+    <div class='conf_selection'>
+      <h4>Depth</h4>
+      <div class="selection_group">
+        <div>
+          <input name="depth_min" type='number' value={{depth_min}}>
+          <span>From</span>
+        </div>
+        <div>
+          <input name="depth_max" type='number' value={{depth_max}}>
+          <span>To</span>
+        </div>
       </div>
-      <div>
-        <select name="qubits_increment_type" type='select'>
-          <option value="linear" {% if qubits_increment_type == "linear" %}selected{% endif%}>Linear</option>
-          <option value="logarithmic" {% if qubits_increment_type == "logarithmic" %}selected{% endif%}>Logarithmic</option>
-        </select>
-        <span>Increment type</span>
+      <div class="selection_group">
+        <div>
+          <input name="depth_increment" type='number' value={{depth_increment}}>
+          <span for="depth_increment">Increment</span>
+        </div>
+        <div>
+          <select name="depth_increment_type" type='select'>
+            <option value="linear" {% if depth_increment_type == "linear" %}selected{% endif%}>Linear</option>
+            <option value="logarithmic" {% if depth_increment_type == "logarithmic" %}selected{% endif%}>Logarithmic</option>
+          </select>
+          <span for="depth_increment_type">Increment type</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shots -->
+    
+    <div class='conf_selection'>
+      <h4>Shots</h4>
+      <div class="selection_group">
+        <div>
+          <input name="shots_min" type='number' value={{shots_min}}>
+          <span>From</span>
+        </div>
+        <div>
+          <input name="shots_max" type='number' value={{shots_max}}>
+          <span>To</span>
+        </div>
+      </div>
+      <div class="selection_group">
+        <div>
+          <input name="shots_increment" type='number' value={{shots_increment}}></input>
+          <span>Increment</span>
+        </div>
+        <div>
+          <select name="shots_increment_type" type='select'>
+            <option value="linear" {% if shots_increment_type == "linear" %}selected{% endif%}>Linear</option>
+            <option value="logarithmic" {% if shots_increment_type == "logarithmic" %}selected{% endif%}>Logarithmic</option>
+          </select>
+          <span>Increment type</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Depth -->
-
-  <div class='conf_selection'>
-    <h4>Depth</h4>
-    <div class="selection_group">
-      <div>
-        <input name="depth_min" type='number' value="{{depth_min}}">
-        <span>From</span>
-      </div>
-      <div>
-        <input name="depth_max" type='number' value="{{depth_max}}">
-        <span>To</span>
-      </div>
-    </div>
-    <div class="selection_group">
-      <div>
-        <input name="depth_increment" type='number' value="{{depth_increment}}">
-        <span for="depth_increment">Increment</span>
-      </div>
-      <div>
-        <select name="depth_increment_type" type='select'>
-          <option value="linear" {% if depth_increment_type == "linear" %}selected{% endif%}>Linear</option>
-          <option value="logarithmic" {% if depth_increment_type == "logarithmic" %}selected{% endif%}>Logarithmic</option>
-        </select>
-        <span for="depth_increment_type">Increment type</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Shots -->
-  
-  <div class='conf_selection'>
-    <h4>Shots</h4>
-    <div class="selection_group">
-      <div>
-        <input name="shots_min" type='number' value="{{shots_min}}">
-        <span>From</span>
-      </div>
-      <div>
-        <input name="shots_max" type='number' value="{{shots_max}}">
-        <span>To</span>
-      </div>
-    </div>
-    <div class="selection_group">
-      <div>
-        <input name="shots_increment" type='number' value="{{shots_increment}}"></input>
-        <span>Increment</span>
-      </div>
-      <div>
-        <select name="shots_increment_type" type='select'>
-          <option value="linear" {% if shots_increment_type == "linear" %}selected{% endif%}>Linear</option>
-          <option value="logarithmic" {% if shots_increment_type == "logarithmic" %}selected{% endif%}>Logarithmic</option>
-        </select>
-        <span>Increment type</span>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="page_panel">
-  <div id="filter_menu">
-    <button id="simulation_conf_submit" type="submit" name="check_all">All</button>
-    <div class="dropdown">
-      <div class="dropbtn">{{ request.GET.hardware_filter|default:"Hardware"}}</div>
-      <div class="dropdown-content">
-        <input name="hardware_filter" type="hidden" value="{{request.GET.hardware_filter}}">
-        {% if request.GET.hardware_filter %}
-        <button name="hardware_filter" type="submit" value="">All</button>
-        {% endif %}
-        {% for hardware in hardware_profiles %}
-        {% if request.GET.hardware_filter != hardware.name%}
-        <button name="hardware_filter" type="submit" value="{{hardware.name}}">{{hardware.name}}</button>
-        {% endif %}
-        {% endfor %}
-      </div>
-    </div>
-    <div class="dropdown">
-      <div class="dropbtn">{{ request.GET.simulator_filter|default:"Simulator"}}</div>
-      <div class="dropdown-content">
-        <input name="simulator_filter" type="hidden" value="{{request.GET.simulator_filter}}">
-        {% if request.GET.simulator_filter %}
-        <button name="simulator_filter" type="submit" value="">All</button>
-        {% endif %}
-        {% for simulator in simulator_profiles %}
-          {% if request.GET.simulator_filter != simulator.name%}
-          <button name="simulator_filter" type="submit" value="{{simulator.name}}">{{simulator.name}}</button>
+  <div class="page_panel">
+    <div id="filter_menu">
+      <button id="simulation_conf_submit" name="check_all">All</button>
+      <div class="dropdown">
+        <div class="dropbtn">{{ request.GET.hardware_filter|default:"Hardware"}}</div>
+        <div class="dropdown-content">
+          <input name="hardware_filter" type="hidden" value="{{request.GET.hardware_filter}}">
+          {% if request.GET.hardware_filter %}
+          <button name="hardware_filter" value="">All</button>
           {% endif %}
-        {% endfor %}
+          {% for hardware in hardware_profiles %}
+          {% if request.GET.hardware_filter != hardware.name%}
+          <button name="hardware_filter" value="{{hardware.name}}">{{hardware.name}}</button>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="dropdown">
+        <div class="dropbtn">{{ request.GET.simulator_filter|default:"Simulator"}}</div>
+        <div class="dropdown-content">
+          <input name="simulator_filter" type="hidden" value="{{request.GET.simulator_filter}}">
+          {% if request.GET.simulator_filter %}
+          <button name="simulator_filter" value="">All</button>
+          {% endif %}
+          {% for simulator in simulator_profiles %}
+            {% if request.GET.simulator_filter != simulator.name%}
+            <button name="simulator_filter" value="{{simulator.name}}">{{simulator.name}}</button>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </div>
-  </div>
-  <div id="env_container">
+    <div id="env_container">
     {% for env in envs %}
       <div class="env_entry">
-        <input type="checkbox" name="{{ env.3 }}" {% if env.4 %}checked{% endif %}></button>
+        <input type="checkbox" name={{ env.3 }} {% if env.4 %}checked{% endif %}></button>
         <p>{{env.0.name}}</p>
         <p>{{env.1.name}}</p>
       </div>
       {% endfor %}
     </div>
-    <button id="simulation_conf_submit" type="submit" name="confirmation" value="1">Confirm</button>
-</div>
-<div id="confirmation_page" {% if not request.GET.confirmation %}  class="hidden" {%endif%} >
-  <div id="confirmation_veil">
-    <div id="confirmation_content">
-      <h2>Overview</h2>  
-      <div id="conf_content">
-        <div id="conf_overview">
-          <div id="conf_upper_part">
-            <div>
-              <div></div>
-              <div><b>Start</b></div>
-              <div><b>End</b></div>
-              <div><b>Increment</b></div>
-              <div><b>Type</b></div>
-              <div><b>Total</b></div>
-            </div>
-            <div>
-              <div><b>Qubits</b></div>
-              <div>{{qubits_min}}</div>
-              <div>{{qubits_max}}</div>
-              <div>{{qubits_increment}}</div>
-              <div>{{qubits_increment_type}}</div>
-              
-              <div>{{qubits_values|length}}</div>
-            </div>
-            <div>
-              <div><b>Depth</b></div>
-              <div>{{depth_min}}</div>
-              <div>{{depth_max}}</div>
-              <div>{{depth_increment}}</div>
-              <div>{{depth_increment_type}}</div>
-              
-              <div>{{depth_values|length}}</div>
-            </div>
-            <div>
-              <div><b>Shots</b></div>
-              <div>{{shots_min}}</div>
-              <div>{{shots_max}}</div>
-              <div>{{shots_increment}}</div>
-              <div>{{shots_increment_type}}</div>
-              
-              <div>{{shots_values|length}}</div>
-            </div>
-            <h3>Runs per environment: {{max_amount}}</h3>
-          </div>
-          <div id="conf_environments_container">
-            {% for env in envs %}
-              {% if env.4 %}
-              <div class="env_conf_entry">
-                <p>{{env.0.name}}</p>
-                <p>{{env.1.name}}</p>
-                <p  >{{env.2}}/{{max_amount}}</p>
-              </div>
-              {% endif %}
-            {% endfor %}
-          </div>
-        </div>
-        <div id="hardware_info">
-          <h3>Hardware authentication</h3>
-          <div id="conf_hardware_container">
-          {% for hardware in selected_hardware %}
-              <div class="hardware_entry">
-                <div>
-                  <p><b>{{hardware.name}}</b> {{hardware.ip_addr}}</p>
-                </div>
-                <div>
-                  <div>
-                    <input name="NAME::{{hardware.uuid}}">
-                    <span>Username</span>
-                  </div>
-                  <div>
-                    <input type="password" name="PASSWORD::{{hardware.uuid}}">
-                    <span>Password</span>
-                  </div>
-                  {% if hardware.needs_totp %}
-                  <div>
-                    <input name="TOTP::{{hardware.uuid}}">
-                    <span>TOTP</span>
-                  </div>
-                  {% endif %}
-                </div>
-              </div>
-            {% endfor %}
-            </div>
-        </div>
-      </div>
-      <div class="button_array">
-        <button>Back</button>
-        <button type="submit" formaction="submit/" formmethod="post">Submit</button>
-      </div>
-    </div>
+    <button id="simulation_conf_submit" type="submit" formaction="confirm/" formmethod="post">Confirm</button>
   </div>
-</div>
 </form>
 {% endblock %}
