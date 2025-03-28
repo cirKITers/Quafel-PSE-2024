@@ -6,7 +6,7 @@ quantum computing simulators with the help of [Quafel](https://github.com/cirKIT
 ## Set up and run the project
 
 ### Project Dependencies
-- [Python 3.11.9](https://www.python.org/downloads/)
+- ~~[Python 3.11.9](https://www.python.org/downloads/) (for Quafel)~~
 - [Poetry](https://python-poetry.org/docs/)
 - [Docker](https://docs.docker.com/get-docker/)
 
@@ -23,7 +23,7 @@ poetry install
 To run the project, the following command must be executed:
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 This will start all docker-containers, migrate the database and start the web application.
@@ -40,14 +40,26 @@ If the docker-containers are running, the simulated hardware-profile can be used
 
 
 ### Loading data
+You can use this bash script to load an initial login email (after `docker compose up`):
+````bash
+./add_email.sh <your-shibboleth-email>
+````
+
+Manually you have to do this:
 To register an admin for the first time replace <admin-email> with the right email in quafelweb/simulation_data/fixtures/login_data.json.
 Then execute the following command in the webapp docker container to register this email in the data base.
+
+Access shell of webapp container
+````bash
+docker exec -it quafel-pse-2024-webapp.server-1 sh
+````
+
+Load login data
 ````bash
 poetry run python manage.py loaddata login_data
 ````
 
-
-To load example data execute
+Additionally you can load example data, execute
 ````bash
 poetry run python manage.py loaddata example_data
 ````
