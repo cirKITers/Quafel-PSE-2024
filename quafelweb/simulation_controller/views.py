@@ -16,7 +16,8 @@ from simulation_controller.util.simulation_request import (
     SimulationRequest,
 )
 from simulation_controller.util.simulation_request_helper import (
-    get_missing_runs_as_ranges, write_unfinished_runs_in_database,
+    get_missing_runs_as_ranges,
+    write_unfinished_runs_in_database,
 )
 from simulation_data.models import SimulatorProfile, SimulationRun
 
@@ -57,7 +58,7 @@ class SimulationRequestView:
                 ]
 
         return context
-    
+
     @AccountView.require_login
     def confirmation(request):
         context = SimulationRequestView.create_context(request)
@@ -73,7 +74,7 @@ class SimulationRequestView:
         ]
 
         context["selected_hardware"] = [
-            HardwareProfile.objects.get(uuid=uuid)    
+            HardwareProfile.objects.get(uuid=uuid)
             for uuid in set(env[0] for env in envs)
         ]
 
@@ -81,18 +82,19 @@ class SimulationRequestView:
             (
                 HardwareProfile.objects.get(uuid=uuid),
                 SimulatorProfile.objects.get(name=sname),
-                SimulationRun.objects.filter(hardware=uuid, simulator=sname, **conf_filter).count()
+                SimulationRun.objects.filter(
+                    hardware=uuid, simulator=sname, **conf_filter
+                ).count(),
             )
             for uuid, sname in envs
         ]
-        
+
         context["max_amount"] = math.prod(
             len(context[name + "_values"]) for name in ["qubits", "depth", "shots"]
         )
 
         return render(request, "confirmation.html", context)
 
-    
     @AccountView.require_login
     def configuration(request):
         context = SimulationRequestView.create_context(request)
@@ -125,15 +127,13 @@ class SimulationRequestView:
             selected = bool(request.POST.get(name, False))
 
             envs.append([hp, sp, finished_runs, name, selected])
-        
-        
+
         # (un)check all functionality
         if "check_all" in request.POST:
             value = not all(env[4] for env in envs)
             for env in envs:
                 env[4] = value
 
-        
         # Sort after hardware then simulator
         envs.sort(key=lambda x: x[1].name)
         envs.sort(key=lambda x: x[0].name)
@@ -143,8 +143,6 @@ class SimulationRequestView:
         context["simulator_profiles"] = SimulatorProfile.objects.all()
 
         return render(request, "simulation.html", context)
-
-
 
     @AccountView.require_login
     def submit_request(request):
@@ -187,8 +185,8 @@ class SimulationRequestView:
                     data.startswith(tag) for tag in ["NAME", "PASSWORD", "TOTP"]
                 ):
                     continue
-                tag, uuid = data.split("::", 1)
-                hp = HardwareProfile.objects.get(uuid=uuid)
+                tag, name = data.split("::", 1)
+                hp = HardwareProfile.objects.get(name=name)
                 auth_data[hp] = {**auth_data.get(hp, dict()), tag: value}
 
             range = SimulationRequestRange(

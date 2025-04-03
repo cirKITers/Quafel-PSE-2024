@@ -19,7 +19,8 @@ git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 ~/.pyenv/bin/pyenv install 3.9.19
 
 # pull the quafel repository
-git clone https://github.com/cirKITers/Quafel.git Quafel
+# git clone https://github.com/cirKITers/Quafel.git Quafel
+git clone -b 105-bug-modulenotfounderror-when-trying-to-install-with-python-31111 https://github.com/cirKITers/quafel.git
 
 # install and setup the quafel repository
 cd Quafel || exit 1
