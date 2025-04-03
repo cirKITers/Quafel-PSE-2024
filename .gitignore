@@ -178,3 +178,4 @@ cython_debug/
 *.lock
 quafelweb/mydatabase
 .python-version
+quafelweb/simulation_data/fixtures/login_data.json
